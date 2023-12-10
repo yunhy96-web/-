@@ -1,4 +1,4 @@
-import TabNavigator from "../components/TabNavigator";
+import TabNavigator from "../components/_common/TabNavigator";
 
 const Home = () => {
   return <main></main>;

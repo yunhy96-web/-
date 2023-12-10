@@ -1,7 +1,7 @@
 import React from "react";
 
 const Funnel = () => {
-  return <div></div>;
+  return <section></section>;
 };
 
 export default Funnel;
