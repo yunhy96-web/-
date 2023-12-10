@@ -32,7 +32,7 @@ public class ClovaApiController {
         return responseEntity;
     }
 
-    @CrossOrigin(origins = "http://allowed-origin.com", maxAge = 3600)
+    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @PostMapping("/send-request2")
     public ResponseEntity<String> sendRequestToExternalApi(@RequestBody Map<String, String> requestMap) {
         String content = requestMap.get("content");
