@@ -20,7 +20,11 @@ const TabNavigator = () => {
   const pathList = [
     { path: "/home", title: "홈", SVG: Icon.Home },
     { path: "/mySchedule", title: "일정관리", SVG: Icon.MySchedule },
-    { path: "/createSchedule", title: "일정 추가", SVG: Icon.CreateSchedule },
+    {
+      path: "/createSchedule/save",
+      title: "일정 추가",
+      SVG: Icon.CreateSchedule,
+    },
     { path: "/Article", title: "아티클", SVG: Icon.Article },
     { path: "/myPage", title: "마이페이지", SVG: Icon.MyPage },
   ];
