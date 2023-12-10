@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service //빈으로 등록
-public class BlogService {
+public class PlanService {
     private final PlanRepository planRepository;
 
     //블로그 글 추가하는 메서드
