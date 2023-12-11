@@ -35,9 +35,6 @@ public class Plan {
     @Column(name = "content" , nullable = false)
     private String content;
 
-//    @Column(name = "day", nullable = false)
-//    private String day;
-
     @Column(name = "time" , nullable = false)
     private String time;
 
@@ -53,7 +50,6 @@ public class Plan {
     public Plan(String realday, String content, String email, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.realday = realday;
         this.content = content;
-        //this.day = day;
         this.time = time;
         this.email = email;
         this.createdAt = createdAt;

@@ -17,7 +17,6 @@ public class AddPlanRequest {
     private String email;
     private String time;
     private String content;
-    //private String day;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     public Plan toEntity(){
@@ -26,7 +25,6 @@ public class AddPlanRequest {
                 .email(email)
                 .time(time)
                 .content(content)
-                //.day(day)
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();

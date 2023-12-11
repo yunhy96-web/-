@@ -19,6 +19,10 @@ public class PlanService {
     public Plan save(AddPlanRequest request){
         return planRepository.save(request.toEntity());
     }
+
+    public void save2(AddPlanRequest request){
+        planRepository.save(request.toEntity());
+    }
     //전체 조회
     public List<Plan> findAll(){
         return planRepository.findAll();
