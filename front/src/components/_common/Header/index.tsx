@@ -10,15 +10,35 @@ type Props = {
     onClick: () => void;
     content: JSX.Element;
   };
+  borderBottom?: boolean;
 };
 
-const Header = ({ back, title, right }: Props) => {
+const Header = ({ back, title, right, borderBottom = true }: Props) => {
   const navigate = useNavigate();
   return (
-    <Style.Header>
-      {back && <Icon.Back onClick={() => navigate(-1)} />}
-      <div>{title}</div>
-      {right && <div onClick={right.onClick}>{right.content}</div>}
+    <Style.Header borderBottom={borderBottom}>
+      <div
+        style={{
+          width: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-start",
+        }}
+      >
+        {back ? <Icon.Back onClick={() => navigate(-1)} /> : <div />}
+      </div>
+      <Style.Text>{title}</Style.Text>
+      <div
+        style={{
+          width: 50,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+        }}
+        onClick={right?.onClick}
+      >
+        {right && right.content}
+      </div>
     </Style.Header>
   );
 };

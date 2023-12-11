@@ -4,6 +4,10 @@ export const Button = styled.button<{
   color: "primary" | "disabled";
   width: number | string;
 }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 13px;
   border-radius: 8px;
   width: ${({ width }) => (typeof width === "number" ? `${width}px` : width)};
   background-color: ${({ color, theme }) =>
@@ -15,6 +19,8 @@ export const Button = styled.button<{
 `;
 
 export const ButtonText = styled.div`
-  font-size: 16px;
+  font-family: Pretendard Variable;
+  font-size: 20px;
+  font-style: normal;
   font-weight: 700;
 `;

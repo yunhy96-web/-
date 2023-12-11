@@ -7,6 +7,8 @@ import Header from "../_common/Header";
 import DateCalendar from "../_common/Funnel/DateCalendar";
 import Destination from "../_common/Funnel/Destination";
 import Type from "../_common/Funnel/Type";
+import { Icon } from "../../assets";
+import Complete from "../_common/Funnel/Complete";
 
 type PageType =
   | "date"
@@ -38,23 +40,33 @@ const FunnelSection = () => {
   };
 
   if (params.state === undefined) return null;
+  if (params.state === "loading") return <Loading />;
+  if (params.state === "complete") return <Complete onNext={() => {}} />;
 
   return (
     <>
       <Header
-        back
-        title="사전 정보 수집"
+        back={params.state !== "date-calendar"}
+        title={
+          params.state === "date-calendar" ? "날짜 선택" : "사전 정보 수집"
+        }
         right={
           isSurvey()
             ? {
                 onClick: skipToNextPage,
-                content: <div>건너뛰기</div>,
+                content: <Style.Skip>건너뛰기</Style.Skip>,
+              }
+            : params.state === "date-calendar"
+            ? {
+                onClick: () =>
+                  navigate("/createSchedule/date", { replace: true }),
+                content: <Icon.Close />,
               }
             : undefined
         }
       />
       <Style.FunnelContainer>
-        {pageList.includes(params.state) && params.state !== "loading" && (
+        {pageList.includes(params.state) && (
           <div style={{ margin: "24px 18px" }}>
             <ProgressBar
               currentPage={
@@ -76,7 +88,6 @@ const FunnelSection = () => {
         {params.state === "type" && (
           <Type onNext={() => navigate("/createSchedule/loading")} />
         )}
-        {params.state === "loading" && <Loading />}
       </Style.FunnelContainer>
     </>
   );

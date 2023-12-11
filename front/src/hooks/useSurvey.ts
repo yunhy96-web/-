@@ -1,5 +1,6 @@
 import { useRecoilState } from "recoil";
 import { surveyState } from "../atom/surveyState";
+import dayjs from "dayjs";
 
 const useSurvey = () => {
   const [survey, setSurvey] = useRecoilState(surveyState);
@@ -52,6 +53,15 @@ const useSurvey = () => {
     }));
   };
 
+  const getTripPeriod = () => {
+    const tripPeriod = dayjs(survey.endDate.format("YYYY-MM-DD")).diff(
+      survey.startDate.format("YYYY-MM-DD"),
+      "day"
+    );
+
+    return tripPeriod;
+  };
+
   return {
     survey,
     setSurvey,
@@ -60,6 +70,7 @@ const useSurvey = () => {
     setTripType,
     setTripInterest,
     setTripStyle,
+    getTripPeriod,
   };
 };
 

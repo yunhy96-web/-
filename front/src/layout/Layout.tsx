@@ -6,7 +6,13 @@ import axios from "axios";
 
 const Layout = ({ children }: PropsWithChildren) => {
   const location = useLocation();
-  const tabNavigatorPathList = ["/home", "/mySchedule", "/Article", "/myPage"];
+  const tabNavigatorPathList = [
+    "/home",
+    "/mySchedule",
+    "/createSchedule",
+    "/Article",
+    "/myPage",
+  ];
 
   return (
     <Style.Layout>

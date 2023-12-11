@@ -7,6 +7,7 @@ import MySchedule from "../pages/MySchedule";
 import Layout from "../layout/Layout";
 import Login from "../pages/Login";
 import Onboarding from "../pages/Onboarding";
+import AddSchedule from "../pages/AddSchedule";
 
 const Router = () => {
   return (
@@ -17,6 +18,7 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/mySchedule" element={<MySchedule />} />
+          <Route path="/createSchedule" element={<AddSchedule />} />
           <Route path="/createSchedule/:state" element={<CreateSchedule />} />
           <Route path="/article" element={<Article />} />
           <Route path="/myPage" element={<MyPage />} />

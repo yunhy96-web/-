@@ -21,4 +21,9 @@ export const Progress = styled.div<{ progress: number }>`
 export const ProgressContainer = styled.div`
   display: flex;
   align-items: center;
+
+  font-family: Pretendard Variable;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
 `;

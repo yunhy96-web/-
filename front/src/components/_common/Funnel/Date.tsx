@@ -3,6 +3,7 @@ import useSurvey from "../../../hooks/useSurvey";
 import Button from "../Button";
 import * as Style from "./style";
 import { useNavigate } from "react-router-dom";
+import { Icon } from "../../../assets";
 
 type Props = {
   onNext: () => void;
@@ -25,20 +26,30 @@ const Date = ({ onNext }: Props) => {
   );
 
   return (
-    <>
-      <div>여행 날짜를 선택해주세요.</div>
-      <div
-        onClick={() => {
-          navigate("/createSchedule/date-calendar");
-        }}
-      >{`${convertDateToString(startDate)} - ${convertDateToString(
-        endDate
-      )}`}</div>
-      <div>{`${tripPeriod}박 ${tripPeriod + 1}일`}</div>
+    <Style.FunnelContainer>
+      <Style.SubTitle>여행 날짜를 선택해주세요.</Style.SubTitle>
+      <div style={{ display: "flex", gap: 16, paddingTop: 12 }}>
+        <Style.DateBox>
+          <Icon.Date />
+          <div
+            onClick={() => {
+              navigate("/createSchedule/date-calendar", { replace: true });
+            }}
+          >
+            {`${convertDateToString(startDate)} - ${convertDateToString(
+              endDate
+            )}`}
+          </div>
+        </Style.DateBox>
+        <Style.ScheduleDate>{`${tripPeriod}박 ${
+          tripPeriod + 1
+        }일`}</Style.ScheduleDate>
+      </div>
+
       <Style.NextButton>
         <Button color="primary" text="다음" onClick={onNext} />
       </Style.NextButton>
-    </>
+    </Style.FunnelContainer>
   );
 };
 
