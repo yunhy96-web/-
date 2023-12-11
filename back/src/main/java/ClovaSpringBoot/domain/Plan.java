@@ -1,5 +1,7 @@
 package ClovaSpringBoot.domain;
 
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,7 +11,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
+
 @Table(name="plans")
 @Entity
 @Getter
@@ -21,11 +26,20 @@ public class Plan {
     @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "title" , nullable = false)
-    private String title;
+    @Column(name = "realday" , nullable = false)
+    private String realday;
+
+    @Column(name = "email", nullable = false)
+    private String email;
 
     @Column(name = "content" , nullable = false)
     private String content;
+
+//    @Column(name = "day", nullable = false)
+//    private String day;
+
+    @Column(name = "time" , nullable = false)
+    private String time;
 
     @CreatedDate
     @Column(name="created_at")
@@ -36,15 +50,18 @@ public class Plan {
     private LocalDateTime updatedAt;
 
     @Builder //빌더패턴으로 객체 생성
-    public Plan(String title, String content, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.title = title;
+    public Plan(String realday, String content, String email, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.realday = realday;
         this.content = content;
+        //this.day = day;
+        this.time = time;
+        this.email = email;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public void update(String title, String content){
-        this.title = title;
+    public void update(String realday, String content){
+        this.realday = realday;
         this.content = content;
     }
 }
