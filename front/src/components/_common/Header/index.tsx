@@ -1,13 +1,24 @@
 import React from "react";
 import * as Style from "./styles";
 import { Icon } from "../../../assets";
+import { useNavigate } from "react-router-dom";
 
-const Header = () => {
+type Props = {
+  back?: boolean;
+  title: string;
+  right?: {
+    onClick: () => void;
+    content: JSX.Element;
+  };
+};
+
+const Header = ({ back, title, right }: Props) => {
+  const navigate = useNavigate();
   return (
     <Style.Header>
-      <Icon.Back />
-      <div>사전 조사</div>
-      <div>건너 뛰기</div>
+      {back && <Icon.Back onClick={() => navigate(-1)} />}
+      <div>{title}</div>
+      {right && <div onClick={right.onClick}>{right.content}</div>}
     </Style.Header>
   );
 };

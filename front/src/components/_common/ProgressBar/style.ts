@@ -17,3 +17,8 @@ export const Progress = styled.div<{ progress: number }>`
   z-index: 3;
   transition: 0.15s ease-in-out;
 `;
+
+export const ProgressContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;

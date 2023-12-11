@@ -6,6 +6,7 @@ const theme = {
     sub: "#757575",
     sub2: "#3B3A3A",
     gray: "#DDDDDD",
+    gray_1: "#999999",
     white: "#FFFFFF",
   },
   font: {

@@ -21,7 +21,7 @@ const TabNavigator = () => {
     { path: "/home", title: "홈", SVG: Icon.Home },
     { path: "/mySchedule", title: "일정관리", SVG: Icon.MySchedule },
     {
-      path: "/createSchedule/save",
+      path: "/createSchedule/date",
       title: "일정 추가",
       SVG: Icon.CreateSchedule,
     },
