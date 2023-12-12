@@ -29,10 +29,15 @@ const Loading = () => {
 
   useEffect(() => {
     if (flag.current) return;
+
     mutate({
-      content1: "기간: 2023년 12월 12일 - 2023년 12월 15일",
-      content2: "여행지: 도쿄",
-      content3: "관심사: 음식, 관광",
+      content1: `기간: ${survey.startDate.format(
+        "YYYY년 MM월 DD일"
+      )} - ${survey.endDate.format("YYYY년 MM월 DD일")}`,
+      content2: `여행지: ${survey.destination.city}`,
+      content3: `관심사: ${[...survey.trip.interest, ...survey.trip.type].join(
+        ", "
+      )}`,
     });
     flag.current = true;
   }, []);

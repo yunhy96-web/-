@@ -58,6 +58,7 @@ const Type = ({ onNext }: Props) => {
         <Style.TagList>
           {typeList.map((type) => (
             <Tag
+              key={type}
               text={type}
               onClick={() => setTripType(type)}
               isActive={isAlreadySelectedType(type)}
@@ -68,6 +69,7 @@ const Type = ({ onNext }: Props) => {
         <Style.TagList>
           {interestList.map((type) => (
             <Tag
+              key={type}
               text={type}
               onClick={() => setTripInterest(type)}
               isActive={isAlreadySelectedInterest(type)}
@@ -78,6 +80,7 @@ const Type = ({ onNext }: Props) => {
         <Style.DestinationType>
           {styleList.map((style) => (
             <SelectBox
+              key={style}
               text={style}
               isActive={survey.trip.style === style}
               onClick={setTripStyle}

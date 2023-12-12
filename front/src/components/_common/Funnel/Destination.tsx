@@ -19,6 +19,7 @@ const Destination = ({ onNext }: Props) => {
         <Style.DestinationType>
           {typeList.map((type) => (
             <SelectBox
+              key={type}
               text={type}
               isActive={survey.destination.type === type}
               onClick={setDestinationType}
