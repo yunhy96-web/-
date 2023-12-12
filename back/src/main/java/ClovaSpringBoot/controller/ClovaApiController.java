@@ -49,7 +49,8 @@ public class ClovaApiController {
         return responseEntity;
     }
 
-    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
+    //모든 경로로 들어오는 요청에 대해서 cors
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/send-request2")
     public ResponseEntity<String> sendRequestToExternalApi(@RequestBody Map<String, String> requestMap) {
         String content1 = requestMap.get("content1");
@@ -98,7 +99,7 @@ public class ClovaApiController {
             System.out.println(scheduleListContent);
 
             JSONArray scheduleList = new JSONArray(scheduleListContent);
-
+            //json 으로 파싱하는 부분
             for (int i = 0; i < scheduleList.length(); i++) {
                 JSONObject day = scheduleList.getJSONObject(i);
                 JSONObject todoList = day.getJSONObject("todoList");

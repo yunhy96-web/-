@@ -56,8 +56,8 @@ public class Plan {
         this.updatedAt = updatedAt;
     }
 
-    public void update(String realday, String content){
-        this.realday = realday;
+    public void update(String time, String content){
+        this.time = time;
         this.content = content;
     }
 }

@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class UpdatePlanRequest {
-    private String title;
+    private String time;
     private String content;
 }
