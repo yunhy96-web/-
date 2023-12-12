@@ -29,13 +29,13 @@ const Date = ({ onNext }: Props) => {
     <Style.FunnelContainer>
       <Style.SubTitle>여행 날짜를 선택해주세요.</Style.SubTitle>
       <div style={{ display: "flex", gap: 16, paddingTop: 12 }}>
-        <Style.DateBox>
+        <Style.DateBox
+          onClick={() => {
+            navigate("/createSchedule/date-calendar", { replace: true });
+          }}
+        >
           <Icon.Date />
-          <div
-            onClick={() => {
-              navigate("/createSchedule/date-calendar", { replace: true });
-            }}
-          >
+          <div>
             {`${convertDateToString(startDate)} - ${convertDateToString(
               endDate
             )}`}

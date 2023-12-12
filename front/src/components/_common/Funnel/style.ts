@@ -85,6 +85,7 @@ export const DateBox = styled.div`
   background: #f5f5f5;
   border-radius: 8px;
   gap: 7px;
+  cursor: pointer;
 
   div {
     color: #000;
