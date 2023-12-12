@@ -117,7 +117,8 @@ export const DayList = styled.div`
   border-bottom: 1px solid #dddddd;
   overflow-x: scroll;
   overflow-y: hidden;
-  padding: 0px 16px;
+  padding: 12px 16px 0 16px;
+  height: 73px;
 
   -ms-overflow-style: none;
 
@@ -135,6 +136,7 @@ export const Day = styled.div<{ isSelected: boolean }>`
   padding: 13px 0;
   white-space: nowrap;
   height: 100%;
+  cursor: pointer;
 
   color: ${({ theme, isSelected }) =>
     isSelected ? theme.colors.main : theme.colors.sub};
@@ -225,6 +227,29 @@ export const RestButton = styled.button`
 export const Content = styled.div`
   background: #f7f7f7;
   padding: 0 16px;
-  height: 100%;
   overflow-y: auto;
+  height: 100%;
+  padding-bottom: 80px;
+`;
+
+export const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 12px);
+  overflow: auto;
+  gap: 15px;
+  padding-top: 17px;
+  -ms-overflow-style: none;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+export const PlusButton = styled.button`
+  width: 100%;
+  border-radius: 8px;
+  border: 1px dashed #ff7a00;
+  background: #fff;
+  padding: 9px 0 13px 0;
 `;

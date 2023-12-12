@@ -8,6 +8,10 @@ import { ReactComponent as Back } from "./back.svg";
 import { ReactComponent as Check } from "./check.svg";
 import { ReactComponent as Close } from "./close.svg";
 import { ReactComponent as Date } from "./date.svg";
+import { ReactComponent as RightArrow } from "./rightArrow.svg";
+import { ReactComponent as Hamburger } from "./hamburger.svg";
+import { ReactComponent as Reload } from "./reload.svg";
+import { ReactComponent as Plus } from "./plus.svg";
 
 export const Icon = {
   Article,
@@ -20,4 +24,8 @@ export const Icon = {
   AddSchedule,
   Close,
   Date,
+  RightArrow,
+  Hamburger,
+  Reload,
+  Plus,
 };
