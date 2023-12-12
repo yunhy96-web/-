@@ -1,27 +1,52 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import React, { useEffect } from "react";
-import { createTripSchedule } from "../../api/clova";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useRef, useState } from "react";
+import { createTripSchedule, getTripSchedule } from "../../api/clova";
 import { useNavigate } from "react-router-dom";
 import * as Style from "./style";
+import useSurvey from "../../hooks/useSurvey";
 
 const Loading = () => {
   const navigate = useNavigate();
-  const { isPending, isSuccess, isError, mutate } = useMutation({
+  const [isComplete, setIsComplete] = useState(false);
+  const flag = useRef(false);
+
+  const { survey } = useSurvey();
+
+  const { data, isLoading, error, isSuccess } = useQuery({
+    queryKey: ["tripSchedule"],
+    queryFn: getTripSchedule,
+    enabled: isComplete,
+    staleTime: Infinity,
+  });
+
+  const { isPending, isError, mutate } = useMutation({
     mutationKey: ["createdTripSchedule"],
     mutationFn: createTripSchedule,
+    onSuccess: () => {
+      setIsComplete(true);
+    },
   });
 
   useEffect(() => {
+    if (flag.current) return;
+
     mutate({
-      content: "기간: 2023년 12월 12일 - 2023년 12월 15일",
-      content2: "여행지: 도쿄",
-      content3: "관심사: 음식, 관광",
+      content1: `기간: ${survey.startDate.format(
+        "YYYY년 MM월 DD일"
+      )} - ${survey.endDate.format("YYYY년 MM월 DD일")}`,
+      content2: `여행지: ${survey.destination.city}`,
+      content3: `관심사: ${[...survey.trip.interest, ...survey.trip.type].join(
+        ", "
+      )}`,
     });
+    flag.current = true;
   }, []);
+
+  const queryClient = useQueryClient();
+  const muatationCache = queryClient.getMutationCache();
 
   useEffect(() => {
     if (isSuccess) {
-      console.log("hi");
       navigate("/createSchedule/complete");
     }
   }, [isSuccess]);

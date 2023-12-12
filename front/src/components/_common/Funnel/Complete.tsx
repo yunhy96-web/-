@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Header from "../Header";
 import { Icon } from "../../../assets";
 import { useNavigate } from "react-router-dom";
@@ -6,15 +5,41 @@ import * as Style from "./style";
 import useSurvey from "../../../hooks/useSurvey";
 import { Dayjs } from "dayjs";
 import Button from "../Button";
+import ScheduleCard from "../ScheduleCard";
+import useSchedule from "../../../hooks/useSchedule";
+import { PeriodTag } from "../Tag/PeriodTab";
 
 type Props = {
   onNext: () => void;
 };
 
+export type Schedule = {
+  id: number;
+  realday: string;
+  email: string;
+  time: string;
+  content: string;
+  description: string;
+};
+
+export type ScheduleByDate = { [key: string]: Omit<Schedule, "realday">[] };
+
 const Complete = ({ onNext }: Props) => {
   const navigate = useNavigate();
   const { survey, getTripPeriod } = useSurvey();
-  const [day, setDay] = useState(1);
+
+  const {
+    day,
+    schedule,
+    date,
+    onChangeDescription,
+    setDay,
+    initData,
+    onDragStart,
+    onDragEnd,
+    onAvailableItemDragEnter,
+    onDragOver,
+  } = useSchedule();
 
   const period = `${getTripPeriod()}박 ${getTripPeriod() + 1}일`;
 
@@ -22,7 +47,7 @@ const Complete = ({ onNext }: Props) => {
     return `${date.format("YYYY.MM.DD")}`;
   };
 
-  const totalDay = getTripPeriod() + 4;
+  const totalDay = getTripPeriod() + 1;
 
   return (
     <>
@@ -39,7 +64,7 @@ const Complete = ({ onNext }: Props) => {
         <Style.DestinationName>
           {survey.destination.city} 여행
         </Style.DestinationName>
-        <Style.PeriodBox>{period}</Style.PeriodBox>
+        <PeriodTag>{period}</PeriodTag>
       </Style.TitleSection>
       <Style.SubRow>
         <Style.DatePeriod>
@@ -47,11 +72,11 @@ const Complete = ({ onNext }: Props) => {
             survey.endDate
           )}`}
         </Style.DatePeriod>
-        <Style.RestButton>초기화</Style.RestButton>
+        <Style.RestButton onClick={initData}>초기화</Style.RestButton>
       </Style.SubRow>
       <Style.DayList>
         {Array.from({ length: totalDay }, (_, index) => (
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative", height: 45 }}>
             <Style.Day
               key={index}
               isSelected={day === index + 1}
@@ -63,9 +88,29 @@ const Complete = ({ onNext }: Props) => {
           </div>
         ))}
       </Style.DayList>
-      <Style.Content>gd</Style.Content>
+      <Style.Content>
+        <Style.Wrapper>
+          {schedule[date]?.map((item, index) => (
+            <ScheduleCard
+              onDragStart={(e) => onDragStart(e, index)}
+              onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
+              onDragOver={onDragOver}
+              onDragEnd={onDragEnd}
+              title={item.content}
+              description={item.description}
+              onChangeDescription={(value) =>
+                onChangeDescription(item.id, value)
+              }
+              key={item.id}
+            />
+          ))}
+          <Style.PlusButton>
+            <Icon.Plus />
+          </Style.PlusButton>
+        </Style.Wrapper>
+      </Style.Content>
       <Style.NextButton>
-        <Button color="primary" text="다음" onClick={onNext} />
+        <Button color="primary" text="저장하기" onClick={onNext} />
       </Style.NextButton>
     </>
   );

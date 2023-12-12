@@ -12,7 +12,6 @@ type Props = {
 
 const Calendar = ({ baseDate, date, setCalendarDate }: Props) => {
   const monthList = createCalendar(baseDate);
-  // const { survey, setCalendarDate } = useSurvey();
   const { startDate, endDate } = date;
 
   return (
