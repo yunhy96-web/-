@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class UpdatePlanRequest {
-    private String time;
-    private String content;
+public class DetailPlanRequest {
+    private String detailContent;
 }

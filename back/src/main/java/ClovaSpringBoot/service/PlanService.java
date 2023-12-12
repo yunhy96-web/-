@@ -43,7 +43,7 @@ public class PlanService {
         Plan plan = planRepository.findById(id)
                 .orElseThrow(()->new IllegalArgumentException("not found : " + id));
 
-        plan.update(request.getTitle(), request.getContent());
+        plan.update(request.getTime(), request.getContent());
 
         return plan;
     }
