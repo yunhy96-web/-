@@ -9,6 +9,7 @@ export const NextButton = styled.div`
   position: fixed;
   bottom: 30px;
   width: calc(100% - 36px);
+  min-width: 360px;
   left: 18px;
 `;
 
@@ -239,6 +240,7 @@ export const Wrapper = styled.div`
   overflow: auto;
   gap: 15px;
   padding-top: 17px;
+  padding-bottom: 20px;
   -ms-overflow-style: none;
 
   ::-webkit-scrollbar {

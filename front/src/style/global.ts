@@ -11,7 +11,7 @@ const globalStyle = css`
     padding: 0;
     height: 100%;
     font-family: "Pretendard Variable";
-    color: #2d2d2d;
+    color: #3b3a3a;
 
     @font-face {
       font-family: SUIT;

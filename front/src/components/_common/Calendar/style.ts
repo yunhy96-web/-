@@ -4,6 +4,7 @@ export const MonthTitle = styled.div`
   width: 100%;
   margin: 24px 0 12px 0;
   text-align: center;
+  ${({ theme }) => theme.font.heading_3}
 `;
 export const Month = styled.div`
   display: flex;
@@ -56,6 +57,7 @@ export const Date = styled.div<{ isSelected: boolean; isDuring: boolean }>`
   align-items: center;
   cursor: pointer;
   border-radius: 8px;
+  ${({ theme }) => theme.font.body_1};
   ${({ theme, isSelected, isDuring }) => `
     color: ${
       isSelected

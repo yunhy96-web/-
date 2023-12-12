@@ -4,7 +4,7 @@ export const TabNavigator = styled.footer`
   position: fixed;
   bottom: 0;
   width: 100%;
-  ${({ theme }) => theme.colors.white}
+  background: ${({ theme }) => theme.colors.white};
 `;
 
 export const TabList = styled.ul`
@@ -25,7 +25,7 @@ export const TabItem = styled.li<{ isActive: boolean }>`
   justify-content: space-between;
   ${({ isActive, theme }) => `
     ${isActive ? `color: ${theme.colors.main};` : `${theme.colors.sub2};`}
-    ${theme.font.body_02}
+    ${theme.font.body_2}
     cursor: pointer;
   `}
 `;

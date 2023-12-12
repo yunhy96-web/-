@@ -6,6 +6,7 @@ export const Card = styled.li<{ isOpen: boolean }>`
   background: ${({ theme }) => theme.colors.white};
   transition: all 0.1s ease-in-out;
   height: ${({ isOpen }) => (isOpen ? "187px" : "72px")};
+  /* min-width: 360px; */
 `;
 
 export const Title = styled.div`

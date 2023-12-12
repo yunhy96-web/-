@@ -11,6 +11,7 @@ export const Header = styled.header<{ borderBottom: boolean }>`
   z-index: 20;
   background: ${({ theme }) => theme.colors.white};
   width: 100%;
+  min-width: 360px;
   height: 63px;
 `;
 

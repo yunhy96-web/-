@@ -1,4 +1,6 @@
 import { api } from ".";
+import { Schedule } from "../components/_common/Funnel/Complete";
+import convertDateFormmat from "../utils/convertDateFormmat";
 
 type TripContent = {
   content1: string;
@@ -12,5 +14,16 @@ export const createTripSchedule = async (content: TripContent) => {
 
 export const getTripSchedule = async () => {
   const { data } = await api.get("/plans");
-  return data;
+  return getScheduleListByDate(data);
+};
+
+const getScheduleListByDate = (scheduleList: Schedule[]) => {
+  return scheduleList.reduce((accr, { realday, ...rest }) => {
+    if (accr[convertDateFormmat(realday)]) {
+      accr[convertDateFormmat(realday)].push({ ...rest, description: "" });
+    } else {
+      accr[convertDateFormmat(realday)] = [{ ...rest, description: "" }];
+    }
+    return accr;
+  }, {} as { [key: string]: Omit<Schedule, "realday">[] });
 };

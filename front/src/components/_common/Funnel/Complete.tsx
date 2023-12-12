@@ -1,4 +1,3 @@
-import React, { DragEvent, useRef, useState } from "react";
 import Header from "../Header";
 import { Icon } from "../../../assets";
 import { useNavigate } from "react-router-dom";
@@ -7,19 +6,40 @@ import useSurvey from "../../../hooks/useSurvey";
 import { Dayjs } from "dayjs";
 import Button from "../Button";
 import ScheduleCard from "../ScheduleCard";
-import { useQueryClient } from "@tanstack/react-query";
+import useSchedule from "../../../hooks/useSchedule";
+import { PeriodTag } from "../Tag/PeriodTab";
 
 type Props = {
   onNext: () => void;
 };
 
+export type Schedule = {
+  id: number;
+  realday: string;
+  email: string;
+  time: string;
+  content: string;
+  description: string;
+};
+
+export type ScheduleByDate = { [key: string]: Omit<Schedule, "realday">[] };
+
 const Complete = ({ onNext }: Props) => {
   const navigate = useNavigate();
   const { survey, getTripPeriod } = useSurvey();
-  const [day, setDay] = useState(1);
-  const queryClient = useQueryClient();
 
-  console.log(queryClient.getQueryData(["tripSchedule"]));
+  const {
+    day,
+    schedule,
+    date,
+    onChangeDescription,
+    setDay,
+    initData,
+    onDragStart,
+    onDragEnd,
+    onAvailableItemDragEnter,
+    onDragOver,
+  } = useSchedule();
 
   const period = `${getTripPeriod()}박 ${getTripPeriod() + 1}일`;
 
@@ -27,49 +47,7 @@ const Complete = ({ onNext }: Props) => {
     return `${date.format("YYYY.MM.DD")}`;
   };
 
-  const totalDay = getTripPeriod() + 4;
-
-  const draggingItemIndex = useRef<number | null>(null);
-  const draggingOverItemIndex = useRef<number | null>(null);
-
-  const [availableOptionsArr, setAvailableOptionsArr] = useState([
-    { id: 1, content: "오사카 성" },
-    { id: 2, content: "도톤보리" },
-    { id: 3, content: "유니버셜 스튜디오" },
-    { id: 3, content: "유니버셜 스튜디오1" },
-    { id: 3, content: "유니버셜 스튜디오2" },
-    { id: 3, content: "유니버셜 스튜디오23" },
-  ]);
-
-  const onDragStart = (e: DragEvent<HTMLLIElement>, index: number) => {
-    draggingItemIndex.current = index;
-    (e.target as HTMLLIElement).classList.add("grabbing");
-  };
-
-  const onDragEnd = (e: DragEvent<HTMLLIElement>) => {
-    (e.target as HTMLLIElement).classList.remove("grabbing");
-  };
-
-  const onAvailableItemDragEnter = (
-    e: DragEvent<HTMLLIElement>,
-    index: number
-  ) => {
-    if (draggingItemIndex.current === null) return;
-    if (draggingItemIndex.current === index) return;
-
-    draggingOverItemIndex.current = index;
-    const copyListItems = [...availableOptionsArr]; // 1
-    const dragItemContent = copyListItems[draggingItemIndex.current]; //2
-    copyListItems.splice(draggingItemIndex.current, 1); //3
-    copyListItems.splice(draggingOverItemIndex.current, 0, dragItemContent); // 4
-    draggingItemIndex.current = draggingOverItemIndex.current;
-    draggingOverItemIndex.current = null; //5
-    setAvailableOptionsArr(copyListItems);
-  }; //6
-
-  const onDragOver = (e: any) => {
-    e.preventDefault();
-  };
+  const totalDay = getTripPeriod() + 1;
 
   return (
     <>
@@ -86,7 +64,7 @@ const Complete = ({ onNext }: Props) => {
         <Style.DestinationName>
           {survey.destination.city} 여행
         </Style.DestinationName>
-        <Style.PeriodBox>{period}</Style.PeriodBox>
+        <PeriodTag>{period}</PeriodTag>
       </Style.TitleSection>
       <Style.SubRow>
         <Style.DatePeriod>
@@ -94,7 +72,7 @@ const Complete = ({ onNext }: Props) => {
             survey.endDate
           )}`}
         </Style.DatePeriod>
-        <Style.RestButton>초기화</Style.RestButton>
+        <Style.RestButton onClick={initData}>초기화</Style.RestButton>
       </Style.SubRow>
       <Style.DayList>
         {Array.from({ length: totalDay }, (_, index) => (
@@ -112,13 +90,18 @@ const Complete = ({ onNext }: Props) => {
       </Style.DayList>
       <Style.Content>
         <Style.Wrapper>
-          {availableOptionsArr.map((item, index) => (
+          {schedule[date]?.map((item, index) => (
             <ScheduleCard
               onDragStart={(e) => onDragStart(e, index)}
               onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
               onDragOver={onDragOver}
               onDragEnd={onDragEnd}
               title={item.content}
+              description={item.description}
+              onChangeDescription={(value) =>
+                onChangeDescription(item.id, value)
+              }
+              key={item.id}
             />
           ))}
           <Style.PlusButton>

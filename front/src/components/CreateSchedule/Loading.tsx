@@ -16,6 +16,7 @@ const Loading = () => {
     queryKey: ["tripSchedule"],
     queryFn: getTripSchedule,
     enabled: isComplete,
+    staleTime: Infinity,
   });
 
   const { isPending, isError, mutate } = useMutation({

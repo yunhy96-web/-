@@ -8,6 +8,8 @@ type Props = {
   onDragEnter: (e: any) => void;
   onDragOver: (e: any) => void;
   onDragEnd: (e: any) => void;
+  description: string;
+  onChangeDescription: (value: string) => void;
 };
 
 const ScheduleCard = ({
@@ -16,6 +18,8 @@ const ScheduleCard = ({
   onDragEnter,
   onDragOver,
   onDragStart,
+  description,
+  onChangeDescription,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [isGrab, setIsGrab] = useState(false);
@@ -58,9 +62,11 @@ const ScheduleCard = ({
       <Style.Detail
         isOpen={open}
         placeholder="세부적인 여행계획을 작성해보세요."
+        value={description}
+        onChange={(e) => onChangeDescription(e.target.value)}
       />
     </Style.Card>
   );
 };
 
-export default ScheduleCard;
+export default React.memo(ScheduleCard);
