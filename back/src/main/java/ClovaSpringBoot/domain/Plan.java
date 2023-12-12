@@ -23,7 +23,7 @@ import java.util.Date;
 public class Plan {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 1씩 자동 증가
-    @Column(name = "id", updatable = false)
+    @Column(name = "plan_id", updatable = false)
     private Long id;
 
     @Column(name = "realday" , nullable = false)
