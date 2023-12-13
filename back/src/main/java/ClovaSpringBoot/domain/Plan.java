@@ -13,6 +13,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class Plan {
     @Column(name = "plan_id", updatable = false)
     private Long id;
 
-    @Column(name = "groupid" , nullable = false)
+    @Column(name = "groupid" , nullable = true)
     private Long groupid;
 
     @Column(name = "realday" , nullable = false)
@@ -50,18 +51,20 @@ public class Plan {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    //필요없으면 삭제해야하는 코드
-//    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<DetailPlan> detailPlans;
+    //추가 코드 안되면 이부분 삭제
+//    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<DetailPlan> detailPlans = new ArrayList<>();
 //
-//    public Long getGroupid() {
-//        return groupid;
+//    public void addDetailPlan(DetailPlan detailPlan) {
+//        detailPlans.add(detailPlan);
+//        detailPlan.setPlan(this);
 //    }
 //
-//    // 추가: groupid 필드의 setter 메서드
-//    public void setGroupid(Long groupid) {
-//        this.groupid = groupid;
+//    public void removeDetailPlan(DetailPlan detailPlan) {
+//        detailPlans.remove(detailPlan);
+//        detailPlan.setPlan(null);
 //    }
+    //삭제
 
     @Builder //빌더패턴으로 객체 생성
     public Plan(Long groupid, String realday, String content, String email, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {
