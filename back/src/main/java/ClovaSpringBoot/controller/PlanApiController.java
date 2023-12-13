@@ -25,12 +25,14 @@ public class PlanApiController {
     private final DetailPlanRepository detailPlanRepository;
 
     //글 등록
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/api/plans")
     public ResponseEntity<Plan> addrPlan(@RequestBody AddPlanRequest request){
         Plan savedPlan = planService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedPlan);
     }
     //전체 조회 여기에 id도 출력해줘야 나중에 클릭시 id 조회 가능.
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @GetMapping("/api/plans")
     public ResponseEntity<List<PlanResponse>> findAllPlan(){
         List<PlanResponse> articles = planService.findAll()
@@ -41,6 +43,7 @@ public class PlanApiController {
                 .body(articles);
     }
     //전체 플랜 조회 + 전체 디테일 플랜 조회
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @GetMapping("/api/plans/detailplans")
     public ResponseEntity<List<PlanResponse>> findAllPlanWithDetailPlans() {
         List<PlanResponse> planResponses = planService.findAll()
@@ -65,6 +68,7 @@ public class PlanApiController {
         return planResponse;
     }
     //id 기반으로 하나 조회
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @GetMapping("/api/plans/{id}")
     public ResponseEntity<Plan> findPlan(@PathVariable long id){
         try {
@@ -76,6 +80,7 @@ public class PlanApiController {
         }
     }
     //글삭제
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @DeleteMapping("/api/plans/{id}")
     public ResponseEntity<Void> deletePlan(@PathVariable long id){
         planService.delete(id);
@@ -83,6 +88,7 @@ public class PlanApiController {
                 .build();
     }
     //굴 수정
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PutMapping("/api/plans/{id}")
     public ResponseEntity<Plan> updateArticle(@PathVariable long id,
                                               @RequestBody UpdatePlanRequest request){

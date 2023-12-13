@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 public class PlanResponse {
     private final Long id;
+    private final Long groupid;
     private final String realday;
     private final String email;
     private final String time;
@@ -20,6 +21,7 @@ public class PlanResponse {
 
     public PlanResponse(Plan plan){
         this.id = plan.getId();
+        this.groupid = plan.getGroupid();
         this.realday = plan.getRealday();
         this.email = plan.getEmail();
         this.time = plan.getTime();

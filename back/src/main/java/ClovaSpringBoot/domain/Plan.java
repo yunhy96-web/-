@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Table(name="plans")
 @Entity
@@ -25,6 +26,9 @@ public class Plan {
     @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 1씩 자동 증가
     @Column(name = "plan_id", updatable = false)
     private Long id;
+
+    @Column(name = "groupid" , nullable = false)
+    private Long groupid;
 
     @Column(name = "realday" , nullable = false)
     private String realday;
@@ -46,8 +50,22 @@ public class Plan {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    //필요없으면 삭제해야하는 코드
+//    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private List<DetailPlan> detailPlans;
+//
+//    public Long getGroupid() {
+//        return groupid;
+//    }
+//
+//    // 추가: groupid 필드의 setter 메서드
+//    public void setGroupid(Long groupid) {
+//        this.groupid = groupid;
+//    }
+
     @Builder //빌더패턴으로 객체 생성
-    public Plan(String realday, String content, String email, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Plan(Long groupid, String realday, String content, String email, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.groupid = groupid;
         this.realday = realday;
         this.content = content;
         this.time = time;
@@ -60,4 +78,5 @@ public class Plan {
         this.time = time;
         this.content = content;
     }
+
 }

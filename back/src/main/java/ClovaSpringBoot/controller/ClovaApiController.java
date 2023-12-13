@@ -1,6 +1,8 @@
 package ClovaSpringBoot.controller;
+import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
 import ClovaSpringBoot.dto.AddPlanRequest;
+import ClovaSpringBoot.repository.PlanRepository;
 import ClovaSpringBoot.service.PlanService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +34,9 @@ public class ClovaApiController {
     private final String apiGatewayApiKey = "nnLIKzOCeByVFAY1xYNDZwNrkCrOByJiykhu2nPx";
     private final String clovaStudioRequestId = "006291727509487e9b395a88d5d2e4c5";
 
+    private Long groupId = 0L;
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @GetMapping("/send-request")
     public ResponseEntity<String> sendRequestToExternalApi(@RequestBody String requestBody) {
         HttpHeaders headers = new HttpHeaders();
@@ -53,6 +59,7 @@ public class ClovaApiController {
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/send-request2")
     public ResponseEntity<String> sendRequestToExternalApi(@RequestBody Map<String, String> requestMap) {
+        groupId++;
         String content1 = requestMap.get("content1");
         String content2 = requestMap.get("content2");
         String content3 = requestMap.get("content3");
@@ -113,7 +120,7 @@ public class ClovaApiController {
                     System.out.println(key + ": " + todoList.getString(key));
                     //여기서 저장로직
                     // AddPlanRequest 객체 생성
-                    AddPlanRequest addPlanRequest = new AddPlanRequest(day.getString("date"), "example@email.com", key, todoList.getString(key), now(), now());
+                    AddPlanRequest addPlanRequest = new AddPlanRequest(groupId, day.getString("date"), "example@email.com", key, todoList.getString(key), now(), now());
                     // TODO: 저장 로직 구현 (예: JPA를 사용한 저장)
                     planService.save2(addPlanRequest);
                 }
@@ -127,6 +134,7 @@ public class ClovaApiController {
 
         return responseEntity;
     }
+
 
 
     private String buildRequestBody(String content, String content2, String content3) {

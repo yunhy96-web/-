@@ -1,8 +1,10 @@
 package ClovaSpringBoot.service;
 
+import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
 import ClovaSpringBoot.dto.AddPlanRequest;
 import ClovaSpringBoot.dto.UpdatePlanRequest;
+import ClovaSpringBoot.repository.DetailPlanRepository;
 import ClovaSpringBoot.repository.PlanRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +49,6 @@ public class PlanService {
 
         return plan;
     }
+
 
 }
