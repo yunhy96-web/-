@@ -1,9 +1,13 @@
 package ClovaSpringBoot.controller;
 
+import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
 import ClovaSpringBoot.dto.AddPlanRequest;
+import ClovaSpringBoot.dto.DetailPlanResponse;
 import ClovaSpringBoot.dto.PlanResponse;
 import ClovaSpringBoot.dto.UpdatePlanRequest;
+import ClovaSpringBoot.repository.DetailPlanRepository;
+import ClovaSpringBoot.repository.PlanRepository;
 import ClovaSpringBoot.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,12 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
 public class PlanApiController {
 
     private final PlanService planService;
+    private final DetailPlanRepository detailPlanRepository;
 
     //글 등록
     @PostMapping("/api/plans")
@@ -33,6 +39,30 @@ public class PlanApiController {
                 .toList();
         return ResponseEntity.ok()
                 .body(articles);
+    }
+    //전체 플랜 조회 + 전체 디테일 플랜 조회
+    @GetMapping("/api/plans/detailplans")
+    public ResponseEntity<List<PlanResponse>> findAllPlanWithDetailPlans() {
+        List<PlanResponse> planResponses = planService.findAll()
+                .stream()
+                .map(this::mapToPlanResponseWithDetailPlans)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok()
+                .body(planResponses);
+    }
+
+    private PlanResponse mapToPlanResponseWithDetailPlans(Plan plan) {
+        List<DetailPlan> detailPlans = detailPlanRepository.findByPlan(plan);
+
+        // PlanResponse 객체에 DetailPlanResponse 리스트를 추가합니다.
+        List<DetailPlanResponse> detailPlanResponses = detailPlans.stream()
+                .map(detailPlan -> new DetailPlanResponse(detailPlan.getId(), detailPlan.getDetailContent()))
+                .collect(Collectors.toList());
+
+        PlanResponse planResponse = new PlanResponse(plan);
+        planResponse.setDetailPlans(detailPlanResponses);
+
+        return planResponse;
     }
     //id 기반으로 하나 조회
     @GetMapping("/api/plans/{id}")

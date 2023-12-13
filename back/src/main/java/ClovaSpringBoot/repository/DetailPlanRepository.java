@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface DetailPlanRepository extends JpaRepository<DetailPlan, Long> {
     List<DetailPlan> findDetailPlansByPlan(Plan plan);
+    List<DetailPlan> findByPlan(Plan plan);
 }
