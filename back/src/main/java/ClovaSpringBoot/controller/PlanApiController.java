@@ -2,13 +2,18 @@ package ClovaSpringBoot.controller;
 
 import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
+import ClovaSpringBoot.domain.User;
 import ClovaSpringBoot.dto.*;
 import ClovaSpringBoot.repository.DetailPlanRepository;
 import ClovaSpringBoot.repository.PlanRepository;
+import ClovaSpringBoot.repository.UserRepository;
 import ClovaSpringBoot.service.PlanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 public class PlanApiController {
 
+    private final UserRepository userRepository;
     private final PlanService planService;
     private final DetailPlanRepository detailPlanRepository;
     //전체 플랜, 디테일 플랜 같이 등록
@@ -83,7 +89,9 @@ public class PlanApiController {
     //전체 플랜 조회 + 전체 디테일 플랜 조회
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @GetMapping("/api/plans/detailplans")
-    public ResponseEntity<List<PlanResponse>> findAllPlanWithDetailPlans() {
+    public ResponseEntity<List<PlanResponse>> findAllPlanWithDetailPlans(@AuthenticationPrincipal Authentication authentication) {
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
         List<PlanResponse> planResponses = planService.findAll()
                 .stream()
                 .map(this::mapToPlanResponseWithDetailPlans)

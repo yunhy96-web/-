@@ -2,6 +2,7 @@ package ClovaSpringBoot.dto;
 
 import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
+import ClovaSpringBoot.domain.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,7 +14,7 @@ public class PlanResponse {
     private final Long id;
     private final Long groupid;
     private final String realday;
-    private final String email;
+    private final User user;
     private final String time;
     private final String content;
     private final LocalDateTime createdAt;
@@ -24,8 +25,8 @@ public class PlanResponse {
     public PlanResponse(Plan plan){
         this.id = plan.getId();
         this.groupid = plan.getGroupid();
+        this.user = plan.getUser();
         this.realday = plan.getRealday();
-        this.email = plan.getEmail();
         this.time = plan.getTime();
         this.content = plan.getContent();
         this.createdAt = plan.getCreatedAt();

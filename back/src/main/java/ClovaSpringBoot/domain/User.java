@@ -15,16 +15,20 @@ public class User{
     @Column(name ="id", updatable = false)
     private Long id;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "username", nullable = false)
+    private String username;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name = "nickname", nullable = false)
+    private String nickname;
+
+    @Column(name = "image")
+    private String image;
 
     @Builder
-    public User(String email, String password, String auth){
-        this.email = email;
-        this.password = password;
+    public User(String username, String nickname, String image){
+        this.username = username;
+        this.nickname = nickname;
+        this.image = image;
     }
     //여기 아래 부분들이 다 유저디테일들
 

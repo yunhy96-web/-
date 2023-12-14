@@ -31,7 +31,7 @@ public class PlanService {
                     request.getGroupid(),
                     request.getRealday(),
                     request.getContent(),
-                    request.getEmail(),
+                    request.getUser(),
                     request.getTime(),
                     LocalDateTime.now(),
                     LocalDateTime.now()

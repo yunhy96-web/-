@@ -1,5 +1,6 @@
 package ClovaSpringBoot.dto;
 
+import ClovaSpringBoot.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ public class PlanWithDetailRequest {
     private Long groupid;
     private String realday;
     private String content;
-    private String email;
+    private User user;
     private String time;
     private List<DetailPlanRequest> detailPlans;
 }
