@@ -8,6 +8,7 @@ export const Background = styled.div`
   display: flex;
   background-image: url("/images/onboarding.webp");
   height: 100%;
+  background-position-x: center;
   /* background-size: contain; */
   background-size: cover;
   background-position-y: 0;

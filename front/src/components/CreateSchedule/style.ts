@@ -12,7 +12,7 @@ export const LoadingTitle = styled.div`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  color: ${({ theme }) => theme.colors.main};
+  /* color: ${({ theme }) => theme.colors.main}; */
   margin-bottom: 12px;
 `;
 

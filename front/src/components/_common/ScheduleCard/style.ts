@@ -56,3 +56,9 @@ export const Detail = styled.textarea<{ isOpen: boolean }>`
 export const DragButton = styled.div<{ isGrab: boolean }>`
   cursor: ${({ isGrab }) => (isGrab ? "grabbing" : "grab")};
 `;
+
+export const TitleRight = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;

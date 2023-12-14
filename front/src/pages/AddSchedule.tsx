@@ -1,4 +1,3 @@
-import React from "react";
 import * as Style from "../components/AddSchedule/style";
 import Button from "../components/_common/Button";
 import { Icon } from "../assets";
@@ -6,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const AddSchedule = () => {
   const navigate = useNavigate();
+
   return (
     <Style.Layout>
       <img

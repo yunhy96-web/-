@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as Style from "./style";
 import { Icon } from "../../../assets";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 type Props = {
   title: string;
@@ -10,6 +11,7 @@ type Props = {
   onDragEnd: (e: any) => void;
   description: string;
   onChangeDescription: (value: string) => void;
+  onDelete: () => void;
 };
 
 const ScheduleCard = ({
@@ -20,9 +22,20 @@ const ScheduleCard = ({
   onDragStart,
   description,
   onChangeDescription,
+  onDelete,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [isGrab, setIsGrab] = useState(false);
+
+  const { openConfirmModal, closeConfirmModal } = useConfirmModal();
+
+  const deleteSchedule = () => {
+    openConfirmModal({
+      type: "DELETE_WHEN_EDITING",
+      confirm: onDelete,
+      cancel: closeConfirmModal,
+    });
+  };
 
   return (
     <Style.Card
@@ -51,13 +64,18 @@ const ScheduleCard = ({
             <Icon.Hamburger />
           </Style.DragButton>
           <Style.TitleText>{title}</Style.TitleText>
-          <button>
+          {/* <button>
             <Icon.Reload />
-          </button>
+          </button> */}
         </Style.TitleLeft>
-        <Style.Arrow isOpen={open} onClick={() => setOpen((prev) => !prev)}>
-          <Icon.RightArrow />
-        </Style.Arrow>
+        <Style.TitleRight>
+          <Style.Arrow isOpen={open} onClick={() => setOpen((prev) => !prev)}>
+            <Icon.RightArrow />
+          </Style.Arrow>
+          <div onClick={deleteSchedule}>
+            <Icon.Close />
+          </div>
+        </Style.TitleRight>
       </Style.Title>
       <Style.Detail
         isOpen={open}

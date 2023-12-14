@@ -8,6 +8,7 @@ import Button from "../Button";
 import ScheduleCard from "../ScheduleCard";
 import useSchedule from "../../../hooks/useSchedule";
 import { PeriodTag } from "../Tag/PeriodTab";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 type Props = {
   onNext: () => void;
@@ -39,6 +40,7 @@ const Complete = ({ onNext }: Props) => {
     onDragEnd,
     onAvailableItemDragEnter,
     onDragOver,
+    onDeleteSchedule,
   } = useSchedule();
 
   const period = `${getTripPeriod()}박 ${getTripPeriod() + 1}일`;
@@ -48,6 +50,16 @@ const Complete = ({ onNext }: Props) => {
   };
 
   const totalDay = getTripPeriod() + 1;
+
+  const { openConfirmModal, closeConfirmModal } = useConfirmModal();
+
+  const openInitModal = () => {
+    openConfirmModal({
+      type: "INIT_SCHEDULE",
+      confirm: () => initData(date),
+      cancel: closeConfirmModal,
+    });
+  };
 
   return (
     <>
@@ -60,11 +72,13 @@ const Complete = ({ onNext }: Props) => {
         borderBottom={false}
       />
       <div style={{ height: 63, minHeight: 63 }}></div>
+      <div style={{ marginLeft: 16 }}>
+        <PeriodTag>{period}</PeriodTag>
+      </div>
       <Style.TitleSection>
         <Style.DestinationName>
           {survey.destination.city} 여행
         </Style.DestinationName>
-        <PeriodTag>{period}</PeriodTag>
       </Style.TitleSection>
       <Style.SubRow>
         <Style.DatePeriod>
@@ -72,13 +86,12 @@ const Complete = ({ onNext }: Props) => {
             survey.endDate
           )}`}
         </Style.DatePeriod>
-        <Style.RestButton onClick={initData}>초기화</Style.RestButton>
+        <Style.RestButton onClick={openInitModal}>초기화</Style.RestButton>
       </Style.SubRow>
       <Style.DayList>
         {Array.from({ length: totalDay }, (_, index) => (
-          <div style={{ position: "relative", height: 45 }}>
+          <div key={index} style={{ position: "relative", height: 45 }}>
             <Style.Day
-              key={index}
               isSelected={day === index + 1}
               onClick={() => setDay(index + 1)}
             >
@@ -94,6 +107,7 @@ const Complete = ({ onNext }: Props) => {
             <ScheduleCard
               onDragStart={(e) => onDragStart(e, index)}
               onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
+              onDelete={() => onDeleteSchedule(item.id)}
               onDragOver={onDragOver}
               onDragEnd={onDragEnd}
               title={item.content}

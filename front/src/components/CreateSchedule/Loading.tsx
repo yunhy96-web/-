@@ -4,6 +4,7 @@ import { createTripSchedule, getTripSchedule } from "../../api/clova";
 import { useNavigate } from "react-router-dom";
 import * as Style from "./style";
 import useSurvey from "../../hooks/useSurvey";
+import { ThreeDots } from "react-loader-spinner";
 
 const Loading = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const Loading = () => {
       content2: `여행지: ${survey.destination.city}`,
       content3: `관심사: ${[...survey.trip.interest, ...survey.trip.type].join(
         ", "
-      )}`,
+      )}, 할 것`,
     });
     flag.current = true;
   }, []);
@@ -56,20 +57,19 @@ const Loading = () => {
       <img
         src="/images/logo.png"
         alt="logo"
-        style={{ width: 125, height: 125, marginBottom: 25 }}
+        style={{ width: 125, height: 125, marginBottom: 10 }}
       />
-      <div style={{ marginBottom: 39 }}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="76"
-          height="18"
-          viewBox="0 0 76 18"
-          fill="none"
-        >
-          <circle cx="9" cy="9" r="9" fill="#FF7A00" />
-          <circle cx="42" cy="9" r="5" fill="#757575" />
-          <circle cx="71" cy="9" r="5" fill="#757575" />
-        </svg>
+      <div style={{ marginBottom: 10 }}>
+        <ThreeDots
+          height="60"
+          width="60"
+          radius="9"
+          color="#FF7A00"
+          ariaLabel="three-dots-loading"
+          wrapperStyle={{}}
+          // wrapperClassName=""
+          visible={true}
+        />
       </div>
       <Style.LoadingTitle>AI가 여행 일정을 추천중입니다.</Style.LoadingTitle>
       <Style.LoadingSubTitle>잠시만 기다려주세요.</Style.LoadingSubTitle>

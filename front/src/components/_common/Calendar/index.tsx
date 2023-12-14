@@ -16,7 +16,9 @@ const Calendar = ({ baseDate, date, setCalendarDate }: Props) => {
 
   return (
     <div>
-      <Style.MonthTitle>{baseDate.month() + 1}월</Style.MonthTitle>
+      <Style.MonthTitle>
+        {baseDate.year()}년 {baseDate.month() + 1}월
+      </Style.MonthTitle>
       <Style.Month>
         {monthList.map((weeks, idx) => (
           <Style.Week key={weeks[0].format("YYYY-MM-DD")}>

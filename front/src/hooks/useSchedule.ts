@@ -11,11 +11,11 @@ const useSchedule = () => {
 
   const queryClient = useQueryClient();
 
-  const scheduleList = queryClient.getQueryData(["tripSchedule"]);
+  const scheduleList = queryClient.getQueryData([
+    "tripSchedule",
+  ]) as ScheduleByDate;
 
-  const [schedule, setSchedule] = useState<ScheduleByDate>(
-    (scheduleList as ScheduleByDate) || []
-  );
+  const [schedule, setSchedule] = useState<ScheduleByDate>(scheduleList);
 
   const draggingItemIndex = useRef<number | null>(null);
   const draggingOverItemIndex = useRef<number | null>(null);
@@ -54,8 +54,11 @@ const useSchedule = () => {
     e.preventDefault();
   };
 
-  const initData = () => {
-    setSchedule((scheduleList as ScheduleByDate) || []);
+  const initData = (date: string) => {
+    setSchedule((prev) => ({
+      ...prev,
+      [date]: scheduleList[date],
+    }));
   };
 
   const onChangeDescription = (id: number, description: string) => {
@@ -63,6 +66,16 @@ const useSchedule = () => {
       const result = prev[date].map((schedule) =>
         schedule.id === id ? { ...schedule, description } : schedule
       );
+      return {
+        ...prev,
+        [date]: result,
+      };
+    });
+  };
+
+  const onDeleteSchedule = (id: number) => {
+    setSchedule((prev) => {
+      const result = prev[date].filter((schedule) => schedule.id !== id);
       return {
         ...prev,
         [date]: result,
@@ -82,6 +95,7 @@ const useSchedule = () => {
     setDay,
     date,
     initData,
+    onDeleteSchedule,
   };
 };
 

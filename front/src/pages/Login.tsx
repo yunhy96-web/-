@@ -6,7 +6,7 @@ const Login = () => {
   return (
     <Style.Container>
       <Style.Background></Style.Background>
-      <Style.KakaoLoginButton onClick={() => navigate("/home")}>
+      <Style.KakaoLoginButton onClick={() => navigate("/mySchedule")}>
         카카오 간편 로그인
       </Style.KakaoLoginButton>
     </Style.Container>

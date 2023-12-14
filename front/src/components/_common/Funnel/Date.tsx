@@ -27,6 +27,9 @@ const Date = ({ onNext }: Props) => {
 
   return (
     <Style.FunnelContainer>
+      <Style.Description>
+        {`정확한 일정 추천을 위해 몇가지의\n사전 정보를 입력,진행한 뒤\nAI가 여행 일정을 생성해드립니다.`}
+      </Style.Description>
       <Style.SubTitle>여행 날짜를 선택해주세요.</Style.SubTitle>
       <div style={{ display: "flex", gap: 16, paddingTop: 12 }}>
         <Style.DateBox
@@ -45,7 +48,6 @@ const Date = ({ onNext }: Props) => {
           tripPeriod + 1
         }일`}</Style.ScheduleDate>
       </div>
-
       <Style.NextButton>
         <Button color="primary" text="다음" onClick={onNext} />
       </Style.NextButton>

@@ -15,7 +15,7 @@ const Destination = ({ onNext }: Props) => {
   return (
     <>
       <Style.FunnelContainer>
-        <Style.SubTitle>여행지를 선택해주세요.</Style.SubTitle>
+        {/* <Style.SubTitle>여행지를 선택해주세요.</Style.SubTitle>
         <Style.DestinationType>
           {typeList.map((type) => (
             <SelectBox
@@ -25,16 +25,23 @@ const Destination = ({ onNext }: Props) => {
               onClick={setDestinationType}
             />
           ))}
-        </Style.DestinationType>
+        </Style.DestinationType> */}
         <Style.SubTitle>여행갈 나라(도시)를 입력해주세요.</Style.SubTitle>
         <Style.DestinationInput
           placeholder="10자까지 입력 가능합니다."
           value={survey.destination.city}
           onChange={(e) => setDestinationCity(e.target.value)}
         />
+        <Style.InputLength>
+          {survey.destination.city?.length || 0}/10
+        </Style.InputLength>
       </Style.FunnelContainer>
       <Style.NextButton>
-        <Button color="primary" text="다음" onClick={onNext} />
+        <Button
+          color={survey.destination.city ? "primary" : "disabled"}
+          text="다음"
+          onClick={onNext}
+        />
       </Style.NextButton>
     </>
   );

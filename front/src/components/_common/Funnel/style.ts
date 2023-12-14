@@ -9,7 +9,7 @@ export const NextButton = styled.div`
   position: fixed;
   bottom: 30px;
   width: calc(100% - 36px);
-  min-width: 360px;
+  min-width: 324px;
   left: 18px;
 `;
 
@@ -67,6 +67,12 @@ export const DestinationInput = styled.input`
   font-style: normal;
   font-weight: 400;
   line-height: 35px; /* 218.75% */
+`;
+
+export const InputLength = styled.p`
+  margin-top: 7px;
+  ${({ theme }) => theme.font.caption_2};
+  color: ${({ theme }) => theme.colors.gray_1};
 `;
 
 export const TagList = styled.div`
@@ -201,7 +207,7 @@ export const TitleSection = styled.div`
   display: flex;
   gap: 8px;
   padding: 0 16px;
-  padding-top: 15px;
+  padding-top: 10px;
 `;
 
 export const SubRow = styled.div`
@@ -255,4 +261,42 @@ export const PlusButton = styled.button`
   border: 1px dashed #ff7a00;
   background: #fff;
   padding: 9px 0 13px 0;
+`;
+
+export const DateContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+`;
+
+export const Date = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  width: 90px;
+  ${({ theme }) => theme.font.heading_3}
+`;
+
+export const Description = styled.div`
+  font-family: Pretendard Variable;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 31px;
+  white-space: pre;
+  margin-bottom: 63px;
+`;
+
+export const AddDestinationText = styled.div`
+  ${({ theme }) => theme.font.heading_3};
+  text-align: center;
+  white-space: pre-wrap;
+  line-height: 27px;
+  padding: 18px 0 27px 0;
+`;
+
+export const GrayText = styled.div`
+  color: ${({ theme }) => theme.colors.gray_1};
 `;

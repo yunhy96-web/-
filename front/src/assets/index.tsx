@@ -12,6 +12,10 @@ import { ReactComponent as RightArrow } from "./rightArrow.svg";
 import { ReactComponent as Hamburger } from "./hamburger.svg";
 import { ReactComponent as Reload } from "./reload.svg";
 import { ReactComponent as Plus } from "./plus.svg";
+import { ReactComponent as Calendar } from "./calendar.svg";
+import { ReactComponent as Line } from "./line.svg";
+import { ReactComponent as Kakao } from "./kakao.svg";
+import { ReactComponent as Url } from "./url.svg";
 
 export const Icon = {
   Article,
@@ -27,5 +31,9 @@ export const Icon = {
   RightArrow,
   Hamburger,
   Reload,
+  Calendar,
+  Line,
   Plus,
+  Kakao,
+  Url,
 };

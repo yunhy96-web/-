@@ -2,8 +2,10 @@ import Calendar from "../Calendar";
 import Button from "../Button";
 import * as Style from "./style";
 import dayjs, { Dayjs } from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSurvey from "../../../hooks/useSurvey";
+import { Icon } from "../../../assets";
+import { useInView } from "react-intersection-observer";
 
 type Props = {
   onNext: () => void;
@@ -15,12 +17,28 @@ export type DateType = {
 };
 
 const DateCalendar = ({ onNext }: Props) => {
-  const calendarList = [
+  const { ref, inView, entry } = useInView({
+    threshold: 0,
+  });
+
+  const [calendarList, setCalendarList] = useState<Dayjs[]>([
     dayjs(),
     dayjs().add(1, "month"),
     dayjs().add(2, "month"),
-  ];
+  ]);
+
   const dayList = ["일", "월", "화", "수", "목", "금", "토"];
+
+  useEffect(() => {
+    if (inView) {
+      const length = calendarList.length;
+      const answer: Dayjs[] = [];
+      for (let i = length; i < length + 3; i++) {
+        answer.push(dayjs().add(i, "month"));
+      }
+      setCalendarList((prev) => [...prev, ...answer]);
+    }
+  }, [inView]);
 
   const { survey, setSurvey } = useSurvey();
   const [date, setDate] = useState<DateType>({
@@ -55,6 +73,26 @@ const DateCalendar = ({ onNext }: Props) => {
 
   return (
     <>
+      <Style.DateContainer>
+        <Style.Date>
+          <Icon.Calendar />
+          <div>
+            {date.startDate?.format("MM.DD")}(
+            {dayList[date.startDate?.day() as number]})
+          </div>
+        </Style.Date>
+        <Icon.Line />
+        <Style.Date>
+          <Icon.Calendar />
+          <div>
+            {date.endDate
+              ? `${date.endDate?.format("MM.DD")}(${
+                  dayList[date.endDate?.day() as number]
+                })`
+              : "오는 날"}
+          </div>
+        </Style.Date>
+      </Style.DateContainer>
       <Style.WeekDayList>
         {dayList.map((day) => (
           <div key={day}>{day}</div>
@@ -69,10 +107,11 @@ const DateCalendar = ({ onNext }: Props) => {
             setCalendarDate={setCalendarDate}
           />
         ))}
+        <div ref={ref} />
       </Style.CalendarScrollBox>
       <Style.NextButton>
         <Button
-          color="primary"
+          color={date.startDate && date.endDate ? "primary" : "disabled"}
           text="선택완료"
           onClick={() => {
             if (date.startDate === null || date.endDate === null) return;

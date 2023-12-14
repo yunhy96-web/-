@@ -9,6 +9,7 @@ import Destination from "../_common/Funnel/Destination";
 import Type from "../_common/Funnel/Type";
 import { Icon } from "../../assets";
 import Complete from "../_common/Funnel/Complete";
+import AddDestination from "../_common/Funnel/AddDestination";
 
 type PageType =
   | "date"
@@ -16,7 +17,8 @@ type PageType =
   | "type"
   | "complete"
   | "loading"
-  | "date-calendar";
+  | "date-calendar"
+  | "add-destination";
 
 const pageList: PageType[] = ["date", "destination", "type", "loading"];
 
@@ -47,6 +49,7 @@ const FunnelSection = () => {
     <>
       <Header
         back={params.state !== "date-calendar"}
+        borderBottom={params.state !== "date-calendar"}
         title={
           params.state === "date-calendar" ? "날짜 선택" : "사전 정보 수집"
         }
@@ -86,7 +89,10 @@ const FunnelSection = () => {
           <Destination onNext={() => navigate("/createSchedule/type")} />
         )}
         {params.state === "type" && (
-          <Type onNext={() => navigate("/createSchedule/loading")} />
+          <Type onNext={() => navigate("/createSchedule/add-destination")} />
+        )}
+        {params.state === "add-destination" && (
+          <AddDestination onNext={() => navigate("/createSchedule/loading")} />
         )}
       </Style.FunnelContainer>
     </>

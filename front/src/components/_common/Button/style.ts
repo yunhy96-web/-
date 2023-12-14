@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 
 export const Button = styled.button<{
-  color: "primary" | "disabled";
+  color: "primary" | "disabled" | "gradient" | "gray";
   width: number | string;
+  size: "sm" | "lg";
 }>`
   display: flex;
   justify-content: center;
@@ -10,17 +11,27 @@ export const Button = styled.button<{
   gap: 13px;
   border-radius: 8px;
   width: ${({ width }) => (typeof width === "number" ? `${width}px` : width)};
-  background-color: ${({ color, theme }) =>
-    color === "primary" ? theme.colors.main : "#e9ecef"};
+  background: ${({ color, theme }) =>
+    color === "primary"
+      ? theme.colors.main
+      : color === "gradient"
+      ? theme.colors.gradient
+      : color === "gray"
+      ? "#F5F5F5"
+      : "#EFDCCA"};
   border: none;
   color: ${({ color, theme }) =>
-    color === "primary" ? theme.colors.white : "#e9ecef"};
+    color === "primary"
+      ? theme.colors.white
+      : color === "gradient"
+      ? theme.colors.white
+      : color === "gray"
+      ? theme.colors.sub2
+      : "#e9ecef"};
   padding: 18px 0;
-`;
 
-export const ButtonText = styled.div`
-  font-family: Pretendard Variable;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
+  div {
+    ${({ theme, size }) =>
+      size === "sm" ? theme.font.btn : theme.font.heading_3};
+  }
 `;
