@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 public class AddPlanRequest {
+    private Long groupId;
     private String realday;
     private String email;
     private String time;
@@ -21,6 +22,7 @@ public class AddPlanRequest {
     private LocalDateTime updatedAt;
     public Plan toEntity(){
         return Plan.builder()
+                .groupid(groupId)
                 .realday(realday)
                 .email(email)
                 .time(time)

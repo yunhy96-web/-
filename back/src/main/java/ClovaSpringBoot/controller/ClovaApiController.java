@@ -1,6 +1,8 @@
 package ClovaSpringBoot.controller;
+import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
 import ClovaSpringBoot.dto.AddPlanRequest;
+import ClovaSpringBoot.repository.PlanRepository;
 import ClovaSpringBoot.service.PlanService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,6 +34,9 @@ public class ClovaApiController {
     private final String apiGatewayApiKey = "nnLIKzOCeByVFAY1xYNDZwNrkCrOByJiykhu2nPx";
     private final String clovaStudioRequestId = "006291727509487e9b395a88d5d2e4c5";
 
+    private Long groupId = 0L;
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @GetMapping("/send-request")
     public ResponseEntity<String> sendRequestToExternalApi(@RequestBody String requestBody) {
         HttpHeaders headers = new HttpHeaders();
@@ -53,6 +59,7 @@ public class ClovaApiController {
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/send-request2")
     public ResponseEntity<String> sendRequestToExternalApi(@RequestBody Map<String, String> requestMap) {
+        groupId++;
         String content1 = requestMap.get("content1");
         String content2 = requestMap.get("content2");
         String content3 = requestMap.get("content3");
@@ -113,7 +120,7 @@ public class ClovaApiController {
                     System.out.println(key + ": " + todoList.getString(key));
                     //여기서 저장로직
                     // AddPlanRequest 객체 생성
-                    AddPlanRequest addPlanRequest = new AddPlanRequest(day.getString("date"), "example@email.com", key, todoList.getString(key), now(), now());
+                    AddPlanRequest addPlanRequest = new AddPlanRequest(groupId, day.getString("date"), "example@email.com", key, todoList.getString(key), now(), now());
                     // TODO: 저장 로직 구현 (예: JPA를 사용한 저장)
                     planService.save2(addPlanRequest);
                 }
@@ -129,12 +136,13 @@ public class ClovaApiController {
     }
 
 
+
     private String buildRequestBody(String content, String content2, String content3) {
         // 전달할 JSON 형식의 데이터를 만듭니다.
         return "{\n" +
                 "  \"messages\" : [ {\n" +
                 "    \"role\" : \"system\",\n" +
-                "    \"content\" : \"전달한 기간과 여행지 기준으로 여행 일정을 만들어줘\\n- 날짜는 0000년 00월 00일 형식으로 만들어줘\\n- 각 일자마다 오전, 오후, 저녁, 낮, 밤으로 나누어서 일정 5개씩 만들어줘\\n- 일정은 한 가지씩만 추천해줘\\n- 관심사가 있으면 관심사 위주로 일정을 만들어줘\\n- 날짜에 해당하는 여행지의 계절을 파악해서 일정을 만들어줘.\\n- 날짜는 ':'로 끝나야 해\\n- 반환할 때에는 일정 리스트: [{date: '0000년 00월 00일', todoList:{오전:'',오후:'',저녁:'',낮:'',밤:''}}] 형태로 반환해줘.\"\n" +
+                "    \"content\" : \"전달한 기간과 여행지 기준으로 여행 일정을 만들어줘\\n- 날짜는 0000년 00월 00일 형식으로 만들어줘\\n- 각 일자마다 일정 5개씩 만들어줘\\n- 일정은 한 가지씩만 추천해줘\\n- 관심사가 있으면 관심사 위주로 일정을 만들어줘\\n- 날짜에 해당하는 여행지의 계절을 파악해서 일정을 만들어줘.\\n- 날짜는 ':'로 끝나야 해\\n- 반환할 때에는 일정 리스트: [{date: '0000년 00월 00일', todoList:{1:'',2:'',3:'',4:'',5:''}}] 형태로 반환해줘.\"\n" +
                 "  }, {\n" +
                 "    \"role\" : \"user\",\n" +
                 "    \"content\" : \"" + content + " " + content2 + " " + content3 + "\"\n" +
