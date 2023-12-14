@@ -18,9 +18,10 @@ export type Schedule = {
   id: number;
   realday: string;
   email: string;
-  time: string;
+  time: number;
   content: string;
   description: string;
+  isEditable: boolean;
 };
 
 export type ScheduleByDate = { [key: string]: Omit<Schedule, "realday">[] };
@@ -41,6 +42,8 @@ const Complete = ({ onNext }: Props) => {
     onAvailableItemDragEnter,
     onDragOver,
     onDeleteSchedule,
+    addItem,
+    onChangeContent,
   } = useSchedule();
 
   const period = `${getTripPeriod()}박 ${getTripPeriod() + 1}일`;
@@ -112,15 +115,24 @@ const Complete = ({ onNext }: Props) => {
               onDragEnd={onDragEnd}
               title={item.content}
               description={item.description}
+              isEditable={item.isEditable}
               onChangeDescription={(value) =>
                 onChangeDescription(item.id, value)
               }
+              onChangeContent={(value) => onChangeContent(item.id, value)}
               key={item.id}
             />
           ))}
-          <Style.PlusButton>
-            <Icon.Plus />
-          </Style.PlusButton>
+          <Style.CreateButtonBox>
+            <Style.PlusButton>
+              <Icon.RoundPlus />
+              <div>다른 장소 더 추천받기</div>
+            </Style.PlusButton>
+            <Style.PlusButton onClick={addItem}>
+              <Icon.RoundPlus />
+              <div>직접 입력해서 추가하기</div>
+            </Style.PlusButton>
+          </Style.CreateButtonBox>
         </Style.Wrapper>
       </Style.Content>
       <Style.NextButton>

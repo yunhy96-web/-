@@ -35,7 +35,7 @@ const Loading = () => {
       content1: `기간: ${survey.startDate.format(
         "YYYY년 MM월 DD일"
       )} - ${survey.endDate.format("YYYY년 MM월 DD일")}`,
-      content2: `여행지: ${survey.destination.city}`,
+      content2: `여행지: ${survey.destination.city}, 꼭 방문하고 싶은 곳: ${survey.addedDestination}`,
       content3: `관심사: ${[...survey.trip.interest, ...survey.trip.type].join(
         ", "
       )}, 할 것`,

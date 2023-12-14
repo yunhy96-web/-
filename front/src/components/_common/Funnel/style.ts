@@ -261,6 +261,24 @@ export const PlusButton = styled.button`
   border: 1px dashed #ff7a00;
   background: #fff;
   padding: 9px 0 13px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 54px;
+  /* gap: 4px; */
+
+  div {
+    ${({ theme }) => theme.font.body_2};
+    color: ${({ theme }) => theme.colors.main};
+    margin-top: 2.5px;
+  }
+`;
+
+export const CreateButtonBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
 `;
 
 export const DateContainer = styled.div`

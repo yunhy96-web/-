@@ -14,15 +14,24 @@ export const createTripSchedule = async (content: TripContent) => {
 
 export const getTripSchedule = async () => {
   const { data } = await api.get("/plans");
-  return getScheduleListByDate(data);
+  return getScheduleListByDate(data, false);
 };
 
-const getScheduleListByDate = (scheduleList: Schedule[]) => {
+const getScheduleListByDate = (
+  scheduleList: Schedule[],
+  isEditable: boolean
+) => {
   return scheduleList.reduce((accr, { realday, ...rest }) => {
     if (accr[convertDateFormmat(realday)]) {
-      accr[convertDateFormmat(realday)].push({ ...rest, description: "" });
+      accr[convertDateFormmat(realday)].push({
+        ...rest,
+        description: "",
+        isEditable,
+      });
     } else {
-      accr[convertDateFormmat(realday)] = [{ ...rest, description: "" }];
+      accr[convertDateFormmat(realday)] = [
+        { ...rest, description: "", isEditable },
+      ];
     }
     return accr;
   }, {} as { [key: string]: Omit<Schedule, "realday">[] });

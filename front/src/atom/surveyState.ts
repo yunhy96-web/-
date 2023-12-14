@@ -13,6 +13,7 @@ type SurveyState = {
     interest: string[];
     style: string;
   };
+  addedDestination: string;
 };
 
 export const surveyState = atom<SurveyState>({
@@ -24,6 +25,7 @@ export const surveyState = atom<SurveyState>({
       type: "",
       city: "",
     },
+    addedDestination: "",
     trip: {
       type: [],
       interest: [],

@@ -73,6 +73,18 @@ const useSchedule = () => {
     });
   };
 
+  const onChangeContent = (id: number, content: string) => {
+    setSchedule((prev) => {
+      const result = prev[date].map((schedule) =>
+        schedule.id === id ? { ...schedule, content } : schedule
+      );
+      return {
+        ...prev,
+        [date]: result,
+      };
+    });
+  };
+
   const onDeleteSchedule = (id: number) => {
     setSchedule((prev) => {
       const result = prev[date].filter((schedule) => schedule.id !== id);
@@ -83,7 +95,27 @@ const useSchedule = () => {
     });
   };
 
+  const addItem = () => {
+    setSchedule((prev) => {
+      return {
+        ...prev,
+        [date]: [
+          ...prev[date],
+          {
+            id: Math.random(),
+            email: "",
+            time: prev[date].length + 1,
+            content: "",
+            description: "",
+            isEditable: true,
+          },
+        ],
+      };
+    });
+  };
+
   return {
+    addItem,
     onDragStart,
     onDragEnd,
     onAvailableItemDragEnter,
@@ -96,6 +128,7 @@ const useSchedule = () => {
     date,
     initData,
     onDeleteSchedule,
+    onChangeContent,
   };
 };
 

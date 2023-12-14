@@ -11,7 +11,9 @@ type Props = {
   onDragEnd: (e: any) => void;
   description: string;
   onChangeDescription: (value: string) => void;
+  onChangeContent: (value: string) => void;
   onDelete: () => void;
+  isEditable: boolean;
 };
 
 const ScheduleCard = ({
@@ -22,7 +24,9 @@ const ScheduleCard = ({
   onDragStart,
   description,
   onChangeDescription,
+  onChangeContent,
   onDelete,
+  isEditable,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [isGrab, setIsGrab] = useState(false);
@@ -63,10 +67,14 @@ const ScheduleCard = ({
           >
             <Icon.Hamburger />
           </Style.DragButton>
-          <Style.TitleText>{title}</Style.TitleText>
-          {/* <button>
-            <Icon.Reload />
-          </button> */}
+          {isEditable ? (
+            <Style.TitleInput
+              value={title}
+              onChange={(e) => onChangeContent(e.target.value)}
+            />
+          ) : (
+            <Style.TitleText>{title}</Style.TitleText>
+          )}
         </Style.TitleLeft>
         <Style.TitleRight>
           <Style.Arrow isOpen={open} onClick={() => setOpen((prev) => !prev)}>

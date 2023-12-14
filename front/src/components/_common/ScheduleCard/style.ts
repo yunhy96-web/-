@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 
 export const Card = styled.li<{ isOpen: boolean }>`
-  padding: 24px;
+  padding: 17px 24px;
   border-radius: 8px;
   background: ${({ theme }) => theme.colors.white};
   transition: all 0.1s ease-in-out;
@@ -17,6 +17,24 @@ export const Title = styled.div`
 
 export const TitleLeft = styled.div`
   display: flex;
+  align-items: center;
+  width: 100%;
+`;
+
+export const TitleInput = styled.input`
+  margin: 0 6px 0 9px;
+  font-family: Pretendard Variable;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  vertical-align: middle;
+  color: ${({ theme }) => theme.colors.sub2};
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  width: 100%;
+  height: 37px;
+  padding-left: 8px;
 `;
 
 export const TitleText = styled.div`
@@ -55,6 +73,7 @@ export const Detail = styled.textarea<{ isOpen: boolean }>`
 
 export const DragButton = styled.div<{ isGrab: boolean }>`
   cursor: ${({ isGrab }) => (isGrab ? "grabbing" : "grab")};
+  height: 24px;
 `;
 
 export const TitleRight = styled.div`

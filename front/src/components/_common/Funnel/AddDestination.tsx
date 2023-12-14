@@ -1,12 +1,19 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import Button from "../Button";
 import * as Style from "./style";
+import useSurvey from "../../../hooks/useSurvey";
 
 type Props = {
   onNext: () => void;
 };
 
 const AddDestination = ({ onNext }: Props) => {
+  const { survey, setSurvey } = useSurvey();
+
+  const onChangeDestination = (e: ChangeEvent<HTMLInputElement>) => {
+    setSurvey((prev) => ({ ...prev, addedDestination: e.target.value }));
+  };
+
   return (
     <div style={{ padding: "0 16px", background: "#F7F7F7", height: "100%" }}>
       <Style.AddDestinationText>
@@ -15,8 +22,12 @@ const AddDestination = ({ onNext }: Props) => {
         </div>
         <Style.GrayText>(선택 사항)</Style.GrayText>
       </Style.AddDestinationText>
-      <Style.DestinationInput placeholder="장소를 입력해주세요." />
-      <Style.InputLength>0/10</Style.InputLength>
+      <Style.DestinationInput
+        value={survey.addedDestination}
+        onChange={onChangeDestination}
+        placeholder="장소를 입력해주세요."
+      />
+      <Style.InputLength>{survey.addedDestination.length}/10</Style.InputLength>
       <Style.NextButton>
         <Button
           color="primary"

@@ -12,6 +12,7 @@ import { ReactComponent as RightArrow } from "./rightArrow.svg";
 import { ReactComponent as Hamburger } from "./hamburger.svg";
 import { ReactComponent as Reload } from "./reload.svg";
 import { ReactComponent as Plus } from "./plus.svg";
+import { ReactComponent as RoundPlus } from "./roundPlus.svg";
 import { ReactComponent as Calendar } from "./calendar.svg";
 import { ReactComponent as Line } from "./line.svg";
 import { ReactComponent as Kakao } from "./kakao.svg";
@@ -36,4 +37,5 @@ export const Icon = {
   Plus,
   Kakao,
   Url,
+  RoundPlus,
 };

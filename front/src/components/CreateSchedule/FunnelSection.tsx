@@ -10,6 +10,7 @@ import Type from "../_common/Funnel/Type";
 import { Icon } from "../../assets";
 import Complete from "../_common/Funnel/Complete";
 import AddDestination from "../_common/Funnel/AddDestination";
+import useConfirmModal from "../../hooks/useConfirmModal";
 
 type PageType =
   | "date"
@@ -39,6 +40,18 @@ const FunnelSection = () => {
       (item) => item === params.state
     );
     navigate(`/createSchedule/${pageList[currentPageIndex + 1]}`);
+  };
+
+  const { openConfirmModal, closeConfirmModal } = useConfirmModal();
+
+  // TODO: 저장하기
+  const onSubmitModal = async () => {
+    await //
+    openConfirmModal({
+      type: "COMPLETE",
+      confirm: () => navigate("/createSchedule/mySchedule"),
+      cancel: closeConfirmModal,
+    });
   };
 
   if (params.state === undefined) return null;
