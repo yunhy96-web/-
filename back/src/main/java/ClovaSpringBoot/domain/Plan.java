@@ -3,10 +3,7 @@ package ClovaSpringBoot.domain;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -20,6 +17,7 @@ import java.util.List;
 @Table(name="plans")
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
 public class Plan {
@@ -51,20 +49,8 @@ public class Plan {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    //추가 코드 안되면 이부분 삭제
-//    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<DetailPlan> detailPlans = new ArrayList<>();
-//
-//    public void addDetailPlan(DetailPlan detailPlan) {
-//        detailPlans.add(detailPlan);
-//        detailPlan.setPlan(this);
-//    }
-//
-//    public void removeDetailPlan(DetailPlan detailPlan) {
-//        detailPlans.remove(detailPlan);
-//        detailPlan.setPlan(null);
-//    }
-    //삭제
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetailPlan> detailPlans = new ArrayList<>();
 
     @Builder //빌더패턴으로 객체 생성
     public Plan(Long groupid, String realday, String content, String email, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {

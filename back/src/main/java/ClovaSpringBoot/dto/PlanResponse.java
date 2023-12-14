@@ -3,6 +3,7 @@ package ClovaSpringBoot.dto;
 import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,6 +18,7 @@ public class PlanResponse {
     private final String content;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
+    @Setter
     private List<DetailPlanResponse> detailPlans;
 
     public PlanResponse(Plan plan){
@@ -30,7 +32,4 @@ public class PlanResponse {
         this.updatedAt = plan.getUpdatedAt();
     }
 
-    public void setDetailPlans(List<DetailPlanResponse> detailPlans) {
-        this.detailPlans = detailPlans;
-    }
 }

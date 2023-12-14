@@ -2,10 +2,7 @@ package ClovaSpringBoot.controller;
 
 import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
-import ClovaSpringBoot.dto.AddPlanRequest;
-import ClovaSpringBoot.dto.DetailPlanResponse;
-import ClovaSpringBoot.dto.PlanResponse;
-import ClovaSpringBoot.dto.UpdatePlanRequest;
+import ClovaSpringBoot.dto.*;
 import ClovaSpringBoot.repository.DetailPlanRepository;
 import ClovaSpringBoot.repository.PlanRepository;
 import ClovaSpringBoot.service.PlanService;
@@ -23,7 +20,48 @@ public class PlanApiController {
 
     private final PlanService planService;
     private final DetailPlanRepository detailPlanRepository;
+    //전체 플랜, 디테일 플랜 같이 등록
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
+    @PostMapping("/api/plans/create-multiple")
+    public ResponseEntity<String> createMultiplePlansWithDetails(@RequestBody List<PlanWithDetailRequest> requests) {
+        try {
+            planService.createMultiplePlansWithDetails(requests);
+            return ResponseEntity.ok("Plans created successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create plans.");
+        }
+    }
+    //전체 플랜, 하위 디테일 플랜 삭제
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
+    @DeleteMapping("/api/plans/group/{groupid}")
+    public ResponseEntity<String> deletePlansByGroupId(@PathVariable Long groupid) {
+        try {
+            planService.deletePlansByGroupId(groupid);
+            return ResponseEntity.ok("Plans and DetailPlans deleted successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete plans and detail plans.");
+        }
+    }
 
+    //그룹 플랜 삭제 + 해당 플랜 재생성
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
+    @PostMapping("/api/plans/create-multiple-and-delete")
+    public ResponseEntity<String> createMultiplePlansAndDeleteByGroupId(
+            @RequestBody List<PlanWithDetailRequest> requests,
+            @RequestParam("groupid") Long groupid) {
+
+        try {
+            // 먼저 해당 그룹을 삭제
+            planService.deletePlansByGroupId(groupid);
+
+            // 그룹을 삭제한 후에 createMultiplePlansWithDetails 실행
+            planService.createMultiplePlansWithDetails(requests);
+
+            return ResponseEntity.ok("Plans created successfully after deleting the group.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create plans.");
+        }
+    }
     //글 등록
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/api/plans")
