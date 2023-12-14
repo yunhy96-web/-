@@ -1,8 +1,10 @@
 package ClovaSpringBoot.controller;
 import ClovaSpringBoot.domain.DetailPlan;
 import ClovaSpringBoot.domain.Plan;
+import ClovaSpringBoot.domain.User;
 import ClovaSpringBoot.dto.AddPlanRequest;
 import ClovaSpringBoot.repository.PlanRepository;
+import ClovaSpringBoot.repository.UserRepository;
 import ClovaSpringBoot.service.PlanService;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,7 +32,7 @@ import static java.time.LocalDateTime.now;
 @RestController
 @RequestMapping("/api/clova")
 public class ClovaApiController {
-
+    private final UserRepository userRepository;
     private final PlanService planService;
     private final String apiUrl = "https://clovastudio.stream.ntruss.com/testapp/v1/chat-completions/HCX-002";
     private final String clovaStudioApiKey = "NTA0MjU2MWZlZTcxNDJiY99YyUqar8st3ycFIZjl2dJ6odngEaoG1eThuYBALdW9qY8x4uLLBEXItGFv+1eLZNRMDtmiUYwmliLzObtGaZNCqFJ04laLxQ6Zz080630qzIO+R0RS61ZUsYcGgJn561I3jrwQOTbsTJwBG/QY90dX7mJfBpF7IH/jseDv/8gqKht2gmHheqmgSYSLhuN103Fq4nbuKbF5LIVBqfTdd2w=";
@@ -58,7 +63,11 @@ public class ClovaApiController {
     //모든 경로로 들어오는 요청에 대해서 cors
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/send-request2")
-    public ResponseEntity<String> sendRequestToExternalApi(@RequestBody Map<String, String> requestMap) {
+    public ResponseEntity<String> sendRequestToExternalApi(@AuthenticationPrincipal Authentication authentication,
+                                                           @RequestBody Map<String, String> requestMap) {
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
         groupId++;
         String content1 = requestMap.get("content1");
         String content2 = requestMap.get("content2");
@@ -120,7 +129,7 @@ public class ClovaApiController {
                     System.out.println(key + ": " + todoList.getString(key));
                     //여기서 저장로직
                     // AddPlanRequest 객체 생성
-                    AddPlanRequest addPlanRequest = new AddPlanRequest(groupId, day.getString("date"), "example@email.com", key, todoList.getString(key), now(), now());
+                    AddPlanRequest addPlanRequest = new AddPlanRequest(groupId, day.getString("date"), user, key, todoList.getString(key), now(), now());
                     // TODO: 저장 로직 구현 (예: JPA를 사용한 저장)
                     planService.save2(addPlanRequest);
                 }

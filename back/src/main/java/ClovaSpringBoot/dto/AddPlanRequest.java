@@ -1,6 +1,7 @@
 package ClovaSpringBoot.dto;
 
 import ClovaSpringBoot.domain.Plan;
+import ClovaSpringBoot.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.Date;
 public class AddPlanRequest {
     private Long groupId;
     private String realday;
-    private String email;
+    private User user;
     private String time;
     private String content;
     private LocalDateTime createdAt;
@@ -24,7 +25,7 @@ public class AddPlanRequest {
         return Plan.builder()
                 .groupid(groupId)
                 .realday(realday)
-                .email(email)
+                .user(user)
                 .time(time)
                 .content(content)
                 .createdAt(createdAt)

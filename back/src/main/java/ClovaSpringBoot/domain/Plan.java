@@ -32,8 +32,9 @@ public class Plan {
     @Column(name = "realday" , nullable = false)
     private String realday;
 
-    @Column(name = "email", nullable = false)
-    private String email;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_sn", nullable = false)
+    private User user;
 
     @Column(name = "content" , nullable = false)
     private String content;
@@ -53,12 +54,12 @@ public class Plan {
     private List<DetailPlan> detailPlans = new ArrayList<>();
 
     @Builder //빌더패턴으로 객체 생성
-    public Plan(Long groupid, String realday, String content, String email, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Plan(Long groupid, String realday, String content, User user, String time, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.groupid = groupid;
         this.realday = realday;
         this.content = content;
         this.time = time;
-        this.email = email;
+        this.user = user;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
