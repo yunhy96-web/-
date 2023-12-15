@@ -32,7 +32,9 @@ spring:
             client-id: 41e262d361b68b616775006c09b25c48
             client-secret: ikY0o83vmzLcDtP0GbsM3idXuAfHjoeq
             client-authentication-method: client_secret_post
-            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+#            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+#            redirect-uri: http://ec2-43-200-157-69.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/kakao
+            redirect-uri: https://d1zdvff23sqy4w.cloudfront.net/mySchedule
             authorization-grant-type: authorization_code
             client-name: kakao
             scope:
