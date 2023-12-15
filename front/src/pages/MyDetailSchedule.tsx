@@ -12,6 +12,9 @@ import useSurvey from "../hooks/useSurvey";
 import useSchedule2 from "../hooks/useSchedule2";
 import { useState } from "react";
 import BottomSheet from "../components/_common/BottomSheet";
+import { DndProvider } from "react-dnd-multi-backend";
+import { HTML5toTouch } from "rdndmb-html5-to-touch";
+import { ScheduleById } from "../api/clova";
 
 type Props = {
   onNext: () => void;
@@ -52,6 +55,7 @@ const MyDetailSchedule = () => {
     onDeleteSchedule,
     addItem,
     onChangeContent,
+    setSchedule,
   } = useSchedule2();
 
   const period = `${getTripPeriod()}박 ${getTripPeriod() + 1}일`;
@@ -96,6 +100,18 @@ const MyDetailSchedule = () => {
     } else {
       navigate("/mySchedule");
     }
+  };
+
+  const moveItem = (fromIndex: number, toIndex: number) => {
+    const updatedItems = [...schedule[date]];
+    const [movedItem] = updatedItems.splice(fromIndex, 1);
+    updatedItems.splice(toIndex, 0, movedItem);
+    setSchedule((prev: ScheduleById) => {
+      return {
+        ...prev,
+        [date]: updatedItems,
+      };
+    });
   };
 
   return (
@@ -163,23 +179,29 @@ const MyDetailSchedule = () => {
       </Style.DayList>
       <Style.Content>
         <Style.Wrapper>
-          {schedule[date]?.map((item, index) => (
-            <ScheduleCard
-              onDragStart={(e) => onDragStart(e, index)}
-              onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
-              onDragEnd={onDragEnd}
-              onDelete={() => onDeleteSchedule(item.id)}
-              onDragOver={onDragOver}
-              title={item.content}
-              description={item.description}
-              isEditable={mode === "EDIT"}
-              onChangeDescription={(value) =>
-                onChangeDescription(item.id, value)
-              }
-              onChangeContent={(value) => onChangeContent(item.id, value)}
-              key={item.id}
-            />
-          ))}
+          <DndProvider options={HTML5toTouch}>
+            {schedule[date]?.map((item, index) => (
+              <ScheduleCard
+                moveItem={moveItem}
+                onDragStart={(e) => onDragStart(e, index)}
+                onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
+                onDragEnd={onDragEnd}
+                onDelete={() => onDeleteSchedule(item.id)}
+                onDragOver={onDragOver}
+                title={item.content}
+                description={item.description}
+                isEditable={mode === "EDIT"}
+                onChangeDescription={(value) =>
+                  onChangeDescription(item.id, value)
+                }
+                onChangeContent={(value) => onChangeContent(item.id, value)}
+                key={item.id}
+                id={item.id}
+                index={index}
+              />
+            ))}
+          </DndProvider>
+
           {mode === "EDIT" && (
             <Style.CreateButtonBox>
               <Style.PlusButton>

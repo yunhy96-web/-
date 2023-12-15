@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import * as Style from "./style";
 import { Icon } from "../../../assets";
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { useDrag, useDrop } from "react-dnd";
 
 type Props = {
   title: string;
@@ -14,6 +15,9 @@ type Props = {
   onChangeContent: (value: string) => void;
   onDelete: () => void;
   isEditable: boolean;
+  id?: number;
+  index?: number;
+  moveItem?: (dragIndex: number, hoverIndex: number) => void;
 };
 
 const ScheduleCard = ({
@@ -27,7 +31,25 @@ const ScheduleCard = ({
   onChangeContent,
   onDelete,
   isEditable,
+  id,
+  index,
+  moveItem,
 }: Props) => {
+  const [, drag] = useDrag({
+    type: "ITEM",
+    item: { id, index },
+  });
+
+  const [, drop] = useDrop({
+    accept: "ITEM",
+    hover: (draggedItem: any) => {
+      if (draggedItem.index !== index) {
+        moveItem && moveItem(draggedItem.index, index || 0);
+        draggedItem.index = index;
+      }
+    },
+  });
+
   const [open, setOpen] = useState(false);
   const [isGrab, setIsGrab] = useState(false);
 
@@ -43,15 +65,16 @@ const ScheduleCard = ({
 
   return (
     <Style.Card
+      ref={(node) => drag(drop(node))}
       isOpen={open}
       draggable={isGrab}
-      onDragStart={onDragStart}
-      onDragEnter={onDragEnter}
-      onDragOver={onDragOver}
-      onDragEnd={(e) => {
-        onDragEnd(e);
-        setIsGrab(false);
-      }}
+      // onDragStart={onDragStart}
+      // onDragEnter={onDragEnter}
+      // onDragOver={onDragOver}
+      // onDragEnd={(e) => {
+      //   onDragEnd(e);
+      //   setIsGrab(false);
+      // }}
     >
       <Style.Title>
         <Style.TitleLeft>
