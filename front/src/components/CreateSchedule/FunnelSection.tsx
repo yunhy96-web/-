@@ -67,12 +67,13 @@ const FunnelSection = () => {
           params.state === "date-calendar" ? "날짜 선택" : "사전 정보 수집"
         }
         right={
-          isSurvey()
-            ? {
-                onClick: skipToNextPage,
-                content: <Style.Skip>건너뛰기</Style.Skip>,
-              }
-            : params.state === "date-calendar"
+          // isSurvey()
+          //   ? {
+          //       onClick: skipToNextPage,
+          //       content: <Style.Skip>건너뛰기</Style.Skip>,
+          //     }
+          //   :
+          params.state === "date-calendar"
             ? {
                 onClick: () =>
                   navigate("/createSchedule/date", { replace: true }),

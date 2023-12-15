@@ -65,9 +65,11 @@ const ScheduleCard = ({
 
   return (
     <Style.Card
-      ref={(node) => drag(drop(node))}
+      ref={(node) => {
+        drag(drop(node));
+      }}
       isOpen={open}
-      draggable={isGrab}
+      // draggable={isGrab}
       // onDragStart={onDragStart}
       // onDragEnter={onDragEnter}
       // onDragOver={onDragOver}
@@ -80,7 +82,12 @@ const ScheduleCard = ({
         <Style.TitleLeft>
           <Style.DragButton
             isGrab={isGrab}
-            onTouchStart={() => {}}
+            onTouchStart={() => {
+              setIsGrab(true);
+            }}
+            onTouchEnd={() => {
+              setIsGrab(false);
+            }}
             onMouseDown={() => {
               setIsGrab(true);
             }}

@@ -92,6 +92,7 @@ const MySchedule = () => {
         {list.map((item) => (
           <MyScheduleCard
             isOpenDropdown={openDropdown === item.id}
+            onClose={() => setOpenDropdown(0)}
             openDropdown={() => {
               if (openDropdown === item.id) {
                 setOpenDropdown(0);

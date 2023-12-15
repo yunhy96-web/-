@@ -16,15 +16,22 @@ export const Month = styled.div`
 export const Week = styled.div`
   display: flex;
   justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
 `;
 
 export const DuringDate = styled.div`
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   width: calc(((100vw - 40px) / 7) + 20px);
   left: 20px;
   height: 40px;
   background-color: #ffeede;
+
+  @media (min-width: 761px) {
+    width: calc(((393px - 40px) / 7) + 20px);
+  }
 `;
 
 export const DateCell = styled.div<{
@@ -38,6 +45,7 @@ export const DateCell = styled.div<{
   justify-content: center;
   background: ${({ isDuring, isStartDate, isEndDate, isSameMonth }) =>
     !isSameMonth ? "transparent" : isDuring ? "#FFEEDE" : "transparent"};
+  /* z-index: 0; */
 
   border-radius: ${({ isStartDate, isEndDate }) =>
     isStartDate && isEndDate
@@ -59,8 +67,10 @@ export const Date = styled.div<{
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  cursor: ${({ disabled }) => !disabled && "pointer"};
   border-radius: 8px;
+  position: relative;
+  z-index: 1;
   ${({ theme }) => theme.font.body_1};
   ${({ theme, isSelected, isDuring, disabled }) => `
     color: ${

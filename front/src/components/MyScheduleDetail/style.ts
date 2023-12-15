@@ -11,6 +11,7 @@ export const NextButton = styled.div`
   width: calc(100% - 36px);
   min-width: 324px;
   left: 18px;
+  z-index: 20;
 `;
 
 export const NextButton2 = styled.div`

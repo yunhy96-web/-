@@ -13,6 +13,15 @@ export const Header = styled.header<{ borderBottom: boolean }>`
   width: 100%;
   min-width: 360px;
   height: 63px;
+
+  @media (max-width: 760px) {
+    width: 100%;
+  }
+
+  @media (min-width: 761px) {
+    width: 393px;
+    /* position: relative; */
+  }
 `;
 
 export const Text = styled.div`

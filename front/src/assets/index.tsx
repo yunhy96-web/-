@@ -20,6 +20,7 @@ import { ReactComponent as Url } from "./url.svg";
 import { ReactComponent as Edit } from "./edit.svg";
 import { ReactComponent as Delete } from "./delete.svg";
 import { ReactComponent as Share } from "./share.svg";
+import { ReactComponent as Error } from "./error.svg";
 
 export const Icon = {
   Article,
@@ -44,4 +45,5 @@ export const Icon = {
   Edit,
   Delete,
   Share,
+  Error,
 };

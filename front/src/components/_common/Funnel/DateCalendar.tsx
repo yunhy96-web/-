@@ -111,10 +111,10 @@ const DateCalendar = ({ onNext }: Props) => {
       </Style.CalendarScrollBox>
       <Style.NextButton>
         <Button
-          color={date.startDate && date.endDate ? "primary" : "disabled"}
+          color={date.startDate ? "primary" : "disabled"}
           text="선택완료"
           onClick={() => {
-            if (date.startDate === null || date.endDate === null) return;
+            if (date.startDate === null) return;
             onNext();
             setSurvey((prev) => ({
               ...prev,

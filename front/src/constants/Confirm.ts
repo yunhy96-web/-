@@ -38,4 +38,9 @@ export const CONFIRM_MODAL = {
     cancel: "닫기",
     confirm: "일정 관리",
   },
+  OVER_DATE: {
+    title: "",
+    description: `AI 여행 일정 추천은 9박까지만 가능합니다.`,
+    confirm: "확인",
+  },
 };

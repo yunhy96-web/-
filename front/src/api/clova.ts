@@ -8,13 +8,21 @@ type TripContent = {
   content3: string;
 };
 export const createTripSchedule = async (content: TripContent) => {
-  const { data } = await api.post("/clova/send-request2", content);
-  return data;
+  try {
+    const { data } = await api.post("/clova/send-request2", content);
+    return data;
+  } catch (e) {
+    window.location.href = "/error";
+  }
 };
 
 export const getTripSchedule = async () => {
-  const { data } = await api.get("/plans");
-  return getScheduleListByDate(data, false);
+  try {
+    const { data } = await api.get("/plans");
+    return getScheduleListByDate(data, false);
+  } catch (e) {
+    window.location.href = "/error";
+  }
 };
 
 const getScheduleListByDate = (
@@ -71,11 +79,15 @@ export const saveScheduleList = async (info: {
     ];
   }[];
 }) => {
-  const { data } = await api.post(
-    `create-multiple-and-delete?groupid=${info.groupId}`,
-    info.scheduleList
-  );
-  return data;
+  try {
+    const { data } = await api.post(
+      `create-multiple-and-delete?groupid=${info.groupId}`,
+      info.scheduleList
+    );
+    return data;
+  } catch (e) {
+    window.location.href = "/error";
+  }
 };
 
 export const getScheduleById = async (id: number) => {

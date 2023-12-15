@@ -1,10 +1,8 @@
 import React, { PropsWithChildren, useEffect } from "react";
 import TabNavigator from "../components/_common/TabNavigator";
-import { useLocation } from "react-router-dom";
 import * as Style from "./styles";
 
 const Layout = ({ children }: PropsWithChildren) => {
-  const location = useLocation();
   const tabNavigatorPathList = [
     "/home",
     "/mySchedule",
@@ -14,10 +12,20 @@ const Layout = ({ children }: PropsWithChildren) => {
   ];
 
   return (
-    <Style.Layout>
-      {children}
-      {/* {tabNavigatorPathList.includes(location.pathname) && <TabNavigator />} */}
-    </Style.Layout>
+    <div
+      style={{
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        // background: "black",
+        height: "100%",
+      }}
+    >
+      <Style.Layout>
+        {children}
+        {/* {tabNavigatorPathList.includes(location.pathname) && <TabNavigator />} */}
+      </Style.Layout>
+    </div>
   );
 };
 

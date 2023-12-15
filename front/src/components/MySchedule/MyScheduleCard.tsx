@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { PeriodTag } from "../_common/Tag/PeriodTab";
 import dayjs from "dayjs";
 import * as Style from "./styles";
@@ -16,6 +16,7 @@ type Props = {
   id: number;
   openDropdown: () => void;
   isOpenDropdown: boolean;
+  onClose: () => void;
 };
 
 const MyScheduleCard = ({
@@ -25,6 +26,7 @@ const MyScheduleCard = ({
   title,
   openDropdown,
   isOpenDropdown,
+  onClose,
 }: Props) => {
   const navigate = useNavigate();
   const period = dayjs(endDate).diff(dayjs(startDate), "day") + 1;
@@ -32,9 +34,27 @@ const MyScheduleCard = ({
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
 
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const onClickOutSide = (event: MouseEvent) => {
+      if (ref?.current && !ref.current.contains(event.target as Node)) {
+        onClose();
+      }
+    };
+    document.addEventListener("mousedown", onClickOutSide);
+    return () => {
+      document.removeEventListener("mousedown", onClickOutSide);
+    };
+  }, [ref.current]);
+
   return (
     <>
-      <Style.Card onClick={() => navigate(`/mySchedule/detail/${id}`)}>
+      <Style.Card
+        onClick={(e) => {
+          navigate(`/mySchedule/detail/${id}`);
+        }}
+      >
         <Style.CardLeft>
           <PeriodTag>
             {period}박 {period + 1}일
@@ -42,8 +62,13 @@ const MyScheduleCard = ({
           <Style.CardTitle>{title}</Style.CardTitle>
           <div>{`${startDate} ~ ${endDate}`}</div>
         </Style.CardLeft>
-        <Style.DropdownBox>
-          <Style.CircleButton onClick={openDropdown}>
+        <Style.DropdownBox ref={ref}>
+          <Style.CircleButton
+            onClick={(e) => {
+              e.stopPropagation();
+              openDropdown();
+            }}
+          >
             <Style.Circle />
             <Style.Circle />
             <Style.Circle />

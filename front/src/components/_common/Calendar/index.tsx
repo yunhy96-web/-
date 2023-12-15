@@ -1,8 +1,9 @@
 import * as Style from "./style";
 import createCalendar from "../../../utils/createCalendar";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import useSurvey from "../../../hooks/useSurvey";
 import { DateType } from "../Funnel/DateCalendar";
+import useConfirmModal from "../../../hooks/useConfirmModal";
 
 type Props = {
   baseDate: Dayjs;
@@ -13,6 +14,7 @@ type Props = {
 const Calendar = ({ baseDate, date, setCalendarDate }: Props) => {
   const monthList = createCalendar(baseDate);
   const { startDate, endDate } = date;
+  const { openConfirmModal, closeConfirmModal } = useConfirmModal();
 
   return (
     <div>
@@ -42,11 +44,24 @@ const Calendar = ({ baseDate, date, setCalendarDate }: Props) => {
                 <Style.Date
                   onClick={() => {
                     if (date.month() !== baseDate.month()) return;
-                    // if (!endDate && startDate?.add(10, "day").isAfter(date))
-                    //   return;
+                    if (date.isBefore(dayjs(), "day")) return;
+                    if (
+                      !endDate &&
+                      startDate &&
+                      Math.abs(startDate.diff(date, "day")) >= 10
+                    ) {
+                      openConfirmModal({
+                        type: "OVER_DATE",
+                        confirm: closeConfirmModal,
+                      });
+                      return;
+                    }
                     setCalendarDate(date);
                   }}
-                  disabled={false}
+                  disabled={
+                    // date.isBefore(startDate, "day") ||
+                    date.isBefore(dayjs(), "day")
+                  }
                   isSelected={
                     date.month() === baseDate.month() &&
                     (date.isSame(startDate, "day") ||

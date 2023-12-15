@@ -7,6 +7,15 @@ export const Tab = styled.header`
   display: flex;
   z-index: 40;
   background: ${({ theme }) => theme.colors.white};
+
+  @media (max-width: 760px) {
+    width: 100%;
+  }
+
+  @media (min-width: 761px) {
+    width: 393px;
+    /* position: relative; */
+  }
 `;
 
 export const TabItem = styled.div<{ isSelected: boolean }>`
@@ -65,6 +74,12 @@ export const CreateButton = styled.div`
   min-width: 324px;
   left: 18px;
   z-index: 20;
+
+  @media (min-width: 761px) {
+    width: calc(393px - 36px);
+    left: calc((100% - (393px - 36px)) / 2);
+    /* position: relative; */
+  }
 `;
 
 export const CreateButton2 = styled.div`

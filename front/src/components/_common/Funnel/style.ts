@@ -11,6 +11,13 @@ export const NextButton = styled.div`
   width: calc(100% - 36px);
   min-width: 324px;
   left: 18px;
+  z-index: 20;
+
+  @media (min-width: 761px) {
+    width: calc(393px - 36px);
+    left: calc((100% - (393px - 36px)) / 2);
+    /* position: relative; */
+  }
 `;
 
 export const NextButton2 = styled.div`

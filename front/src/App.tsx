@@ -8,8 +8,19 @@ import theme from "./style/Theme";
 import { GlobalConfirmModal } from "./components/_common/ConfirmModal";
 import { useEffect } from "react";
 
-const queryClient = new QueryClient();
 function App() {
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+      mutations: {
+        onError: (error) => {
+          throw new Error("This error is handled");
+        },
+      },
+    },
+  });
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://developers.kakao.com/sdk/js/kakao.js";
