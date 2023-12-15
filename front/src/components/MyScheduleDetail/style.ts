@@ -94,7 +94,6 @@ export const TagList = styled.div`
 export const DateBox = styled.div`
   display: flex;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
   padding: 12px 18px 12px 18px;
   background: #f5f5f5;
@@ -246,13 +245,13 @@ export const Content = styled.div`
   padding: 0 16px;
   overflow-y: auto;
   height: 100%;
-  padding-bottom: 80px;
+  /* padding-bottom: 80px; */
 `;
 
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 12px);
+  height: 100%;
   overflow: auto;
   gap: 15px;
   padding-top: 17px;
@@ -326,4 +325,18 @@ export const AddDestinationText = styled.div`
 
 export const GrayText = styled.div`
   color: ${({ theme }) => theme.colors.gray_1};
+`;
+
+export const Complete = styled.div`
+  ${({ theme }) => theme.font.heading_3};
+`;
+
+export const TitleInput = styled.input`
+  ${({ theme }) => theme.font.heading_1};
+  border: 2px solid #e0e0e0;
+  width: 100%;
+  padding: 8px 14px;
+  text-align: left;
+  border-radius: 8px;
+  /* margin-bottom: 16px; */
 `;

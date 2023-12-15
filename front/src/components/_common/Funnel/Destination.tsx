@@ -30,7 +30,10 @@ const Destination = ({ onNext }: Props) => {
         <Style.DestinationInput
           placeholder="10자까지 입력 가능합니다."
           value={survey.destination.city}
-          onChange={(e) => setDestinationCity(e.target.value)}
+          onChange={(e) => {
+            if (e.target.value.length > 10) return;
+            setDestinationCity(e.target.value);
+          }}
         />
         <Style.InputLength>
           {survey.destination.city?.length || 0}/10

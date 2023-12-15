@@ -26,6 +26,7 @@ const AddDestination = ({ onNext }: Props) => {
         value={survey.addedDestination}
         onChange={onChangeDestination}
         placeholder="장소를 입력해주세요."
+        maxLength={10}
       />
       <Style.InputLength>{survey.addedDestination.length}/10</Style.InputLength>
       <Style.NextButton>
@@ -35,6 +36,13 @@ const AddDestination = ({ onNext }: Props) => {
           onClick={onNext}
         />
       </Style.NextButton>
+      {/* <Style.NextButton>
+        <Button
+          color="primary"
+          text="여행 일정 추천 받으러 가기"
+          onClick={onNext}
+        />
+      </Style.NextButton> */}
     </div>
   );
 };

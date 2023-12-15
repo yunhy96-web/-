@@ -49,7 +49,11 @@ export const DateCell = styled.div<{
       : "none"};
 `;
 
-export const Date = styled.div<{ isSelected: boolean; isDuring: boolean }>`
+export const Date = styled.div<{
+  isSelected: boolean;
+  isDuring: boolean;
+  disabled: boolean;
+}>`
   width: 40px;
   height: 40px;
   display: flex;
@@ -58,12 +62,14 @@ export const Date = styled.div<{ isSelected: boolean; isDuring: boolean }>`
   cursor: pointer;
   border-radius: 8px;
   ${({ theme }) => theme.font.body_1};
-  ${({ theme, isSelected, isDuring }) => `
+  ${({ theme, isSelected, isDuring, disabled }) => `
     color: ${
       isSelected
         ? theme.colors.white
         : isDuring
         ? theme.colors.main
+        : disabled
+        ? theme.colors.gray
         : theme.colors.sub2
     };
     background-color: ${

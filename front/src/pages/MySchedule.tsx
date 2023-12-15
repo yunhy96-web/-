@@ -112,6 +112,14 @@ const MySchedule = () => {
           color="gradient"
         />
       </Style.CreateButton>
+      {/* <Style.CreateButton2>
+        <Button
+          left={<Icon.AddSchedule />}
+          text="AI한테 여행 일정 추천받으러 가기"
+          onClick={() => navigate("/createSchedule/date")}
+          color="gradient"
+        />
+      </Style.CreateButton2> */}
     </>
   );
 };

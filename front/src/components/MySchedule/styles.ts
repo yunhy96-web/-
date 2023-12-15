@@ -67,6 +67,15 @@ export const CreateButton = styled.div`
   z-index: 20;
 `;
 
+export const CreateButton2 = styled.div`
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  min-width: 324px;
+  /* left: 18px; */
+  z-index: 20;
+`;
+
 export const Dropdown = styled.ul`
   position: absolute;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.15);

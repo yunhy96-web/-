@@ -7,6 +7,13 @@ export const CONFIRM_MODAL = {
     cancel: "취소",
     confirm: "삭제",
   },
+  EIXT_WHEN_EDITING: {
+    title: "",
+    description:
+      "화면을 나가시면 그동안\n수정했던 내용이 저장되지 않습니다.\n이동하시겠습니까?",
+    cancel: "취소",
+    confirm: "삭제",
+  },
   DELETE: {
     title: "",
     description: "일정을 삭제하시겠습니까?\n삭제 후 되돌릴 수 없습니다.",
@@ -15,7 +22,7 @@ export const CONFIRM_MODAL = {
   },
   LIMIT_SCHEDULE: {
     title: "",
-    description: `여행지는 10개까지만 추가 가능합니다.`,
+    description: `여행지는 20개까지만 추가 가능합니다.`,
     // cancel: "취소",
     confirm: "확인",
   },

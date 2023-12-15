@@ -11,9 +11,10 @@ type Props = {
     content: JSX.Element;
   };
   borderBottom?: boolean;
+  backFn?: () => void;
 };
 
-const Header = ({ back, title, right, borderBottom = true }: Props) => {
+const Header = ({ back, title, right, borderBottom = true, backFn }: Props) => {
   const navigate = useNavigate();
   return (
     <Style.Header borderBottom={borderBottom}>
@@ -25,7 +26,11 @@ const Header = ({ back, title, right, borderBottom = true }: Props) => {
           justifyContent: "flex-start",
         }}
       >
-        {back ? <Icon.Back onClick={() => navigate(-1)} /> : <div />}
+        {back ? (
+          <Icon.Back onClick={() => (backFn ? backFn() : navigate(-1))} />
+        ) : (
+          <div />
+        )}
       </div>
       <Style.Text>{title}</Style.Text>
       <div

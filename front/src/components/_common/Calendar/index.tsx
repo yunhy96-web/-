@@ -42,8 +42,11 @@ const Calendar = ({ baseDate, date, setCalendarDate }: Props) => {
                 <Style.Date
                   onClick={() => {
                     if (date.month() !== baseDate.month()) return;
+                    // if (!endDate && startDate?.add(10, "day").isAfter(date))
+                    //   return;
                     setCalendarDate(date);
                   }}
+                  disabled={false}
                   isSelected={
                     date.month() === baseDate.month() &&
                     (date.isSame(startDate, "day") ||

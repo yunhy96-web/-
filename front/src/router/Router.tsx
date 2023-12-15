@@ -8,6 +8,7 @@ import Layout from "../layout/Layout";
 import Login from "../pages/Login";
 import Onboarding from "../pages/Onboarding";
 import AddSchedule from "../pages/AddSchedule";
+import MyDetailSchedule from "../pages/MyDetailSchedule";
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home />} />
           <Route path="/mySchedule" element={<MySchedule />} />
+          <Route path="/mySchedule/detail/:id" element={<MyDetailSchedule />} />
           <Route path="/createSchedule" element={<AddSchedule />} />
           <Route path="/createSchedule/:state" element={<CreateSchedule />} />
           <Route path="/article" element={<Article />} />

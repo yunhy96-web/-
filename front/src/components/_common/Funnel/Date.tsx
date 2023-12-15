@@ -37,16 +37,19 @@ const Date = ({ onNext }: Props) => {
             navigate("/createSchedule/date-calendar", { replace: true });
           }}
         >
-          <Icon.Date />
-          <div>
-            {`${convertDateToString(startDate)} - ${convertDateToString(
-              endDate
-            )}`}
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <Icon.Date />
+            <div>
+              {`${convertDateToString(startDate)} - ${convertDateToString(
+                endDate
+              )}`}
+            </div>
           </div>
+          <div>{`${tripPeriod}박 ${tripPeriod + 1}일`}</div>
         </Style.DateBox>
-        <Style.ScheduleDate>{`${tripPeriod}박 ${
+        {/* <Style.ScheduleDate>{`${tripPeriod}박 ${
           tripPeriod + 1
-        }일`}</Style.ScheduleDate>
+        }일`}</Style.ScheduleDate> */}
       </div>
       <Style.NextButton>
         <Button color="primary" text="다음" onClick={onNext} />

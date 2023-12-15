@@ -1,27 +1,78 @@
-import React, { DragEvent, useRef, useState } from "react";
-import { ScheduleByDate } from "../components/_common/Funnel/Complete";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  DragEvent,
+  TouchEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useQuery } from "@tanstack/react-query";
 import useSurvey from "./useSurvey";
+import { ScheduleById, getScheduleById, getTripSchedule } from "../api/clova";
+import useSaveScehdule from "./useSaveScehdule";
+import { useParams } from "react-router-dom";
 import useConfirmModal from "./useConfirmModal";
 
-const useSchedule = () => {
-  const { openConfirmModal, closeConfirmModal } = useConfirmModal();
+const useSchedule2 = () => {
+  const params = useParams<{ id: string }>();
 
   const { survey } = useSurvey();
   const [day, setDay] = useState(1);
+  const { openConfirmModal, closeConfirmModal } = useConfirmModal();
 
   const date = survey.startDate.add(day - 1, "day").format("YYYY-MM-DD");
 
-  const queryClient = useQueryClient();
+  const { data, isSuccess } = useQuery({
+    queryKey: ["mySchedule"],
+    queryFn: () => getScheduleById(Number(params.id)),
+  });
 
-  const scheduleList = queryClient.getQueryData([
-    "tripSchedule",
-  ]) as ScheduleByDate;
+  const { mutate } = useSaveScehdule();
 
-  const [schedule, setSchedule] = useState<ScheduleByDate>(scheduleList);
+  const scheduleList = data as ScheduleById;
+
+  const [schedule, setSchedule] = useState<ScheduleById>({});
+
+  const onSave = () => {
+    const result: {
+      realday: string;
+      content: string;
+      email: string;
+      time: string;
+      detailPlans: [
+        {
+          detailContent: string;
+        }
+      ];
+    }[] = [];
+    for (let idx in schedule) {
+      schedule[idx].forEach((item, index) => {
+        // item.time = index + 1;
+        result.push({
+          realday: idx,
+          content: "재일정 내용 1",
+          email: "example1@example.com",
+          time: String(index + 1),
+          detailPlans: [
+            {
+              detailContent: "재상세 일정 1-1",
+            },
+          ],
+        });
+      });
+    }
+
+    mutate({ groupId: Number(params.id), scheduleList: result });
+  };
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    setSchedule(scheduleList);
+  }, [isSuccess]);
 
   const draggingItemIndex = useRef<number | null>(null);
   const draggingOverItemIndex = useRef<number | null>(null);
+
   const onDragStart = (e: DragEvent<HTMLLIElement>, index: number) => {
     draggingItemIndex.current = index;
     (e.target as HTMLLIElement).classList.add("grabbing");
@@ -45,7 +96,7 @@ const useSchedule = () => {
     copyListItems.splice(draggingOverItemIndex.current, 0, dragItemContent); // 4
     draggingItemIndex.current = draggingOverItemIndex.current;
     draggingOverItemIndex.current = null; //5
-    setSchedule((prev: ScheduleByDate) => {
+    setSchedule((prev: ScheduleById) => {
       return {
         ...prev,
         [date]: copyListItems,
@@ -110,19 +161,36 @@ const useSchedule = () => {
     setSchedule((prev) => {
       return {
         ...prev,
-        [date]: [
-          ...prev[date],
-          {
-            id: Math.random(),
-            email: "",
-            time: prev[date].length + 1,
-            content: "",
-            description: "",
-            isEditable: true,
-          },
-        ],
+        [date]: prev[date]
+          ? [
+              ...prev[date],
+              {
+                id: Math.random(),
+                email: "",
+                time: String(prev[date].length + 1),
+                content: "",
+                description: "",
+                detailPlans: [{ id: Math.random(), detailContent: "" }],
+                // isEditable: true,
+              },
+            ]
+          : [
+              {
+                id: Math.random(),
+                email: "",
+                time: String(1),
+                content: "",
+                description: "",
+                detailPlans: [{ id: Math.random(), detailContent: "" }],
+                // isEditable: true,
+              },
+            ],
       };
     });
+  };
+
+  const handleTouchMove = (e: any) => {
+    e.preventDefault(); // 스크롤 이벤트를 막음
   };
 
   return {
@@ -140,7 +208,8 @@ const useSchedule = () => {
     initData,
     onDeleteSchedule,
     onChangeContent,
+    onSave,
   };
 };
 
-export default useSchedule;
+export default useSchedule2;

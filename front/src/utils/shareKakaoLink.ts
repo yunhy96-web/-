@@ -16,7 +16,7 @@ export const shareKakao = (route: string, title: string) => {
       content: {
         title: title, // 인자값으로 받은 title
         description: "설명", // 인자값으로 받은 title
-        imageUrl: `https://d1zdvff23sqy4w.cloudfront.net/images/ogimage.png`,
+        imageUrl: `https://d1zdvff23sqy4w.cloudfront.net/images/share.png`,
         link: {
           mobileWebUrl: route, // 인자값으로 받은 route(uri 형태)
           webUrl: route,

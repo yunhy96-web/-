@@ -6,6 +6,8 @@ import useConfirmModal from "../../hooks/useConfirmModal";
 import { Icon } from "../../assets";
 import { shareKakao } from "../../utils/shareKakaoLink";
 import { copyInvitationLink } from "../../utils/copyInvitationLink";
+import { useNavigate } from "react-router-dom";
+import BottomSheet from "../_common/BottomSheet";
 
 type Props = {
   startDate: string;
@@ -24,6 +26,7 @@ const MyScheduleCard = ({
   openDropdown,
   isOpenDropdown,
 }: Props) => {
+  const navigate = useNavigate();
   const period = dayjs(endDate).diff(dayjs(startDate), "day") + 1;
 
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
@@ -31,7 +34,7 @@ const MyScheduleCard = ({
 
   return (
     <>
-      <Style.Card>
+      <Style.Card onClick={() => navigate(`/mySchedule/detail/${id}`)}>
         <Style.CardLeft>
           <PeriodTag>
             {period}박 {period + 1}일
@@ -59,8 +62,8 @@ const MyScheduleCard = ({
                 onClick={() => {
                   openConfirmModal({
                     type: "DELETE",
-                    confirm: () => {},
-                    cancel: () => {},
+                    confirm: closeConfirmModal,
+                    cancel: closeConfirmModal,
                   });
                 }}
               >
@@ -71,30 +74,7 @@ const MyScheduleCard = ({
         </Style.DropdownBox>
       </Style.Card>
       {isOpenDropdown && openBottomSheet && (
-        <>
-          <Style.Overlay onClick={() => setOpenBottomSheet(false)} />
-          <Style.BottomSheet>
-            <Style.BottomSheetTitle>여행 일정 공유하기</Style.BottomSheetTitle>
-            <Style.BottomSheetButtonBox>
-              <Style.BottomSheetButton
-                onClick={() =>
-                  shareKakao("http://localhost:3000", "여행일정공유")
-                }
-              >
-                <Icon.Kakao />
-                <div>카카오톡</div>
-              </Style.BottomSheetButton>
-              <Style.BottomSheetButton
-                onClick={() => {
-                  copyInvitationLink(id);
-                }}
-              >
-                <Icon.Url />
-                <div>URL 복사</div>
-              </Style.BottomSheetButton>
-            </Style.BottomSheetButtonBox>
-          </Style.BottomSheet>
-        </>
+        <BottomSheet onClose={() => setOpenBottomSheet(false)} id={id} />
       )}
     </>
   );
