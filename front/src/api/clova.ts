@@ -90,6 +90,27 @@ export const saveScheduleList = async (info: {
   }
 };
 
+export type MyScheduleList = {
+  id: 1;
+  groupid: 1;
+  destination: "서울";
+  period: "2023년 12월 10일 - 2023년 12월 12일";
+  userid: 1;
+  passed: true;
+};
+
+export const getMyScheduleList = async (userId: number) => {
+  try {
+    const { data } = await api.get<MyScheduleList[]>(
+      `/clova/totalgroupplan/${userId}`
+    );
+
+    return data;
+  } catch (e) {
+    // window.location.href = "/error";
+  }
+};
+
 export const getScheduleById = async (id: number) => {
   return getScheduleListById(
     [

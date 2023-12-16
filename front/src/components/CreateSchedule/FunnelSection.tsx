@@ -27,26 +27,11 @@ const FunnelSection = () => {
   const navigate = useNavigate();
   const params = useParams<{ state: PageType }>();
 
-  const isSurvey = () => {
-    const currentPageIndex = pageList.findIndex(
-      (item) => item === params.state
-    );
-    return currentPageIndex !== -1;
-  };
-
-  const skipToNextPage = () => {
-    if (!isSurvey()) return;
-    const currentPageIndex = pageList.findIndex(
-      (item) => item === params.state
-    );
-    navigate(`/createSchedule/${pageList[currentPageIndex + 1]}`);
-  };
-
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
 
   // TODO: 저장하기
   const onSubmitModal = async () => {
-    await //
+    // await //
     openConfirmModal({
       type: "COMPLETE",
       confirm: () => navigate("/createSchedule/mySchedule"),
@@ -56,7 +41,7 @@ const FunnelSection = () => {
 
   if (params.state === undefined) return null;
   if (params.state === "loading") return <Loading />;
-  if (params.state === "complete") return <Complete onNext={() => {}} />;
+  if (params.state === "complete") return <Complete onNext={onSubmitModal} />;
 
   return (
     <>
@@ -114,3 +99,18 @@ const FunnelSection = () => {
 };
 
 export default FunnelSection;
+
+// const isSurvey = () => {
+//   const currentPageIndex = pageList.findIndex(
+//     (item) => item === params.state
+//   );
+//   return currentPageIndex !== -1;
+// };
+
+// const skipToNextPage = () => {
+//   if (!isSurvey()) return;
+//   const currentPageIndex = pageList.findIndex(
+//     (item) => item === params.state
+//   );
+//   navigate(`/createSchedule/${pageList[currentPageIndex + 1]}`);
+// };

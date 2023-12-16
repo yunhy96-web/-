@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import useSurvey from "../../../hooks/useSurvey";
 import { Icon } from "../../../assets";
 import { useInView } from "react-intersection-observer";
+import { CalendarController } from "../../../controller/CalendarController";
 
 type Props = {
   onNext: () => void;
@@ -17,7 +18,7 @@ export type DateType = {
 };
 
 const DateCalendar = ({ onNext }: Props) => {
-  const { ref, inView, entry } = useInView({
+  const { ref, inView } = useInView({
     threshold: 0,
   });
 
@@ -46,29 +47,12 @@ const DateCalendar = ({ onNext }: Props) => {
     endDate: survey.endDate,
   });
 
-  const setStartDate = (date: Dayjs) => {
-    setDate((prev) => ({ ...prev, startDate: date, endDate: null }));
-  };
-
-  const setEndDate = (date: Dayjs) => {
-    setDate((prev) => ({ ...prev, endDate: date }));
-  };
-
   const setCalendarDate = (newDate: Dayjs) => {
-    if (date.startDate && date.endDate) {
-      setStartDate(newDate);
-    } else {
-      if (newDate.isBefore(date.startDate, "day")) {
-        // 시작일이 종료일보다 이후일 경우 시작일, 종료일 변경
-        setDate((prev) => ({
-          ...prev,
-          endDate: prev.startDate,
-          startDate: newDate,
-        }));
-      } else {
-        setEndDate(newDate);
-      }
-    }
+    setDate((prev) =>
+      CalendarController(prev) //
+        .setCalendarDate(newDate)
+        .get()
+    );
   };
 
   return (

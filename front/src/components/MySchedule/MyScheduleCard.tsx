@@ -60,7 +60,7 @@ const MyScheduleCard = ({
             {period}박 {period + 1}일
           </PeriodTag>
           <Style.CardTitle>{title}</Style.CardTitle>
-          <div>{`${startDate} ~ ${endDate}`}</div>
+          <Style.DateTitle>{`${startDate} ~ ${endDate}`}</Style.DateTitle>
         </Style.CardLeft>
         <Style.DropdownBox ref={ref}>
           <Style.CircleButton

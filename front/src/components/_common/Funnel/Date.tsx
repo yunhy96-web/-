@@ -47,9 +47,6 @@ const Date = ({ onNext }: Props) => {
           </div>
           <div>{`${tripPeriod}박 ${tripPeriod + 1}일`}</div>
         </Style.DateBox>
-        {/* <Style.ScheduleDate>{`${tripPeriod}박 ${
-          tripPeriod + 1
-        }일`}</Style.ScheduleDate> */}
       </div>
       <Style.NextButton>
         <Button color="primary" text="다음" onClick={onNext} />

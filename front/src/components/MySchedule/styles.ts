@@ -49,6 +49,10 @@ export const Title = styled.h3`
 export const CardTitle = styled.div`
   ${({ theme }) => theme.font.heading_2};
 `;
+export const DateTitle = styled.div`
+  ${({ theme }) => theme.font.caption_2};
+  color: #a7a7a7;
+`;
 
 export const Card = styled.li`
   display: flex;
