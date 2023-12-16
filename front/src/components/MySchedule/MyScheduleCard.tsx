@@ -8,7 +8,7 @@ import { shareKakao } from "../../utils/shareKakaoLink";
 import { copyInvitationLink } from "../../utils/copyInvitationLink";
 import { useNavigate } from "react-router-dom";
 import BottomSheet from "../_common/BottomSheet";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteSchedule } from "../../api/clova";
 
 type Props = {
@@ -33,6 +33,7 @@ const MyScheduleCard = ({
   groupId,
 }: Props) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const period = dayjs(endDate).diff(dayjs(startDate), "day") + 1;
 
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
@@ -43,6 +44,9 @@ const MyScheduleCard = ({
   const { mutate } = useMutation({
     mutationKey: ["deleteSchedule"],
     mutationFn: deleteSchedule,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mySchedule", "all"] });
+    },
   });
 
   // useEffect(() => {
@@ -85,15 +89,25 @@ const MyScheduleCard = ({
           {isOpenDropdown ? (
             <Style.Dropdown>
               <Style.DropdownItem
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+
                   setOpenBottomSheet(true);
                 }}
               >
                 공유
               </Style.DropdownItem>
-              <Style.DropdownItem>수정</Style.DropdownItem>
               <Style.DropdownItem
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/mySchedule/detail/${id}`);
+                }}
+              >
+                수정
+              </Style.DropdownItem>
+              <Style.DropdownItem
+                onClick={(e) => {
+                  e.stopPropagation();
                   openConfirmModal({
                     type: "DELETE",
                     confirm: () => mutate(groupId),
@@ -108,7 +122,12 @@ const MyScheduleCard = ({
         </Style.DropdownBox>
       </Style.Card>
       {isOpenDropdown && openBottomSheet && (
-        <BottomSheet onClose={() => setOpenBottomSheet(false)} id={id} />
+        <BottomSheet
+          title={`${title} ${period}박 ${period + 1}일`}
+          onClose={() => setOpenBottomSheet(false)}
+          desc={`${startDate} ~ ${endDate}`}
+          id={id}
+        />
       )}
     </>
   );

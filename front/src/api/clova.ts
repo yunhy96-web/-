@@ -179,3 +179,27 @@ export const deleteSchedule = async (id: number) => {
     window.location.href = "/error";
   }
 };
+
+export const getUserState = async () => {
+  try {
+    const { data } = await api.get(`/getuserinfo`);
+    return data;
+  } catch (e) {
+    window.location.href = "/error";
+  }
+};
+
+export const updateTripName = async ({
+  destination,
+  groupId,
+}: {
+  destination: string;
+  groupId: number;
+}) => {
+  try {
+    const { data } = await api.put(`${groupId}/destination`, { destination });
+    return data;
+  } catch (e) {
+    window.location.href = "/error";
+  }
+};

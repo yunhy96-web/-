@@ -68,6 +68,14 @@ export const Card = styled.li`
   border-radius: 8px;
   border: 2px solid #e0e0e0;
 `;
+export const Empty = styled.div`
+  ${({ theme }) => theme.font.body_1};
+  color: ${({ theme }) => theme.colors.gray_1};
+  text-align: center;
+  margin-top: 40px;
+  white-space: pre-line;
+  line-height: 30px; /* 187.5% */
+`;
 
 export const CardLeft = styled.div`
   display: flex;
@@ -137,6 +145,7 @@ export const CircleButton = styled.div`
   justify-content: center;
   align-items: center;
   gap: 3px;
+  height: 40px;
 `;
 
 export const BottomSheet = styled.div`

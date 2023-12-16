@@ -12,8 +12,15 @@ import MyDetailSchedule from "../pages/MyDetailSchedule";
 import { ErrorBoundary } from "react-error-boundary";
 import { Error } from "../pages/Error";
 import UserLogin from "../pages/UserLogin";
+import { useQuery } from "@tanstack/react-query";
+import { getUserState } from "../api/clova";
 
 const Router = () => {
+  const { data } = useQuery({
+    queryKey: ["user"],
+    queryFn: getUserState,
+    staleTime: Infinity,
+  });
   return (
     <Layout>
       <BrowserRouter>

@@ -31,6 +31,7 @@ function App() {
       document.body.removeChild(script);
     };
   }, []);
+
   return (
     <RecoilRoot>
       <Global styles={globalStyle} />
