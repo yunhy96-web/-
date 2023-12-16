@@ -52,9 +52,13 @@ public class PlanApiController {
     //그룹 플랜 삭제 + 해당 플랜 재생성
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/api/plans/create-multiple-and-delete")
-    public ResponseEntity<String> createMultiplePlansAndDeleteByGroupId(
+    public ResponseEntity<String> createMultiplePlansAndDeleteByGroupId(@AuthenticationPrincipal Authentication authentication,
             @RequestBody List<PlanWithDetailRequest> requests,
             @RequestParam("groupid") Long groupid) {
+
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
 
         try {
             // 먼저 해당 그룹을 삭제

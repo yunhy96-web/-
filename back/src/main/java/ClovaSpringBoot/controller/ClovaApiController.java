@@ -1,8 +1,10 @@
 package ClovaSpringBoot.controller;
 import ClovaSpringBoot.domain.DetailPlan;
+import ClovaSpringBoot.domain.GroupPlan;
 import ClovaSpringBoot.domain.Plan;
 import ClovaSpringBoot.domain.User;
 import ClovaSpringBoot.dto.AddPlanRequest;
+import ClovaSpringBoot.repository.GroupPlanRepository;
 import ClovaSpringBoot.repository.PlanRepository;
 import ClovaSpringBoot.repository.UserRepository;
 import ClovaSpringBoot.service.PlanService;
@@ -18,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
@@ -33,6 +36,7 @@ import static java.time.LocalDateTime.now;
 @RequestMapping("/api/clova")
 public class ClovaApiController {
     private final UserRepository userRepository;
+    private final GroupPlanRepository groupPlanRepository;
     private final PlanService planService;
     private final String apiUrl = "https://clovastudio.stream.ntruss.com/testapp/v1/chat-completions/HCX-002";
     private final String clovaStudioApiKey = "NTA0MjU2MWZlZTcxNDJiY99YyUqar8st3ycFIZjl2dJ6odngEaoG1eThuYBALdW9qY8x4uLLBEXItGFv+1eLZNRMDtmiUYwmliLzObtGaZNCqFJ04laLxQ6Zz080630qzIO+R0RS61ZUsYcGgJn561I3jrwQOTbsTJwBG/QY90dX7mJfBpF7IH/jseDv/8gqKht2gmHheqmgSYSLhuN103Fq4nbuKbF5LIVBqfTdd2w=";
@@ -60,6 +64,13 @@ public class ClovaApiController {
         return responseEntity;
     }
 
+    //전체 그룹 계획 조회
+    @GetMapping("/totalgroupplan/{userid}")
+    public List<GroupPlan> getGroupPlansByUserId(@PathVariable Long userid) {
+        // userid를 기반으로 그룹 플랜을 조회
+        return groupPlanRepository.findByUserid(userid);
+    }
+
     //모든 경로로 들어오는 요청에 대해서 cors
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/send-request2")
@@ -68,10 +79,44 @@ public class ClovaApiController {
         Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
+        //groupId 서버 껏다 킬때마다 다시 0 부터 시작안하려면
+        //groupId 테이블에서 맥스값을 불러와서 +해주는 로직으로 변경 해주어야함.
         groupId++;
+
         String content1 = requestMap.get("content1");
         String content2 = requestMap.get("content2");
         String content3 = requestMap.get("content3");
+        String pattern1 = "기간: ";
+        String period = content1.replaceAll(pattern1,"");
+        String pattern2 = "여행지: ";
+        String destination = content2.replaceAll(pattern2,"");
+        //pass 된 일정인지 아닌지 구별하는 로직
+        // 현재 날짜 얻기
+        LocalDate currentDate = LocalDate.now();
+
+        // " - "로 문자열을 분리하여 종료일을 얻음
+        String[] dateParts = period.split(" - ");
+        String endDateStr = dateParts[1];
+
+        // 날짜 문자열을 LocalDate로 파싱
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
+        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
+
+        // 오늘 날짜와 종료일을 비교하여 초과 여부를 판단
+        boolean isAfter = currentDate.isAfter(endDate);
+
+        //그룹 플랜 생성
+        GroupPlan groupPlan = GroupPlan.builder()
+                .groupid(groupId)
+                .destination(destination)
+                .period(period)
+                .userid(userId)
+                .passed(isAfter)
+                .build();
+        // 그룹 플랜을 리포지토리를 통해 저장
+        GroupPlan savedGroupPlan = groupPlanRepository.save(groupPlan);
+
+        //클로바 일정 생성
         System.out.println(content1);
         System.out.println(content2);
         System.out.println(content3);
