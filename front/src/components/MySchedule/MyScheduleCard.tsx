@@ -36,17 +36,17 @@ const MyScheduleCard = ({
 
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const onClickOutSide = (event: MouseEvent) => {
-      if (ref?.current && !ref.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-    document.addEventListener("mousedown", onClickOutSide);
-    return () => {
-      document.removeEventListener("mousedown", onClickOutSide);
-    };
-  }, [ref.current]);
+  // useEffect(() => {
+  //   const onClickOutSide = (event: MouseEvent) => {
+  //     if (ref?.current && !ref.current.contains(event.target as Node)) {
+  //       onClose();
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", onClickOutSide);
+  //   return () => {
+  //     document.removeEventListener("mousedown", onClickOutSide);
+  //   };
+  // }, [ref.current]);
 
   return (
     <>
