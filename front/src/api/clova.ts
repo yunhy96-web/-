@@ -16,33 +16,61 @@ export const createTripSchedule = async (content: TripContent) => {
   }
 };
 
-export const getTripSchedule = async () => {
+export type ScheduleInfo = {
+  id: number;
+  groupid: number;
+  realday: string;
+  user: {
+    id: number;
+    username: string;
+    nickname: string;
+    image: string;
+  };
+  time: string;
+  createdAt?: string;
+  updatedAt?: string;
+  content: string;
+  detailPlans: {
+    id: number;
+    detailContent: string;
+  }[];
+};
+
+export const getTripSchedule = async ({ groupId }: { groupId: number }) => {
   try {
-    const { data } = await api.get("/plans");
+    const { data } = await api.get<ScheduleInfo[]>(
+      `/plans/detailplans/${groupId}`
+    );
     return getScheduleListByDate(data, false);
   } catch (e) {
-    window.location.href = "/error";
+    console.log(e);
+    // window.location.href = "/error";
   }
 };
 
+export type NewSceduleInfo = {
+  [key: string]: (Omit<ScheduleInfo, "realday"> & { isEditable: boolean })[];
+};
+
 const getScheduleListByDate = (
-  scheduleList: Schedule[],
+  scheduleList: ScheduleInfo[],
   isEditable: boolean
 ) => {
   return scheduleList.reduce((accr, { realday, ...rest }) => {
     if (accr[convertDateFormmat(realday)]) {
       accr[convertDateFormmat(realday)].push({
         ...rest,
-        description: "",
+        detailPlans: [
+          // rest?.detailPlans[0] ??
+          { id: Math.random(), detailContent: "" },
+        ],
         isEditable,
       });
     } else {
-      accr[convertDateFormmat(realday)] = [
-        { ...rest, description: "", isEditable },
-      ];
+      accr[convertDateFormmat(realday)] = [{ ...rest, isEditable }];
     }
     return accr;
-  }, {} as { [key: string]: Omit<Schedule, "realday">[] });
+  }, {} as NewSceduleInfo);
 };
 
 export type SaveScheduleListType = {
@@ -67,21 +95,11 @@ export type ScheduleById = {
 
 export const saveScheduleList = async (info: {
   groupId: number;
-  scheduleList: {
-    realday: string;
-    content: string;
-    email: string;
-    time: string;
-    detailPlans: [
-      {
-        detailContent: string;
-      }
-    ];
-  }[];
+  scheduleList: ScheduleInfo[];
 }) => {
   try {
     const { data } = await api.post(
-      `create-multiple-and-delete?groupid=${info.groupId}`,
+      `/plans/create-multiple-and-delete?groupid=${info.groupId}`,
       info.scheduleList
     );
     return data;

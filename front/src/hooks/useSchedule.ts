@@ -1,8 +1,8 @@
 import React, { DragEvent, useRef, useState } from "react";
-import { ScheduleByDate } from "../components/_common/Funnel/Complete";
 import { useQueryClient } from "@tanstack/react-query";
 import useSurvey from "./useSurvey";
 import useConfirmModal from "./useConfirmModal";
+import { NewSceduleInfo } from "../api/clova";
 
 const useSchedule = () => {
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
@@ -16,9 +16,9 @@ const useSchedule = () => {
 
   const scheduleList = queryClient.getQueryData([
     "tripSchedule",
-  ]) as ScheduleByDate;
+  ]) as NewSceduleInfo;
 
-  const [schedule, setSchedule] = useState<ScheduleByDate>(scheduleList);
+  const [schedule, setSchedule] = useState<NewSceduleInfo>(scheduleList);
 
   const draggingItemIndex = useRef<number | null>(null);
   const draggingOverItemIndex = useRef<number | null>(null);
@@ -45,7 +45,7 @@ const useSchedule = () => {
     copyListItems.splice(draggingOverItemIndex.current, 0, dragItemContent); // 4
     draggingItemIndex.current = draggingOverItemIndex.current;
     draggingOverItemIndex.current = null; //5
-    setSchedule((prev: ScheduleByDate) => {
+    setSchedule((prev: NewSceduleInfo) => {
       return {
         ...prev,
         [date]: copyListItems,
@@ -67,7 +67,12 @@ const useSchedule = () => {
   const onChangeDescription = (id: number, description: string) => {
     setSchedule((prev) => {
       const result = prev[date].map((schedule) =>
-        schedule.id === id ? { ...schedule, description } : schedule
+        schedule.id === id
+          ? {
+              ...schedule,
+              detailPlans: [{ id: Math.random(), detailContent: description }],
+            }
+          : schedule
       );
       return {
         ...prev,
@@ -113,11 +118,16 @@ const useSchedule = () => {
         [date]: [
           ...prev[date],
           {
-            id: Math.random(),
-            email: "",
-            time: prev[date].length + 1,
+            ...prev[date][0],
             content: "",
-            description: "",
+            detailPlans: [
+              {
+                id: Math.random(),
+                detailContent: "",
+              },
+            ],
+            id: Math.random(),
+            time: String(prev[date].length + 1),
             isEditable: true,
           },
         ],

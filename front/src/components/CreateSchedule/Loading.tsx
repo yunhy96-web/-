@@ -9,21 +9,29 @@ import { ThreeDots } from "react-loader-spinner";
 const Loading = () => {
   const navigate = useNavigate();
   const [isComplete, setIsComplete] = useState(false);
+  const [groupId, setGroupId] = useState<number | null>(null);
   const flag = useRef(false);
 
   const { survey } = useSurvey();
 
   const { data, isLoading, error, isSuccess } = useQuery({
     queryKey: ["tripSchedule"],
-    queryFn: getTripSchedule,
-    enabled: isComplete,
+    queryFn: () => {
+      if (!groupId) return;
+      return getTripSchedule({ groupId });
+    },
+    enabled: isComplete && groupId !== null,
     staleTime: Infinity,
   });
 
   const { isPending, isError, mutate } = useMutation({
     mutationKey: ["createdTripSchedule"],
     mutationFn: createTripSchedule,
-    onSuccess: () => {
+    onSuccess: (data: string) => {
+      // console.log(data.groupId);
+      setGroupId(Number(data.replaceAll(/\D/g, "")));
+      // console.log(typeof data);
+      // console.log(data.replaceAll(/^[0-9]/g, ""));
       setIsComplete(true);
     },
   });
@@ -35,10 +43,10 @@ const Loading = () => {
       content1: `기간: ${survey.startDate.format(
         "YYYY년 MM월 DD일"
       )} - ${survey.endDate.format("YYYY년 MM월 DD일")}`,
-      content2: `여행지: ${survey.destination.city}, 꼭 방문하고 싶은 곳: ${survey.addedDestination}`,
+      content2: `여행지: ${survey.destination.city}`,
       content3: `관심사: ${[...survey.trip.interest, ...survey.trip.type].join(
         ", "
-      )}, 할 것`,
+      )}, 할 것, 꼭 방문하고 싶은 곳: ${survey.addedDestination}`,
     });
     flag.current = true;
   }, []);

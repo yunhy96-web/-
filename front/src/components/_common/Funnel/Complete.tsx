@@ -11,6 +11,8 @@ import { PeriodTag } from "../Tag/PeriodTab";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import { DndProvider } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
+import { NewSceduleInfo, ScheduleInfo } from "../../../api/clova";
+import useSaveScehdule from "../../../hooks/useSaveScehdule";
 
 type Props = {
   onNext: () => void;
@@ -26,7 +28,7 @@ export type Schedule = {
   isEditable: boolean;
 };
 
-export type ScheduleByDate = { [key: string]: Omit<Schedule, "realday">[] };
+// export type ScheduleByDate = { [key: string]: Omit<Schedule, "realday">[] };
 
 const Complete = ({ onNext }: Props) => {
   const navigate = useNavigate();
@@ -46,6 +48,7 @@ const Complete = ({ onNext }: Props) => {
     onDeleteSchedule,
     addItem,
     onChangeContent,
+    setSchedule,
   } = useSchedule();
 
   const period = `${getTripPeriod()}박 ${getTripPeriod() + 1}일`;
@@ -64,6 +67,40 @@ const Complete = ({ onNext }: Props) => {
       confirm: () => initData(date),
       cancel: closeConfirmModal,
     });
+  };
+
+  const moveItem = (fromIndex: number, toIndex: number) => {
+    const updatedItems = [...schedule[date]];
+    const [movedItem] = updatedItems.splice(fromIndex, 1);
+    updatedItems.splice(toIndex, 0, movedItem);
+    setSchedule((prev: NewSceduleInfo) => {
+      return {
+        ...prev,
+        [date]: updatedItems,
+      };
+    });
+  };
+
+  const { mutateAsync } = useSaveScehdule();
+
+  const convertToRequestForm = () => {
+    const result: ScheduleInfo[] = [];
+    for (let realday in schedule) {
+      schedule[realday].forEach((item, index) => {
+        result.push({
+          ...item,
+          realday: realday,
+          time: String(index + 1),
+        });
+      });
+    }
+    return result;
+  };
+  const onSubmit = () => {
+    const result = convertToRequestForm();
+    mutateAsync({ groupId: result[0].groupid, scheduleList: result }).then(() =>
+      onNext()
+    );
   };
 
   return (
@@ -111,13 +148,14 @@ const Complete = ({ onNext }: Props) => {
           <DndProvider options={HTML5toTouch}>
             {schedule[date]?.map((item, index) => (
               <ScheduleCard
+                moveItem={moveItem}
                 onDragStart={(e) => onDragStart(e, index)}
                 onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
                 onDragOver={onDragOver}
                 onDragEnd={onDragEnd}
                 onDelete={() => onDeleteSchedule(item.id)}
                 title={item.content}
-                description={item.description}
+                description={item.detailPlans[0]?.detailContent || ""}
                 isEditable={item.isEditable}
                 onChangeDescription={(value) =>
                   onChangeDescription(item.id, value)
@@ -128,10 +166,10 @@ const Complete = ({ onNext }: Props) => {
             ))}
           </DndProvider>
           <Style.CreateButtonBox>
-            <Style.PlusButton>
+            {/* <Style.PlusButton>
               <Icon.RoundPlus />
               <div>다른 장소 더 추천받기</div>
-            </Style.PlusButton>
+            </Style.PlusButton> */}
             <Style.PlusButton onClick={addItem}>
               <Icon.RoundPlus />
               <div>직접 입력해서 추가하기</div>
@@ -140,7 +178,7 @@ const Complete = ({ onNext }: Props) => {
         </Style.Wrapper>
       </Style.Content>
       <Style.NextButton>
-        <Button color="primary" text="저장하기" onClick={onNext} />
+        <Button color="primary" text="저장하기" onClick={onSubmit} />
       </Style.NextButton>
     </>
   );

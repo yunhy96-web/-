@@ -18,7 +18,7 @@ export const MyScheduleListController = (
 ): IMyScheduleListController => ({
   filter: (tab: Tab) => {
     let filteredList = scheduleList;
-    if (tab === "보관중인 일정") {
+    if (tab === "내가 저장한 일정") {
       filteredList = scheduleList.filter((item) => !item.passed);
     } else {
       filteredList = scheduleList.filter((item) => item.passed);

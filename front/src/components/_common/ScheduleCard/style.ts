@@ -1,11 +1,10 @@
 import styled from "@emotion/styled";
 
 export const Card = styled.li<{ isOpen: boolean }>`
-  padding: 17px 24px;
+  padding: 25px 15px;
   border-radius: 8px;
   background: ${({ theme }) => theme.colors.white};
   transition: all 0.1s ease-in-out;
-  height: ${({ isOpen }) => (isOpen ? "187px" : "72px")};
 
   /* min-width: 360px; */
 `;
@@ -13,13 +12,13 @@ export const Card = styled.li<{ isOpen: boolean }>`
 export const Title = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  height: 38px;
+  align-items: flex-start;
+  /* height: 38px; */
 `;
 
 export const TitleLeft = styled.div`
   display: flex;
-  align-items: center;
+  /* align-items: center; */
   width: 100%;
 `;
 
@@ -53,6 +52,7 @@ export const TitleText = styled.div`
 export const Arrow = styled.div<{ isOpen: boolean }>`
   cursor: pointer;
   transition: all 0.1s ease-in-out;
+  height: 24px;
   transform: ${({ isOpen }) => (isOpen ? "rotate(90deg)" : "rotate(0deg)")};
 `;
 

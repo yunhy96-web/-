@@ -7,67 +7,43 @@ import {
   useState,
 } from "react";
 import { useQuery } from "@tanstack/react-query";
-import useSurvey from "./useSurvey";
-import { ScheduleById, getScheduleById, getTripSchedule } from "../api/clova";
+import { NewSceduleInfo, getTripSchedule } from "../api/clova";
 import useSaveScehdule from "./useSaveScehdule";
 import { useParams } from "react-router-dom";
 import useConfirmModal from "./useConfirmModal";
+import dayjs from "dayjs";
 
 const useSchedule2 = () => {
   const params = useParams<{ id: string }>();
 
-  const { survey } = useSurvey();
+  // const { survey } = useSurvey();
   const [day, setDay] = useState(1);
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
 
-  const date = survey.startDate.add(day - 1, "day").format("YYYY-MM-DD");
-
   const { data, isSuccess } = useQuery({
-    queryKey: ["mySchedule"],
-    queryFn: () => getScheduleById(Number(params.id)),
+    queryKey: ["mySchedule", Number(params.id)],
+    queryFn: () => getTripSchedule({ groupId: Number(params.id) }),
   });
 
   const { mutate } = useSaveScehdule();
 
-  const scheduleList = data as ScheduleById;
+  const scheduleList = data as NewSceduleInfo;
 
-  const [schedule, setSchedule] = useState<ScheduleById>({});
+  const [schedule, setSchedule] = useState<NewSceduleInfo>({});
+  const [date, setDate] = useState("");
 
-  const onSave = () => {
-    const result: {
-      realday: string;
-      content: string;
-      email: string;
-      time: string;
-      detailPlans: [
-        {
-          detailContent: string;
-        }
-      ];
-    }[] = [];
-    for (let idx in schedule) {
-      schedule[idx].forEach((item, index) => {
-        // item.time = index + 1;
-        result.push({
-          realday: idx,
-          content: "재일정 내용 1",
-          email: "example1@example.com",
-          time: String(index + 1),
-          detailPlans: [
-            {
-              detailContent: "재상세 일정 1-1",
-            },
-          ],
-        });
-      });
-    }
+  const getDate = (schedule: NewSceduleInfo) => {
+    const result = Object.keys(schedule);
+    result.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
-    mutate({ groupId: Number(params.id), scheduleList: result });
+    return { startDate: dayjs(result[0]), endDate: dayjs(result.at(-1)) };
   };
 
   useEffect(() => {
     if (!isSuccess) return;
     setSchedule(scheduleList);
+    const { startDate, endDate } = getDate(scheduleList);
+    setDate(startDate.add(day - 1, "day").format("YYYY-MM-DD"));
   }, [isSuccess]);
 
   const draggingItemIndex = useRef<number | null>(null);
@@ -96,7 +72,7 @@ const useSchedule2 = () => {
     copyListItems.splice(draggingOverItemIndex.current, 0, dragItemContent); // 4
     draggingItemIndex.current = draggingOverItemIndex.current;
     draggingOverItemIndex.current = null; //5
-    setSchedule((prev: ScheduleById) => {
+    setSchedule((prev: NewSceduleInfo) => {
       return {
         ...prev,
         [date]: copyListItems,
@@ -161,30 +137,22 @@ const useSchedule2 = () => {
     setSchedule((prev) => {
       return {
         ...prev,
-        [date]: prev[date]
-          ? [
-              ...prev[date],
+        [date]: [
+          ...prev[date],
+          {
+            ...prev[date][0],
+            content: "",
+            detailPlans: [
               {
                 id: Math.random(),
-                email: "",
-                time: String(prev[date].length + 1),
-                content: "",
-                description: "",
-                detailPlans: [{ id: Math.random(), detailContent: "" }],
-                // isEditable: true,
-              },
-            ]
-          : [
-              {
-                id: Math.random(),
-                email: "",
-                time: String(1),
-                content: "",
-                description: "",
-                detailPlans: [{ id: Math.random(), detailContent: "" }],
-                // isEditable: true,
+                detailContent: "",
               },
             ],
+            id: Math.random(),
+            time: String(prev[date].length + 1),
+            isEditable: true,
+          },
+        ],
       };
     });
   };
@@ -208,7 +176,8 @@ const useSchedule2 = () => {
     initData,
     onDeleteSchedule,
     onChangeContent,
-    onSave,
+    setDate,
+    // onSave,
   };
 };
 

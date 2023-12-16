@@ -8,12 +8,12 @@ import { useQuery } from "@tanstack/react-query";
 import { getMyScheduleList } from "../api/clova";
 import { MyScheduleListController } from "../controller/MyScheduleListController";
 
-export type Tab = "보관중인 일정" | "지난 일정";
+export type Tab = "내가 저장한 일정" | "지난 일정";
 
-const tabList: Tab[] = ["보관중인 일정", "지난 일정"];
+const tabList: Tab[] = ["내가 저장한 일정", "지난 일정"];
 
 const MySchedule = () => {
-  const [tab, setTab] = useState<Tab>("보관중인 일정");
+  const [tab, setTab] = useState<Tab>("내가 저장한 일정");
   const navigate = useNavigate();
 
   const [openDropdown, setOpenDropdown] = useState(0);
@@ -37,7 +37,7 @@ const MySchedule = () => {
         ))}
       </Style.Tab>
       <Style.Content>
-        <Style.Title>내가 저장한 일정</Style.Title>
+        <Style.Title>{tab}</Style.Title>
         {MyScheduleListController(scheduleList || [])
           .filter(tab)
           .get()

@@ -33,14 +33,14 @@ function App() {
   }, []);
   return (
     <RecoilRoot>
-      <button
+      {/* <button
         onClick={() => {
           window.location.href =
             "http://localhost:8080/oauth2/authorization/kakao";
         }}
       >
         gdgd
-      </button>
+      </button> */}
       <Global styles={globalStyle} />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>

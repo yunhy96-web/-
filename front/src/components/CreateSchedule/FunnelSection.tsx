@@ -31,15 +31,16 @@ const FunnelSection = () => {
 
   // TODO: 저장하기
   const onSubmitModal = async () => {
-    // await //
     openConfirmModal({
       type: "COMPLETE",
-      confirm: () => navigate("/createSchedule/mySchedule"),
+      confirm: () => navigate("/mySchedule"),
       cancel: closeConfirmModal,
     });
   };
 
   if (params.state === undefined) return null;
+  if (params.state === "loading") return <Loading />;
+  if (params.state === "complete") return <Complete onNext={onSubmitModal} />;
 
   return (
     <>
@@ -85,8 +86,6 @@ const FunnelSection = () => {
         {params.state === "add-destination" && (
           <AddDestination onNext={() => navigate("/createSchedule/loading")} />
         )}
-        {params.state === "loading" && <Loading />}
-        {params.state === "complete" && <Complete onNext={onSubmitModal} />}
       </Style.FunnelContainer>
     </>
   );

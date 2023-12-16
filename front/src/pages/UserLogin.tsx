@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useEffect } from "react";
 import * as Style from "../components/Login/styles";
 import { ThreeDots } from "react-loader-spinner";
+import { useRecoilState } from "recoil";
+import { authState } from "../atom/authState";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 const UserLogin = () => {
+  const [auth, setAuth] = useRecoilState(authState);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    console.log(searchParams);
+  }, [searchParams]);
+
   return (
     <Style.Container>
       <Style.Background></Style.Background>

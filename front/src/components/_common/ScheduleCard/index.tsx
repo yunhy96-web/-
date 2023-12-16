@@ -3,6 +3,7 @@ import * as Style from "./style";
 import { Icon } from "../../../assets";
 import useConfirmModal from "../../../hooks/useConfirmModal";
 import { useDrag, useDrop } from "react-dnd";
+import { useLocation } from "react-router-dom";
 
 type Props = {
   title: string;
@@ -35,10 +36,7 @@ const ScheduleCard = ({
   index,
   moveItem,
 }: Props) => {
-  const [, drag] = useDrag({
-    type: "ITEM",
-    item: { id, index },
-  });
+  const location = useLocation();
 
   const [, drop] = useDrop({
     accept: "ITEM",
@@ -52,6 +50,14 @@ const ScheduleCard = ({
 
   const [open, setOpen] = useState(false);
   const [isGrab, setIsGrab] = useState(false);
+
+  const [, drag] = useDrag({
+    type: "ITEM",
+    canDrag:
+      (location.pathname.includes("mySchedule") && isGrab && isEditable) ||
+      (location.pathname.includes("complete") && isGrab),
+    item: { id, index },
+  });
 
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
 
@@ -69,7 +75,7 @@ const ScheduleCard = ({
         drag(drop(node));
       }}
       isOpen={open}
-      // draggable={isGrab}
+      // draggable={false}
       // onDragStart={onDragStart}
       // onDragEnter={onDragEnter}
       // onDragOver={onDragOver}
@@ -80,23 +86,26 @@ const ScheduleCard = ({
     >
       <Style.Title>
         <Style.TitleLeft>
-          <Style.DragButton
-            isGrab={isGrab}
-            onTouchStart={() => {
-              setIsGrab(true);
-            }}
-            onTouchEnd={() => {
-              setIsGrab(false);
-            }}
-            onMouseDown={() => {
-              setIsGrab(true);
-            }}
-            onMouseUp={() => {
-              setIsGrab(false);
-            }}
-          >
-            <Icon.Hamburger />
-          </Style.DragButton>
+          {(isEditable || location.pathname.includes("complete")) && (
+            <Style.DragButton
+              isGrab={isGrab}
+              onTouchStart={() => {
+                setIsGrab(true);
+              }}
+              onTouchEnd={() => {
+                setIsGrab(false);
+              }}
+              onMouseDown={() => {
+                setIsGrab(true);
+              }}
+              onMouseUp={() => {
+                setIsGrab(false);
+              }}
+            >
+              <Icon.Hamburger />
+            </Style.DragButton>
+          )}
+
           {isEditable ? (
             <Style.TitleInput
               value={title}
@@ -110,8 +119,16 @@ const ScheduleCard = ({
           <Style.Arrow isOpen={open} onClick={() => setOpen((prev) => !prev)}>
             <Icon.RightArrow />
           </Style.Arrow>
-          <div onClick={deleteSchedule}>
-            <Icon.Close />
+          <div
+            style={{
+              height: 24,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onClick={deleteSchedule}
+          >
+            <Icon.RoundClose />
           </div>
         </Style.TitleRight>
       </Style.Title>
@@ -125,4 +142,4 @@ const ScheduleCard = ({
   );
 };
 
-export default React.memo(ScheduleCard);
+export default ScheduleCard;

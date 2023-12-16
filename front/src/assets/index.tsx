@@ -21,10 +21,13 @@ import { ReactComponent as Edit } from "./edit.svg";
 import { ReactComponent as Delete } from "./delete.svg";
 import { ReactComponent as Share } from "./share.svg";
 import { ReactComponent as Error } from "./error.svg";
+import { ReactComponent as RoundClose } from "./roundClose.svg";
+import { ReactComponent as KakaoButton } from "./kakaoButton.svg";
 
 export const Icon = {
   Article,
   CreateSchedule,
+  KakaoButton,
   MyPage,
   Home,
   MySchedule,
@@ -46,4 +49,5 @@ export const Icon = {
   Delete,
   Share,
   Error,
+  RoundClose,
 };

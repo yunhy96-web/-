@@ -16,13 +16,12 @@ export const Background = styled.div`
 `;
 
 export const KakaoLoginButton = styled.button`
-  position: fixed;
+  position: absolute;
   bottom: 60px;
-  width: calc(100% - 32px);
-  margin: 0 16px;
-  background: #ffdb00;
+  /* width: calc(100% - 32px); */
   border-radius: 8px;
-  padding: 20px;
+  overflow: hidden;
+  left: calc((100% - 328px) / 2);
 `;
 
 export const Title = styled.div`
