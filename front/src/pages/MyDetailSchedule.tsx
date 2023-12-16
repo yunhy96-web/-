@@ -1,13 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import * as Style from "../components/MyScheduleDetail/style";
 import { Dayjs } from "dayjs";
-import useSchedule from "../hooks/useSchedule";
 import useConfirmModal from "../hooks/useConfirmModal";
 import { PeriodTag } from "../components/_common/Tag/PeriodTab";
 import Header from "../components/_common/Header";
 import ScheduleCard from "../components/_common/ScheduleCard";
 import { Icon } from "../assets";
-import Button from "../components/_common/Button";
 import useSurvey from "../hooks/useSurvey";
 import useSchedule2 from "../hooks/useSchedule2";
 import { useState } from "react";
@@ -15,10 +13,6 @@ import BottomSheet from "../components/_common/BottomSheet";
 import { DndProvider } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { ScheduleById } from "../api/clova";
-
-type Props = {
-  onNext: () => void;
-};
 
 export type Schedule = {
   id: number;
@@ -47,7 +41,6 @@ const MyDetailSchedule = () => {
     date,
     onChangeDescription,
     setDay,
-    initData,
     onDragStart,
     onDragEnd,
     onAvailableItemDragEnter,

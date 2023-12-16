@@ -9,6 +9,8 @@ import ScheduleCard from "../ScheduleCard";
 import useSchedule from "../../../hooks/useSchedule";
 import { PeriodTag } from "../Tag/PeriodTab";
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { DndProvider } from "react-dnd-multi-backend";
+import { HTML5toTouch } from "rdndmb-html5-to-touch";
 
 type Props = {
   onNext: () => void;
@@ -106,23 +108,25 @@ const Complete = ({ onNext }: Props) => {
       </Style.DayList>
       <Style.Content>
         <Style.Wrapper>
-          {schedule[date]?.map((item, index) => (
-            <ScheduleCard
-              onDragStart={(e) => onDragStart(e, index)}
-              onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
-              onDelete={() => onDeleteSchedule(item.id)}
-              onDragOver={onDragOver}
-              onDragEnd={onDragEnd}
-              title={item.content}
-              description={item.description}
-              isEditable={item.isEditable}
-              onChangeDescription={(value) =>
-                onChangeDescription(item.id, value)
-              }
-              onChangeContent={(value) => onChangeContent(item.id, value)}
-              key={item.id}
-            />
-          ))}
+          <DndProvider options={HTML5toTouch}>
+            {schedule[date]?.map((item, index) => (
+              <ScheduleCard
+                onDragStart={(e) => onDragStart(e, index)}
+                onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
+                onDragOver={onDragOver}
+                onDragEnd={onDragEnd}
+                onDelete={() => onDeleteSchedule(item.id)}
+                title={item.content}
+                description={item.description}
+                isEditable={item.isEditable}
+                onChangeDescription={(value) =>
+                  onChangeDescription(item.id, value)
+                }
+                onChangeContent={(value) => onChangeContent(item.id, value)}
+                key={item.id}
+              />
+            ))}
+          </DndProvider>
           <Style.CreateButtonBox>
             <Style.PlusButton>
               <Icon.RoundPlus />
