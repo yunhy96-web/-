@@ -7,6 +7,7 @@ import ClovaSpringBoot.dto.KakaoOauthRs;
 import ClovaSpringBoot.repository.UserRepository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -35,7 +36,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService)
             throws Exception {
         http.csrf().disable();
-        http.authorizeHttpRequests(config -> config.anyRequest().permitAll());
+        http.authorizeHttpRequests(config -> config
+                .requestMatchers("/login").permitAll()
+                .anyRequest().permitAll());
         http
                 .formLogin(Customizer.withDefaults())
                 .logout(
@@ -43,7 +46,8 @@ public class SecurityConfig {
                 )
                 // oauth2 로그인 추가
                 .oauth2Login(oAuth -> oAuth
-                        .loginPage("/llogin")
+                        .loginPage("/login")
+//                        .loginPage("localhost:8080/code/kakao")
                         .successHandler(successHandler())
                         .failureHandler(failureHandler())
                         .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))
@@ -59,6 +63,10 @@ public class SecurityConfig {
 
             String jwt = jwtTokenProvider.generate(userPrincipal.id());
             PrintWriter writer = response.getWriter();
+            Cookie cookie = new Cookie("access_token", jwt);
+
+            response.sendRedirect("https://d1zdvff23sqy4w.cloudfront.net/mySchedule?token=" + jwt);
+            response.addCookie(cookie);
             writer.println(jwt);
             writer.flush();
         }));
