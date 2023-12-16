@@ -7,7 +7,12 @@ const Login = () => {
   return (
     <Style.Container>
       <Style.Background></Style.Background>
-      <Style.KakaoLoginButton onClick={() => navigate("/mySchedule")}>
+      <Style.KakaoLoginButton
+        onClick={() => {
+          window.location.href =
+            "http://localhost:8080/oauth2/authorization/kakao";
+        }}
+      >
         <Icon.KakaoButton />
       </Style.KakaoLoginButton>
     </Style.Container>
