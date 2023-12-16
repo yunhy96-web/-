@@ -5,6 +5,7 @@ import ClovaSpringBoot.domain.Plan;
 import ClovaSpringBoot.domain.User;
 import ClovaSpringBoot.dto.*;
 import ClovaSpringBoot.repository.DetailPlanRepository;
+import ClovaSpringBoot.repository.GroupPlanRepository;
 import ClovaSpringBoot.repository.PlanRepository;
 import ClovaSpringBoot.repository.UserRepository;
 import ClovaSpringBoot.service.PlanService;
@@ -27,6 +28,7 @@ public class PlanApiController {
     private final PlanService planService;
     private final DetailPlanRepository detailPlanRepository;
     private final PlanRepository planRepository;
+    private final GroupPlanRepository groupPlanRepository;
     //전체 플랜, 디테일 플랜 같이 등록
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/api/plans/create-multiple")
@@ -63,10 +65,12 @@ public class PlanApiController {
 
         try {
             // 먼저 해당 그룹을 삭제
-            planService.deletePlansByGroupId(groupid);
-
+//            planService.deletePlansByGroupId(groupid);
+            // 그룹테이블에 있는 그룹도 삭제한다.
+            groupPlanRepository.deleteByGroupid(groupid);
             // 그룹을 삭제한 후에 createMultiplePlansWithDetails 실행
             planService.createMultiplePlansWithDetails(requests);
+            // 똑같이 그룹 플랜도 생성해줘야함.
 
             return ResponseEntity.ok("Plans created successfully after deleting the group.");
         } catch (Exception e) {
