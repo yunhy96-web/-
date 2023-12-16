@@ -8,12 +8,15 @@ import { shareKakao } from "../../utils/shareKakaoLink";
 import { copyInvitationLink } from "../../utils/copyInvitationLink";
 import { useNavigate } from "react-router-dom";
 import BottomSheet from "../_common/BottomSheet";
+import { useMutation } from "@tanstack/react-query";
+import { deleteSchedule } from "../../api/clova";
 
 type Props = {
   startDate: string;
   endDate: string;
   title: string;
   id: number;
+  groupId: number;
   openDropdown: () => void;
   isOpenDropdown: boolean;
   onClose: () => void;
@@ -27,6 +30,7 @@ const MyScheduleCard = ({
   openDropdown,
   isOpenDropdown,
   onClose,
+  groupId,
 }: Props) => {
   const navigate = useNavigate();
   const period = dayjs(endDate).diff(dayjs(startDate), "day") + 1;
@@ -35,6 +39,11 @@ const MyScheduleCard = ({
   const [openBottomSheet, setOpenBottomSheet] = useState(false);
 
   const ref = useRef<HTMLDivElement>(null);
+
+  const { mutate } = useMutation({
+    mutationKey: ["deleteSchedule"],
+    mutationFn: deleteSchedule,
+  });
 
   // useEffect(() => {
   //   const onClickOutSide = (event: MouseEvent) => {
@@ -87,7 +96,7 @@ const MyScheduleCard = ({
                 onClick={() => {
                   openConfirmModal({
                     type: "DELETE",
-                    confirm: closeConfirmModal,
+                    confirm: () => mutate(groupId),
                     cancel: closeConfirmModal,
                   });
                 }}
