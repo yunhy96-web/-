@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {
     List<Plan> findByGroupid(Long groupid);
+    List<Plan> findByUserId(Long userId);
 }

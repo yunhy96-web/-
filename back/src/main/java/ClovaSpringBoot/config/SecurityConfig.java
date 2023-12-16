@@ -43,7 +43,7 @@ public class SecurityConfig {
                 )
                 // oauth2 로그인 추가
                 .oauth2Login(oAuth -> oAuth
-                        .loginPage("/login")
+                        .loginPage("/llogin")
                         .successHandler(successHandler())
                         .failureHandler(failureHandler())
                         .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService))

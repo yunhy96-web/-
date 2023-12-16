@@ -19,7 +19,7 @@ public class GroupPlan {
     @Column(name = "group_plan_id", updatable = false)
     private Long id;
 
-    @Column(name = "groupid" , nullable = true)
+    @Column(name = "groupId" , nullable = true)
     private Long groupid;
 
     @Column(name = "destination" , nullable = false)
@@ -28,7 +28,7 @@ public class GroupPlan {
     @Column(name = "period" , nullable = false)
     private String period;
 
-    @Column(name = "userid" , nullable = false)
+    @Column(name = "userId" , nullable = false)
     private Long userid;
 
     @Column(name = "passed" , nullable = false)

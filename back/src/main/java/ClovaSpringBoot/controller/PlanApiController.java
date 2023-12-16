@@ -26,6 +26,7 @@ public class PlanApiController {
     private final UserRepository userRepository;
     private final PlanService planService;
     private final DetailPlanRepository detailPlanRepository;
+    private final PlanRepository planRepository;
     //전체 플랜, 디테일 플랜 같이 등록
     @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PostMapping("/api/plans/create-multiple")
@@ -100,6 +101,27 @@ public class PlanApiController {
                 .stream()
                 .map(this::mapToPlanResponseWithDetailPlans)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok()
+                .body(planResponses);
+    }
+
+    //그룹에 묶힌 플랜 + 디테일 플랜 조회
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
+    @GetMapping("/api/plans/detailplans/{groupid}")
+    public ResponseEntity<List<PlanResponse>> findAllPlanWithDetailPlansByGroupid(
+            @AuthenticationPrincipal Authentication authentication,
+            @PathVariable Long groupid) {
+        Long userId = (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
+
+        // groupid를 사용하여 해당하는 plan과 detailplan을 조회
+        List<Plan> plans = planRepository.findByGroupid(groupid);
+
+        // 조회한 plan과 detailplan을 PlanResponse 형태로 매핑
+        List<PlanResponse> planResponses = plans.stream()
+                .map(this::mapToPlanResponseWithDetailPlans)
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok()
                 .body(planResponses);
     }

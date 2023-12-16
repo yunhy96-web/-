@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -185,8 +186,10 @@ public class ClovaApiController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("groupId", groupId);
 
-        return responseEntity;
+        return ResponseEntity.ok(responseBody.toString());
     }
 
 
