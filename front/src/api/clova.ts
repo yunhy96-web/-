@@ -12,7 +12,7 @@ export const createTripSchedule = async (content: TripContent) => {
     const { data } = await api.post("/clova/send-request2", content);
     return data;
   } catch (e) {
-    window.location.href = "/error";
+    // window.location.href = "/error";
   }
 };
 

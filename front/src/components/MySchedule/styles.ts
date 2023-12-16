@@ -39,6 +39,11 @@ export const Content = styled.section`
   flex-direction: column;
   gap: 18px;
   overflow-y: auto;
+  -ms-overflow-style: none;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 export const Title = styled.h3`

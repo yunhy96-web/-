@@ -7,12 +7,17 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getMyScheduleList } from "../api/clova";
 import { MyScheduleListController } from "../controller/MyScheduleListController";
+import { authState } from "../atom/authState";
+import { useRecoilState } from "recoil";
 
 export type Tab = "내가 저장한 일정" | "지난 일정";
 
 const tabList: Tab[] = ["내가 저장한 일정", "지난 일정"];
 
 const MySchedule = () => {
+  // const [auth, setAuth] = useRecoilState(authState);
+  // console.log(auth);
+
   const [tab, setTab] = useState<Tab>("내가 저장한 일정");
   const navigate = useNavigate();
 

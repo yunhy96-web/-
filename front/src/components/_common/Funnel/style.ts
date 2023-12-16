@@ -74,7 +74,6 @@ export const DestinationInput = styled.input`
   border: 2px solid #e0e0e0;
   background: #fff;
   width: 100%;
-  color: ${({ theme }) => theme.colors.gray_1};
   padding: 8px 16px;
   //font
   font-family: Pretendard Variable;

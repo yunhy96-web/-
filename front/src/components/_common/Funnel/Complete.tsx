@@ -108,7 +108,7 @@ const Complete = ({ onNext }: Props) => {
       <Header
         title={"AI기반 여행 일정"}
         right={{
-          onClick: () => navigate("/createSchedule", { replace: true }),
+          onClick: () => navigate("/mySchedule", { replace: true }),
           content: <Icon.Close />,
         }}
         borderBottom={false}

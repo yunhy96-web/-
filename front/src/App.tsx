@@ -33,14 +33,6 @@ function App() {
   }, []);
   return (
     <RecoilRoot>
-      {/* <button
-        onClick={() => {
-          window.location.href =
-            "http://localhost:8080/oauth2/authorization/kakao";
-        }}
-      >
-        gdgd
-      </button> */}
       <Global styles={globalStyle} />
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
@@ -48,7 +40,6 @@ function App() {
           <Router />
         </ThemeProvider>
       </QueryClientProvider>
-      {/* <ReactQueryDevtools initialIsOpen={true} position={"right"} /> */}
     </RecoilRoot>
   );
 }
