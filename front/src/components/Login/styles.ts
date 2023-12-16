@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 
 export const Container = styled.section`
   height: 100%;
+  position: relative;
 `;
 
 export const Background = styled.div`
@@ -22,4 +23,23 @@ export const KakaoLoginButton = styled.button`
   background: #ffdb00;
   border-radius: 8px;
   padding: 20px;
+`;
+
+export const Title = styled.div`
+  color: #fff;
+  font-family: S-Core Dream;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  margin-top: 30px;
+  margin-bottom: 10px;
+`;
+
+export const Login = styled.div`
+  color: #fff;
+  font-family: Pretendard Variable;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 `;

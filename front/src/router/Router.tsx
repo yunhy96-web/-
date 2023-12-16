@@ -11,6 +11,7 @@ import AddSchedule from "../pages/AddSchedule";
 import MyDetailSchedule from "../pages/MyDetailSchedule";
 import { ErrorBoundary } from "react-error-boundary";
 import { Error } from "../pages/Error";
+import UserLogin from "../pages/UserLogin";
 
 const Router = () => {
   return (
@@ -20,6 +21,7 @@ const Router = () => {
           <Routes>
             <Route path="/" element={<Onboarding />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/user-login" element={<UserLogin />} />
             <Route path="/home" element={<Home />} />
             <Route path="/mySchedule" element={<MySchedule />} />
             <Route

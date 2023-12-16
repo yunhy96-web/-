@@ -28,4 +28,10 @@ export const StartButton = styled.button`
   font-style: normal;
   font-weight: 700;
   line-height: 35px;
+
+  @media (min-width: 761px) {
+    width: 393px;
+    left: calc((100% - (393px)) / 2);
+    /* position: relative; */
+  }
 `;
