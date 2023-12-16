@@ -17,6 +17,7 @@ public class GroupPlanApiController {
     private final PlanRepository planRepository;
 
     // GroupPlan 삭제 컨트롤러
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @DeleteMapping("/groupplan/delete/{groupid}")
     public void deleteGroupPlan(@PathVariable Long groupid) {
         // id에 해당하는 GroupPlan을 삭제합니다.
@@ -26,6 +27,7 @@ public class GroupPlanApiController {
     }
 
     // groupId 기반으로 destination 수정 API
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @PutMapping("/{groupId}/destination")
     public GroupPlan updateDestinationByGroupId(@PathVariable Long groupId, @RequestBody Map<String, String> requestBody) {
         // groupId에 해당하는 GroupPlan을 조회합니다.

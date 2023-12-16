@@ -66,6 +66,7 @@ public class ClovaApiController {
     }
 
     //전체 그룹 계획 조회
+    @CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
     @GetMapping("/totalgroupplan/{userid}")
     public List<GroupPlan> getGroupPlansByUserId(@PathVariable Long userid) {
         // userid를 기반으로 그룹 플랜을 조회
