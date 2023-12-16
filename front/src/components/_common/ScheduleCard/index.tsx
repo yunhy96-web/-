@@ -75,7 +75,7 @@ const ScheduleCard = ({
         drag(drop(node));
       }}
       isOpen={open}
-      // draggable={false}
+      // draggable={true}
       // onDragStart={onDragStart}
       // onDragEnter={onDragEnter}
       // onDragOver={onDragOver}

@@ -162,6 +162,7 @@ const Complete = ({ onNext }: Props) => {
                 }
                 onChangeContent={(value) => onChangeContent(item.id, value)}
                 key={item.id}
+                index={index}
               />
             ))}
           </DndProvider>
