@@ -1,17 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import * as Style from "../components/Login/styles";
 import { ThreeDots } from "react-loader-spinner";
 import { useRecoilState } from "recoil";
 import { authState } from "../atom/authState";
-import { useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { setAccesToken } from "../utils/getAccessToken";
 
 const UserLogin = () => {
-  const [auth, setAuth] = useRecoilState(authState);
   const searchParams = useSearchParams();
+  const navigate = useNavigate();
+  const ref = useRef(false);
+  const [count, setCount] = useRecoilState(authState);
 
   useEffect(() => {
-    console.log(searchParams);
-  }, [searchParams]);
+    setAccesToken(searchParams[0].get("token") || "");
+    window.location.href = "/mySchedule";
+    // setAuth((prev) => searchParams[0].get("token") || "");
+  }, [searchParams[0].get("token")]);
+  // console.log(auth);
+
+  // useEffect(() => {
+  //   if (ref.current || !searchParams[0].get("token")) return;
+  //   setAuth((prev) => searchParams[0].get("token") || "");
+  //   ref.current = true;
+  // }, [searchParams[0].get("token"), auth]);
+  // console.log(auth);
 
   return (
     <Style.Container>

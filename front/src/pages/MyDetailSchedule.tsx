@@ -8,11 +8,18 @@ import ScheduleCard from "../components/_common/ScheduleCard";
 import { Icon } from "../assets";
 import useSurvey from "../hooks/useSurvey";
 import useSchedule2 from "../hooks/useSchedule2";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BottomSheet from "../components/_common/BottomSheet";
 import { DndProvider } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
-import { NewSceduleInfo, ScheduleById } from "../api/clova";
+import {
+  NewSceduleInfo,
+  ScheduleById,
+  deleteSchedule,
+  getMyScheduleList,
+  updateTripName,
+} from "../api/clova";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export type Schedule = {
   id: number;
@@ -33,6 +40,28 @@ const MyDetailSchedule = () => {
   const [openShare, setOpenShare] = useState(false);
 
   const [mode, setMode] = useState<"EDIT" | "VIEW">("VIEW");
+  const [tripName, setTripName] = useState("");
+
+  const queryClient = useQueryClient();
+  const user = queryClient.getQueryData(["user"]) as { id: number };
+  const { data: scheduleList, isSuccess } = useQuery({
+    queryKey: ["mySchedule", "all"],
+    queryFn: () => getMyScheduleList(user?.id || 0),
+    enabled: !!user,
+  });
+
+  useEffect(() => {
+    const getTripName = () => {
+      if (isSuccess) {
+        const result = scheduleList?.find(
+          (item) => item.groupid === Number(params.id)
+        );
+        return result?.destination || "";
+      }
+      return "";
+    };
+    setTripName(getTripName());
+  }, [isSuccess]);
 
   const {
     day,
@@ -92,9 +121,10 @@ const MyDetailSchedule = () => {
   const openDeleteModal = () => {
     openConfirmModal({
       type: "DELETE",
-      confirm: () => {
-        navigate("/mySchedule");
-      },
+      confirm: () =>
+        mutateAsync(Number(params.id)).then(() => {
+          navigate("/mySchedule");
+        }),
       cancel: closeConfirmModal,
     });
   };
@@ -125,6 +155,25 @@ const MyDetailSchedule = () => {
     });
   };
 
+  const { mutateAsync } = useMutation({
+    mutationKey: ["deleteSchedule"],
+    mutationFn: deleteSchedule,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mySchedule", "all"] });
+    },
+  });
+
+  const { mutateAsync: update } = useMutation({
+    mutationKey: ["deleteSchedule"],
+    mutationFn: updateTripName,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["mySchedule", Number(params.id)],
+      });
+      queryClient.invalidateQueries({ queryKey: ["mySchedule", "all"] });
+    },
+  });
+
   return (
     <>
       <Header
@@ -136,7 +185,14 @@ const MyDetailSchedule = () => {
           mode === "EDIT"
             ? {
                 content: <Style.Complete>완료</Style.Complete>,
-                onClick: () => setMode("VIEW"),
+                onClick: () => {
+                  setMode("VIEW");
+                  update({ destination: tripName, groupId: Number(params.id) });
+
+                  queryClient.invalidateQueries({
+                    queryKey: ["mySchedule", "all"],
+                  });
+                },
               }
             : undefined
         }
@@ -147,12 +203,15 @@ const MyDetailSchedule = () => {
       </div>
       <Style.TitleSection>
         {mode === "EDIT" ? (
-          <Style.TitleInput />
+          <Style.TitleInput
+            value={tripName}
+            onChange={(e) => {
+              if (e.target.value.length > 10) return;
+              setTripName(e.target.value);
+            }}
+          />
         ) : (
-          <Style.DestinationName>
-            {/* {survey.destination.city}  */}
-            여행
-          </Style.DestinationName>
+          <Style.DestinationName>{tripName} 여행</Style.DestinationName>
         )}
       </Style.TitleSection>
       <Style.SubRow>
@@ -231,6 +290,8 @@ const MyDetailSchedule = () => {
       </Style.Content>
       {openShare && (
         <BottomSheet
+          title={`여행 ${period}`}
+          desc={`${dateFormatting(startDate)} ~ ${dateFormatting(endDate)}`}
           id={Number(params.id)}
           onClose={() => setOpenShare(false)}
         />

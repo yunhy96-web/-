@@ -8,12 +8,15 @@ import { shareKakao } from "../../utils/shareKakaoLink";
 import { copyInvitationLink } from "../../utils/copyInvitationLink";
 import { useNavigate } from "react-router-dom";
 import BottomSheet from "../_common/BottomSheet";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteSchedule } from "../../api/clova";
 
 type Props = {
   startDate: string;
   endDate: string;
   title: string;
   id: number;
+  groupId: number;
   openDropdown: () => void;
   isOpenDropdown: boolean;
   onClose: () => void;
@@ -27,8 +30,10 @@ const MyScheduleCard = ({
   openDropdown,
   isOpenDropdown,
   onClose,
+  groupId,
 }: Props) => {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const period = dayjs(endDate).diff(dayjs(startDate), "day") + 1;
 
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
@@ -36,17 +41,25 @@ const MyScheduleCard = ({
 
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const onClickOutSide = (event: MouseEvent) => {
-      if (ref?.current && !ref.current.contains(event.target as Node)) {
-        onClose();
-      }
-    };
-    document.addEventListener("mousedown", onClickOutSide);
-    return () => {
-      document.removeEventListener("mousedown", onClickOutSide);
-    };
-  }, [ref.current]);
+  const { mutate } = useMutation({
+    mutationKey: ["deleteSchedule"],
+    mutationFn: deleteSchedule,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["mySchedule", "all"] });
+    },
+  });
+
+  // useEffect(() => {
+  //   const onClickOutSide = (event: MouseEvent) => {
+  //     if (ref?.current && !ref.current.contains(event.target as Node)) {
+  //       onClose();
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", onClickOutSide);
+  //   return () => {
+  //     document.removeEventListener("mousedown", onClickOutSide);
+  //   };
+  // }, [ref.current]);
 
   return (
     <>
@@ -76,18 +89,28 @@ const MyScheduleCard = ({
           {isOpenDropdown ? (
             <Style.Dropdown>
               <Style.DropdownItem
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+
                   setOpenBottomSheet(true);
                 }}
               >
                 공유
               </Style.DropdownItem>
-              <Style.DropdownItem>수정</Style.DropdownItem>
               <Style.DropdownItem
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/mySchedule/detail/${id}`);
+                }}
+              >
+                수정
+              </Style.DropdownItem>
+              <Style.DropdownItem
+                onClick={(e) => {
+                  e.stopPropagation();
                   openConfirmModal({
                     type: "DELETE",
-                    confirm: closeConfirmModal,
+                    confirm: () => mutate(groupId),
                     cancel: closeConfirmModal,
                   });
                 }}
@@ -99,7 +122,12 @@ const MyScheduleCard = ({
         </Style.DropdownBox>
       </Style.Card>
       {isOpenDropdown && openBottomSheet && (
-        <BottomSheet onClose={() => setOpenBottomSheet(false)} id={id} />
+        <BottomSheet
+          title={`${title} ${period}박 ${period + 1}일`}
+          onClose={() => setOpenBottomSheet(false)}
+          desc={`${startDate} ~ ${endDate}`}
+          id={id}
+        />
       )}
     </>
   );

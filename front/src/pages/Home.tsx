@@ -16,11 +16,7 @@ const Home = () => {
 
   return (
     <main>
-      <button
-        onClick={() => shareKakao("http://localhost:3000/mySchedule", "hi")}
-      >
-        공유하기
-      </button>
+      <button>공유하기</button>
     </main>
   );
 };

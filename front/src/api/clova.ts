@@ -9,10 +9,10 @@ type TripContent = {
 };
 export const createTripSchedule = async (content: TripContent) => {
   try {
-    const { data } = await api.post("/clova/send-request2", content);
+    const { data } = await api.post("/api/clova/send-request2", content);
     return data;
   } catch (e) {
-    window.location.href = "/error";
+    // window.location.href = "/error";
   }
 };
 
@@ -39,7 +39,7 @@ export type ScheduleInfo = {
 export const getTripSchedule = async ({ groupId }: { groupId: number }) => {
   try {
     const { data } = await api.get<ScheduleInfo[]>(
-      `/plans/detailplans/${groupId}`
+      `/api/plans/detailplans/${groupId}`
     );
     return getScheduleListByDate(data, false);
   } catch (e) {
@@ -99,7 +99,7 @@ export const saveScheduleList = async (info: {
 }) => {
   try {
     const { data } = await api.post(
-      `/plans/create-multiple-and-delete?groupid=${info.groupId}`,
+      `/api/plans/create-multiple-and-delete?groupid=${info.groupId}`,
       info.scheduleList
     );
     return data;
@@ -109,18 +109,18 @@ export const saveScheduleList = async (info: {
 };
 
 export type MyScheduleList = {
-  id: 1;
-  groupid: 1;
-  destination: "서울";
-  period: "2023년 12월 10일 - 2023년 12월 12일";
-  userid: 1;
-  passed: true;
+  id: number;
+  groupid: number;
+  destination: string;
+  period: string;
+  userid: number;
+  passed: boolean;
 };
 
 export const getMyScheduleList = async (userId: number) => {
   try {
     const { data } = await api.get<MyScheduleList[]>(
-      `/clova/totalgroupplan/${userId}`
+      `/api/clova/totalgroupplan/${userId}`
     );
 
     return data;
@@ -169,4 +169,37 @@ const getScheduleListById = (
     }
     return accr;
   }, {} as ScheduleById);
+};
+
+export const deleteSchedule = async (id: number) => {
+  try {
+    const { data } = await api.delete(`/groupplan/delete/${id}`);
+    return data;
+  } catch (e) {
+    window.location.href = "/error";
+  }
+};
+
+export const getUserState = async () => {
+  try {
+    const { data } = await api.get(`/getuserinfo`);
+    return data;
+  } catch (e) {
+    window.location.href = "/error";
+  }
+};
+
+export const updateTripName = async ({
+  destination,
+  groupId,
+}: {
+  destination: string;
+  groupId: number;
+}) => {
+  try {
+    const { data } = await api.put(`${groupId}/destination`, { destination });
+    return data;
+  } catch (e) {
+    window.location.href = "/error";
+  }
 };

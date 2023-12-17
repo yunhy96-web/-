@@ -75,7 +75,7 @@ const ScheduleCard = ({
         drag(drop(node));
       }}
       isOpen={open}
-      // draggable={false}
+      // draggable={true}
       // onDragStart={onDragStart}
       // onDragEnter={onDragEnter}
       // onDragOver={onDragOver}
@@ -119,17 +119,19 @@ const ScheduleCard = ({
           <Style.Arrow isOpen={open} onClick={() => setOpen((prev) => !prev)}>
             <Icon.RightArrow />
           </Style.Arrow>
-          <div
-            style={{
-              height: 24,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-            onClick={deleteSchedule}
-          >
-            <Icon.RoundClose />
-          </div>
+          {(isEditable || location.pathname.includes("complete")) && (
+            <div
+              style={{
+                height: 24,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={deleteSchedule}
+            >
+              <Icon.RoundClose />
+            </div>
+          )}
         </Style.TitleRight>
       </Style.Title>
       <Style.Detail

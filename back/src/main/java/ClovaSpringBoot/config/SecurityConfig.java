@@ -65,7 +65,7 @@ public class SecurityConfig {
             PrintWriter writer = response.getWriter();
             Cookie cookie = new Cookie("access_token", jwt);
 
-            response.sendRedirect("https://d1zdvff23sqy4w.cloudfront.net/mySchedule?token=" + jwt);
+            response.sendRedirect("http://localhost:3000/user-login?token=" + jwt);
             response.addCookie(cookie);
             writer.println(jwt);
             writer.flush();
