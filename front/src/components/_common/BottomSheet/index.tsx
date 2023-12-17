@@ -21,7 +21,7 @@ const BottomSheet = ({ onClose, id, title, desc }: Props) => {
           <Style.BottomSheetButton
             onClick={() =>
               shareKakao(
-                `https://d1zdvff23sqy4w.cloudfront.net/mySchedule/detail/${id}`,
+                `http://localhost:3000/mySchedule/detail/${id}`,
                 title,
                 desc
               )

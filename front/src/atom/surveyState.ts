@@ -16,8 +16,7 @@ type SurveyState = {
   addedDestination: string;
 };
 
-export const surveyState = atom<SurveyState>({
-  key: "surveyState",
+export const initialSurvey = {
   default: {
     startDate: dayjs(),
     endDate: dayjs().add(2, "day"),
@@ -32,4 +31,9 @@ export const surveyState = atom<SurveyState>({
       style: "",
     },
   },
+};
+
+export const surveyState = atom<SurveyState>({
+  key: "surveyState",
+  default: initialSurvey.default,
 });

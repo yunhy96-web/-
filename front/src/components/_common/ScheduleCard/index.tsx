@@ -36,6 +36,7 @@ const ScheduleCard = ({
   index,
   moveItem,
 }: Props) => {
+  console.log(description);
   const location = useLocation();
 
   const [, drop] = useDrop({

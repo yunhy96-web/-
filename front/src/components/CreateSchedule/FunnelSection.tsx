@@ -11,6 +11,7 @@ import { Icon } from "../../assets";
 import Complete from "../_common/Funnel/Complete";
 import AddDestination from "../_common/Funnel/AddDestination";
 import useConfirmModal from "../../hooks/useConfirmModal";
+import useSurvey from "../../hooks/useSurvey";
 
 type PageType =
   | "date"
@@ -27,13 +28,17 @@ const FunnelSection = () => {
   const navigate = useNavigate();
   const params = useParams<{ state: PageType }>();
 
+  const { initSurvey } = useSurvey();
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
 
   // TODO: 저장하기
   const onSubmitModal = async () => {
     openConfirmModal({
       type: "COMPLETE",
-      confirm: () => navigate("/mySchedule"),
+      confirm: () => {
+        initSurvey();
+        navigate("/mySchedule");
+      },
       cancel: closeConfirmModal,
     });
   };

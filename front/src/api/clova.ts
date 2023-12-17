@@ -61,8 +61,7 @@ const getScheduleListByDate = (
       accr[convertDateFormmat(realday)].push({
         ...rest,
         detailPlans: [
-          // rest?.detailPlans[0] ??
-          { id: Math.random(), detailContent: "" },
+          rest?.detailPlans[0] ?? { id: Math.random(), detailContent: "" },
         ],
         isEditable,
       });

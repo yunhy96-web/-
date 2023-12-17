@@ -1,9 +1,13 @@
 import { useRecoilState } from "recoil";
-import { surveyState } from "../atom/surveyState";
+import { initialSurvey, surveyState } from "../atom/surveyState";
 import dayjs from "dayjs";
 
 const useSurvey = () => {
   const [survey, setSurvey] = useRecoilState(surveyState);
+
+  const initSurvey = () => {
+    setSurvey(initialSurvey.default);
+  };
 
   const setDestinationType = (type: string) => {
     if (type === survey.destination.type) return;
@@ -71,6 +75,7 @@ const useSurvey = () => {
     setTripInterest,
     setTripStyle,
     getTripPeriod,
+    initSurvey,
   };
 };
 

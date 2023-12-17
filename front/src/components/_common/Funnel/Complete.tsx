@@ -32,7 +32,7 @@ export type Schedule = {
 
 const Complete = ({ onNext }: Props) => {
   const navigate = useNavigate();
-  const { survey, getTripPeriod } = useSurvey();
+  const { survey, getTripPeriod, initSurvey } = useSurvey();
 
   const {
     day,

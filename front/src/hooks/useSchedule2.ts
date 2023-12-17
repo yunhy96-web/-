@@ -28,6 +28,7 @@ const useSchedule2 = () => {
   const { mutate } = useSaveScehdule();
 
   const scheduleList = data as NewSceduleInfo;
+  console.log("scheduleList", scheduleList);
 
   const [schedule, setSchedule] = useState<NewSceduleInfo>({});
   const [date, setDate] = useState("");
@@ -94,7 +95,12 @@ const useSchedule2 = () => {
   const onChangeDescription = (id: number, description: string) => {
     setSchedule((prev) => {
       const result = prev[date].map((schedule) =>
-        schedule.id === id ? { ...schedule, description } : schedule
+        schedule.id === id
+          ? {
+              ...schedule,
+              detailPlans: [{ id: Math.random(), detailContent: description }],
+            }
+          : schedule
       );
       return {
         ...prev,

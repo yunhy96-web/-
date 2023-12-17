@@ -15,11 +15,13 @@ import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import {
   NewSceduleInfo,
   ScheduleById,
+  ScheduleInfo,
   deleteSchedule,
   getMyScheduleList,
   updateTripName,
 } from "../api/clova";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import useSaveScehdule from "../hooks/useSaveScehdule";
 
 export type Schedule = {
   id: number;
@@ -108,6 +110,22 @@ const MyDetailSchedule = () => {
 
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
 
+  const { mutateAsync: saveMutate } = useSaveScehdule();
+
+  const convertToRequestForm = () => {
+    const result: ScheduleInfo[] = [];
+    for (let realday in schedule) {
+      schedule[realday].forEach((item, index) => {
+        result.push({
+          ...item,
+          realday: realday,
+          time: String(index + 1),
+        });
+      });
+    }
+    return result;
+  };
+
   const onSaveSchedule = () => {
     openConfirmModal({
       type: "COMPLETE",
@@ -186,11 +204,16 @@ const MyDetailSchedule = () => {
             ? {
                 content: <Style.Complete>완료</Style.Complete>,
                 onClick: () => {
-                  setMode("VIEW");
                   update({ destination: tripName, groupId: Number(params.id) });
-
-                  queryClient.invalidateQueries({
-                    queryKey: ["mySchedule", "all"],
+                  const result = convertToRequestForm();
+                  saveMutate({
+                    groupId: result[0].groupid,
+                    scheduleList: result,
+                  }).then(() => {
+                    setMode("VIEW");
+                    queryClient.invalidateQueries({
+                      queryKey: ["mySchedule", "all"],
+                    });
                   });
                 },
               }
@@ -252,26 +275,30 @@ const MyDetailSchedule = () => {
       <Style.Content>
         <Style.Wrapper>
           <DndProvider options={HTML5toTouch}>
-            {schedule[date]?.map((item, index) => (
-              <ScheduleCard
-                moveItem={moveItem}
-                onDragStart={(e) => onDragStart(e, index)}
-                onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
-                onDragEnd={onDragEnd}
-                onDelete={() => onDeleteSchedule(item.id)}
-                onDragOver={onDragOver}
-                title={item.content}
-                description={item.detailPlans[0]?.detailContent || ""}
-                isEditable={mode === "EDIT"}
-                onChangeDescription={(value) =>
-                  onChangeDescription(item.id, value)
-                }
-                onChangeContent={(value) => onChangeContent(item.id, value)}
-                key={item.id}
-                id={item.id}
-                index={index}
-              />
-            ))}
+            {schedule[date]?.map((item, index) => {
+              console.log(item.detailPlans);
+              return (
+                <ScheduleCard
+                  moveItem={moveItem}
+                  onDragStart={(e) => onDragStart(e, index)}
+                  onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
+                  onDragEnd={onDragEnd}
+                  onDelete={() => onDeleteSchedule(item.id)}
+                  onDragOver={onDragOver}
+                  title={item.content}
+                  description={item.detailPlans[0]?.detailContent || ""}
+                  isEditable={mode === "EDIT"}
+                  onChangeDescription={(value) => {
+                    if (mode === "VIEW") return;
+                    onChangeDescription(item.id, value);
+                  }}
+                  onChangeContent={(value) => onChangeContent(item.id, value)}
+                  key={item.id}
+                  id={item.id}
+                  index={index}
+                />
+              );
+            })}
           </DndProvider>
 
           {mode === "EDIT" && (
@@ -290,7 +317,7 @@ const MyDetailSchedule = () => {
       </Style.Content>
       {openShare && (
         <BottomSheet
-          title={`여행 ${period}`}
+          title={`${tripName} 여행 ${period}`}
           desc={`${dateFormatting(startDate)} ~ ${dateFormatting(endDate)}`}
           id={Number(params.id)}
           onClose={() => setOpenShare(false)}

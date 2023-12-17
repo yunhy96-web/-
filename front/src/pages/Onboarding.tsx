@@ -6,6 +6,24 @@ const Onboarding = () => {
   return (
     <Style.Container>
       <Style.Background></Style.Background>
+      <div
+        style={{
+          width: "100%",
+          position: "absolute",
+          top: 63,
+          display: "flex",
+          flexDirection: "column",
+          left: 45,
+          // alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src="/images/intro.png"
+          alt=""
+          style={{ width: 260, height: 343 }}
+        />
+      </div>
       <Style.StartButton onClick={() => navigate("login")}>
         시작하기
       </Style.StartButton>
