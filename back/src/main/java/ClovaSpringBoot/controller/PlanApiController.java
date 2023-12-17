@@ -67,7 +67,8 @@ public class PlanApiController {
             // 먼저 해당 그룹을 삭제
 //            planService.deletePlansByGroupId(groupid);
             // 그룹테이블에 있는 그룹도 삭제한다.
-            groupPlanRepository.deleteByGroupid(groupid);
+            planService.deletePlansByGroupId(groupid);
+//            groupPlanRepository.deleteByGroupid(groupid);
             // 그룹을 삭제한 후에 createMultiplePlansWithDetails 실행
             planService.createMultiplePlansWithDetails(requests);
             // 똑같이 그룹 플랜도 생성해줘야함.
