@@ -185,7 +185,7 @@ export const getUserState = async () => {
     const { data } = await api.get(`/getuserinfo`);
     return data;
   } catch (e) {
-    window.location.href = "/error";
+    // window.location.href = "/error";
   }
 };
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as Style from "../components/MySchedule/styles";
 import MyScheduleCard from "../components/MySchedule/MyScheduleCard";
 import Button from "../components/_common/Button";
@@ -9,6 +9,7 @@ import { getMyScheduleList } from "../api/clova";
 import { MyScheduleListController } from "../controller/MyScheduleListController";
 import { authState } from "../atom/authState";
 import { useRecoilState } from "recoil";
+import useConfirmModal from "../hooks/useConfirmModal";
 
 export type Tab = "내가 저장한 일정" | "지난 일정";
 
@@ -22,6 +23,7 @@ const MySchedule = () => {
     queryFn: () => getMyScheduleList(user?.id || 0),
     enabled: !!user,
   });
+
   // const [auth, setAuth] = useRecoilState(authState);
   // console.log(auth);
 

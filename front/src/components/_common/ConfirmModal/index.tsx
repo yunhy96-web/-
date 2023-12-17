@@ -8,6 +8,7 @@ import {
   initialConfirmModalState,
 } from "../../../atom/confirmModalState";
 import useConfirmModal from "../../../hooks/useConfirmModal";
+import { Icon } from "../../../assets";
 
 interface Props {
   modalHandler: () => void;
@@ -40,9 +41,13 @@ export const ConfirmModal = ({
 
   return (
     <Modal.Frame borderRadius="8px" onClick={modalHandler}>
-      {/* <Modal.Header>
-        <Style.Title>{CONFIRM_MODAL[type].title}</Style.Title>
-      </Modal.Header> */}
+      {type === "COMPLETE" && (
+        <Modal.Header>
+          <Style.Title>
+            <Icon.Complete></Icon.Complete>
+          </Style.Title>
+        </Modal.Header>
+      )}
       <Modal.Body>
         <Style.Desc>{CONFIRM_MODAL[type].description}</Style.Desc>
       </Modal.Body>

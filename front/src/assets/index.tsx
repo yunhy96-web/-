@@ -23,8 +23,10 @@ import { ReactComponent as Share } from "./share.svg";
 import { ReactComponent as Error } from "./error.svg";
 import { ReactComponent as RoundClose } from "./roundClose.svg";
 import { ReactComponent as KakaoButton } from "./kakaoButton.svg";
+import { ReactComponent as Complete } from "./complete.svg";
 
 export const Icon = {
+  Complete,
   Article,
   CreateSchedule,
   KakaoButton,

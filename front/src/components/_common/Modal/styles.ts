@@ -38,6 +38,7 @@ export const ModalFrame = styled.div<ModalProps>`
 
 /* ${({ theme }) => (isMobile ? theme.font.subhead_04 : theme.font.headline)}; */
 export const ModalHeader = styled.div<ModalHeaderProps>`
+  padding-top: 30px;
   width: 100%;
   text-align: ${({ align }) => align === "center" && "center"};
   margin-bottom: ${(props) => props.margin};
