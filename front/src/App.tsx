@@ -3,7 +3,6 @@ import { RecoilRoot } from "recoil";
 import { Global, ThemeProvider } from "@emotion/react";
 import globalStyle from "./style/global";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import theme from "./style/Theme";
 import { GlobalConfirmModal } from "./components/_common/ConfirmModal";
 import { useEffect } from "react";

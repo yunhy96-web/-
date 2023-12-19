@@ -28,10 +28,7 @@ const Loading = () => {
     mutationKey: ["createdTripSchedule"],
     mutationFn: createTripSchedule,
     onSuccess: (data: string) => {
-      // console.log(data.groupId);
       setGroupId(Number(data.replaceAll(/\D/g, "")));
-      // console.log(typeof data);
-      // console.log(data.replaceAll(/^[0-9]/g, ""));
       setIsComplete(true);
     },
   });
@@ -50,9 +47,6 @@ const Loading = () => {
     });
     flag.current = true;
   }, []);
-
-  const queryClient = useQueryClient();
-  const muatationCache = queryClient.getMutationCache();
 
   useEffect(() => {
     if (isSuccess) {

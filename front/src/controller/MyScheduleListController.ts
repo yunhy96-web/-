@@ -27,12 +27,14 @@ export const MyScheduleListController = (
   },
   get: () => {
     return scheduleList.map((item) => {
+      const [startDate, endDate] = item.period.split(" - ");
+
       return {
         id: item.id,
         groupId: item.groupid,
         title: `${item.destination} 여행`,
-        startDate: convertDateFormmat(item.period.split(" - ")[0]),
-        endDate: convertDateFormmat(item.period.split(" - ")[1]),
+        startDate: convertDateFormmat(startDate),
+        endDate: convertDateFormmat(endDate),
       };
     });
   },

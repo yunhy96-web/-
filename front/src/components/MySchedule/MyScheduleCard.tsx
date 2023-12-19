@@ -1,15 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { PeriodTag } from "../_common/Tag/PeriodTab";
 import dayjs from "dayjs";
 import * as Style from "./styles";
 import useConfirmModal from "../../hooks/useConfirmModal";
-import { Icon } from "../../assets";
-import { shareKakao } from "../../utils/shareKakaoLink";
-import { copyInvitationLink } from "../../utils/copyInvitationLink";
 import { useNavigate } from "react-router-dom";
 import BottomSheet from "../_common/BottomSheet";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteSchedule } from "../../api/clova";
+import DropdownButton from "./DropdownButton";
 
 type Props = {
   startDate: string;
@@ -49,18 +47,6 @@ const MyScheduleCard = ({
     },
   });
 
-  // useEffect(() => {
-  //   const onClickOutSide = (event: MouseEvent) => {
-  //     if (ref?.current && !ref.current.contains(event.target as Node)) {
-  //       onClose();
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", onClickOutSide);
-  //   return () => {
-  //     document.removeEventListener("mousedown", onClickOutSide);
-  //   };
-  // }, [ref.current]);
-
   return (
     <>
       <Style.Card
@@ -76,16 +62,7 @@ const MyScheduleCard = ({
           <Style.DateTitle>{`${startDate} ~ ${endDate}`}</Style.DateTitle>
         </Style.CardLeft>
         <Style.DropdownBox ref={ref}>
-          <Style.CircleButton
-            onClick={(e) => {
-              e.stopPropagation();
-              openDropdown();
-            }}
-          >
-            <Style.Circle />
-            <Style.Circle />
-            <Style.Circle />
-          </Style.CircleButton>
+          <DropdownButton onClick={openDropdown} />
           {isOpenDropdown ? (
             <Style.Dropdown>
               <Style.DropdownItem

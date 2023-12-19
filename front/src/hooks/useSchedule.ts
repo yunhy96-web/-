@@ -1,61 +1,32 @@
-import React, { DragEvent, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import useSurvey from "./useSurvey";
+import { useEffect, useState } from "react";
 import useConfirmModal from "./useConfirmModal";
 import { NewSceduleInfo } from "../api/clova";
+import dayjs from "dayjs";
+import { ScheduleController } from "../controller/ScheduleController";
 
-const useSchedule = () => {
+const useSchedule = (scheduleList: NewSceduleInfo = {}) => {
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
-
-  const { survey } = useSurvey();
   const [day, setDay] = useState(1);
 
-  const date = survey.startDate.add(day - 1, "day").format("YYYY-MM-DD");
+  //다른 부분
+  const [date, setDate] = useState("");
+  const getDate = (schedule: NewSceduleInfo) => {
+    const result = Object.keys(schedule);
+    result.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
 
-  const queryClient = useQueryClient();
+    return { startDate: dayjs(result[0]), endDate: dayjs(result.at(-1)) };
+  };
 
-  const scheduleList = queryClient.getQueryData([
-    "tripSchedule",
-  ]) as NewSceduleInfo;
+  useEffect(() => {
+    if (!scheduleList) return;
+    setSchedule(scheduleList);
+    const { startDate } = getDate(scheduleList);
+    setDate(startDate.add(day - 1, "day").format("YYYY-MM-DD"));
+  }, [scheduleList]);
+  // const date = survey.startDate.add(day - 1, "day").format("YYYY-MM-DD");
 
   const [schedule, setSchedule] = useState<NewSceduleInfo>(scheduleList);
-
-  const draggingItemIndex = useRef<number | null>(null);
-  const draggingOverItemIndex = useRef<number | null>(null);
-  const onDragStart = (e: DragEvent<HTMLLIElement>, index: number) => {
-    draggingItemIndex.current = index;
-    (e.target as HTMLLIElement).classList.add("grabbing");
-  };
-
-  const onDragEnd = (e: DragEvent<HTMLLIElement>) => {
-    (e.target as HTMLLIElement).classList.remove("grabbing");
-  };
-
-  const onAvailableItemDragEnter = (
-    e: DragEvent<HTMLLIElement>,
-    index: number
-  ) => {
-    if (draggingItemIndex.current === null) return;
-    if (draggingItemIndex.current === index) return;
-
-    draggingOverItemIndex.current = index;
-    const copyListItems = [...schedule[date]]; // 1
-    const dragItemContent = copyListItems[draggingItemIndex.current]; //2
-    copyListItems.splice(draggingItemIndex.current, 1); //3
-    copyListItems.splice(draggingOverItemIndex.current, 0, dragItemContent); // 4
-    draggingItemIndex.current = draggingOverItemIndex.current;
-    draggingOverItemIndex.current = null; //5
-    setSchedule((prev: NewSceduleInfo) => {
-      return {
-        ...prev,
-        [date]: copyListItems,
-      };
-    });
-  }; //6
-
-  const onDragOver = (e: any) => {
-    e.preventDefault();
-  };
+  //다른 부분
 
   const initData = (date: string) => {
     setSchedule((prev) => ({
@@ -65,45 +36,30 @@ const useSchedule = () => {
   };
 
   const onChangeDescription = (id: number, description: string) => {
-    setSchedule((prev) => {
-      const result = prev[date].map((schedule) =>
-        schedule.id === id
-          ? {
-              ...schedule,
-              detailPlans: [{ id: Math.random(), detailContent: description }],
-            }
-          : schedule
-      );
-      return {
-        ...prev,
-        [date]: result,
-      };
+    setSchedule((scheduleInfo) => {
+      return ScheduleController(scheduleInfo, date) //
+        .updateScheduleDescription(id, description);
     });
   };
 
+  //액션
   const onChangeContent = (id: number, content: string) => {
-    setSchedule((prev) => {
-      const result = prev[date].map((schedule) =>
-        schedule.id === id ? { ...schedule, content } : schedule
-      );
-      return {
-        ...prev,
-        [date]: result,
-      };
+    setSchedule((scheduleInfo) => {
+      return ScheduleController(scheduleInfo, date) //
+        .updateScheduleContent(id, content);
     });
   };
 
+  //액션
   const onDeleteSchedule = (id: number) => {
-    setSchedule((prev) => {
-      const result = prev[date].filter((schedule) => schedule.id !== id);
-      return {
-        ...prev,
-        [date]: result,
-      };
+    setSchedule((scheduleInfo) => {
+      return ScheduleController(scheduleInfo, date) //
+        .removeSchedule(id);
     });
   };
 
-  const addItem = () => {
+  const addNewSchedule = () => {
+    //액션
     if (schedule[date].length >= 20) {
       openConfirmModal({
         type: "LIMIT_SCHEDULE",
@@ -112,36 +68,16 @@ const useSchedule = () => {
       return;
     }
 
-    setSchedule((prev) => {
-      return {
-        ...prev,
-        [date]: [
-          ...prev[date],
-          {
-            ...prev[date][0],
-            content: "",
-            detailPlans: [
-              {
-                id: Math.random(),
-                detailContent: "",
-              },
-            ],
-            id: Math.random(),
-            time: String(prev[date].length + 1),
-            isEditable: true,
-          },
-        ],
-      };
+    //액션
+    setSchedule((scheduleInfo) => {
+      return ScheduleController(scheduleInfo, date) //
+        .addNewSchedule();
     });
   };
 
   return {
-    addItem,
-    onDragStart,
-    onDragEnd,
-    onAvailableItemDragEnter,
+    addNewSchedule,
     onChangeDescription,
-    onDragOver,
     schedule,
     setSchedule,
     day,
@@ -150,6 +86,7 @@ const useSchedule = () => {
     initData,
     onDeleteSchedule,
     onChangeContent,
+    setDate,
   };
 };
 

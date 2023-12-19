@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "../pages/Home";
 import CreateSchedule from "../pages/CreateSchedule";
 import MySchedule from "../pages/MySchedule";
 import Layout from "../layout/Layout";
@@ -26,7 +25,6 @@ const Router = () => {
             <Route path="/" element={<Onboarding />} />
             <Route path="/login" element={<Login />} />
             <Route path="/user-login" element={<UserLogin />} />
-            <Route path="/home" element={<Home />} />
             <Route path="/mySchedule" element={<MySchedule />} />
             <Route
               path="/mySchedule/detail/:id"

@@ -3,7 +3,7 @@ import { Icon } from "../../../assets";
 import { useNavigate } from "react-router-dom";
 import * as Style from "./style";
 import useSurvey from "../../../hooks/useSurvey";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import Button from "../Button";
 import ScheduleCard from "../ScheduleCard";
 import useSchedule from "../../../hooks/useSchedule";
@@ -13,6 +13,8 @@ import { DndProvider } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import { NewSceduleInfo, ScheduleInfo } from "../../../api/clova";
 import useSaveScehdule from "../../../hooks/useSaveScehdule";
+import { useQueryClient } from "@tanstack/react-query";
+import DayList from "../DayList";
 
 type Props = {
   onNext: () => void;
@@ -32,7 +34,11 @@ export type Schedule = {
 
 const Complete = ({ onNext }: Props) => {
   const navigate = useNavigate();
-  const { survey, getTripPeriod, initSurvey } = useSurvey();
+  const { survey, getTripPeriod } = useSurvey();
+  const queryClient = useQueryClient();
+  const scheduleList = queryClient.getQueryData([
+    "tripSchedule",
+  ]) as NewSceduleInfo;
 
   const {
     day,
@@ -41,15 +47,21 @@ const Complete = ({ onNext }: Props) => {
     onChangeDescription,
     setDay,
     initData,
-    onDragStart,
-    onDragEnd,
-    onAvailableItemDragEnter,
-    onDragOver,
     onDeleteSchedule,
-    addItem,
+    addNewSchedule,
     onChangeContent,
     setSchedule,
-  } = useSchedule();
+    setDate,
+  } = useSchedule(scheduleList);
+
+  const getDate = (schedule: NewSceduleInfo) => {
+    const result = Object.keys(schedule);
+    result.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
+
+    return { startDate: dayjs(result[0]), endDate: dayjs(result.at(-1)) };
+  };
+
+  const { startDate, endDate } = getDate(schedule);
 
   const period = `${getTripPeriod()}박 ${getTripPeriod() + 1}일`;
 
@@ -103,6 +115,11 @@ const Complete = ({ onNext }: Props) => {
     );
   };
 
+  const onClickDay = (day: number) => {
+    setDay(day + 1);
+    setDate(startDate.add(day, "day").format("YYYY-MM-DD"));
+  };
+
   return (
     <>
       <Header
@@ -130,29 +147,17 @@ const Complete = ({ onNext }: Props) => {
         </Style.DatePeriod>
         <Style.RestButton onClick={openInitModal}>초기화</Style.RestButton>
       </Style.SubRow>
-      <Style.DayList>
-        {Array.from({ length: totalDay }, (_, index) => (
-          <div key={index} style={{ position: "relative", height: 45 }}>
-            <Style.Day
-              isSelected={day === index + 1}
-              onClick={() => setDay(index + 1)}
-            >
-              {`Day ${index + 1}`}
-            </Style.Day>
-            <Style.UnderLine isSelected={day === index + 1} />
-          </div>
-        ))}
-      </Style.DayList>
+      <DayList
+        totalDay={totalDay} //
+        selectedDay={day}
+        onClick={onClickDay}
+      />
       <Style.Content>
         <Style.Wrapper>
           <DndProvider options={HTML5toTouch}>
             {schedule[date]?.map((item, index) => (
               <ScheduleCard
                 moveItem={moveItem}
-                onDragStart={(e) => onDragStart(e, index)}
-                onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
-                onDragOver={onDragOver}
-                onDragEnd={onDragEnd}
                 onDelete={() => onDeleteSchedule(item.id)}
                 title={item.content}
                 description={item.detailPlans[0]?.detailContent || ""}
@@ -167,11 +172,7 @@ const Complete = ({ onNext }: Props) => {
             ))}
           </DndProvider>
           <Style.CreateButtonBox>
-            {/* <Style.PlusButton>
-              <Icon.RoundPlus />
-              <div>다른 장소 더 추천받기</div>
-            </Style.PlusButton> */}
-            <Style.PlusButton onClick={addItem}>
+            <Style.PlusButton onClick={addNewSchedule}>
               <Icon.RoundPlus />
               <div>직접 입력해서 추가하기</div>
             </Style.PlusButton>

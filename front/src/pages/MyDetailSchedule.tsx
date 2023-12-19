@@ -6,22 +6,22 @@ import { PeriodTag } from "../components/_common/Tag/PeriodTab";
 import Header from "../components/_common/Header";
 import ScheduleCard from "../components/_common/ScheduleCard";
 import { Icon } from "../assets";
-import useSurvey from "../hooks/useSurvey";
-import useSchedule2 from "../hooks/useSchedule2";
 import { useEffect, useState } from "react";
 import BottomSheet from "../components/_common/BottomSheet";
 import { DndProvider } from "react-dnd-multi-backend";
 import { HTML5toTouch } from "rdndmb-html5-to-touch";
 import {
   NewSceduleInfo,
-  ScheduleById,
   ScheduleInfo,
   deleteSchedule,
   getMyScheduleList,
+  getTripSchedule,
   updateTripName,
 } from "../api/clova";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useSaveScehdule from "../hooks/useSaveScehdule";
+import useSchedule from "../hooks/useSchedule";
+import DayList from "../components/_common/DayList";
 
 export type Schedule = {
   id: number;
@@ -36,8 +36,8 @@ export type Schedule = {
 export type ScheduleByDate = { [key: string]: Omit<Schedule, "realday">[] };
 
 const MyDetailSchedule = () => {
-  const params = useParams();
   const navigate = useNavigate();
+  const params = useParams<{ id: string }>();
 
   const [openShare, setOpenShare] = useState(false);
 
@@ -46,7 +46,7 @@ const MyDetailSchedule = () => {
 
   const queryClient = useQueryClient();
   const user = queryClient.getQueryData(["user"]) as { id: number };
-  const { data: scheduleList, isSuccess } = useQuery({
+  const { data: myScheduleList, isSuccess: isSuccessMySchedule } = useQuery({
     queryKey: ["mySchedule", "all"],
     queryFn: () => getMyScheduleList(user?.id || 0),
     enabled: !!user,
@@ -54,8 +54,8 @@ const MyDetailSchedule = () => {
 
   useEffect(() => {
     const getTripName = () => {
-      if (isSuccess) {
-        const result = scheduleList?.find(
+      if (isSuccessMySchedule) {
+        const result = myScheduleList?.find(
           (item) => item.groupid === Number(params.id)
         );
         return result?.destination || "";
@@ -63,7 +63,12 @@ const MyDetailSchedule = () => {
       return "";
     };
     setTripName(getTripName());
-  }, [isSuccess]);
+  }, [isSuccessMySchedule]);
+
+  const { data: scheduleList } = useQuery({
+    queryKey: ["mySchedule", Number(params.id)],
+    queryFn: () => getTripSchedule({ groupId: Number(params.id) }),
+  });
 
   const {
     day,
@@ -71,16 +76,12 @@ const MyDetailSchedule = () => {
     date,
     onChangeDescription,
     setDay,
-    onDragStart,
-    onDragEnd,
-    onAvailableItemDragEnter,
-    onDragOver,
     onDeleteSchedule,
-    addItem,
+    addNewSchedule,
     onChangeContent,
     setSchedule,
     setDate,
-  } = useSchedule2();
+  } = useSchedule(scheduleList);
 
   const getDate = (schedule: NewSceduleInfo) => {
     const result = Object.keys(schedule);
@@ -256,22 +257,14 @@ const MyDetailSchedule = () => {
         </div>
         {/* <Style.RestButton onClick={openInitModal}>초기화</Style.RestButton> */}
       </Style.SubRow>
-      <Style.DayList>
-        {Array.from({ length: totalDay }, (_, index) => (
-          <div key={index} style={{ position: "relative", height: 45 }}>
-            <Style.Day
-              isSelected={day === index + 1}
-              onClick={() => {
-                setDay(index + 1);
-                setDate(startDate.add(index, "day").format("YYYY-MM-DD"));
-              }}
-            >
-              {`Day ${index + 1}`}
-            </Style.Day>
-            <Style.UnderLine isSelected={day === index + 1} />
-          </div>
-        ))}
-      </Style.DayList>
+      <DayList
+        totalDay={totalDay}
+        selectedDay={day}
+        onClick={(day) => {
+          setDay(day + 1);
+          setDate(startDate.add(day, "day").format("YYYY-MM-DD"));
+        }}
+      />
       <Style.Content>
         <Style.Wrapper>
           <DndProvider options={HTML5toTouch}>
@@ -280,11 +273,7 @@ const MyDetailSchedule = () => {
               return (
                 <ScheduleCard
                   moveItem={moveItem}
-                  onDragStart={(e) => onDragStart(e, index)}
-                  onDragEnter={(e) => onAvailableItemDragEnter(e, index)}
-                  onDragEnd={onDragEnd}
                   onDelete={() => onDeleteSchedule(item.id)}
-                  onDragOver={onDragOver}
                   title={item.content}
                   description={item.detailPlans[0]?.detailContent || ""}
                   isEditable={mode === "EDIT"}
@@ -303,7 +292,7 @@ const MyDetailSchedule = () => {
 
           {mode === "EDIT" && (
             <Style.CreateButtonBox>
-              <Style.PlusButton onClick={addItem}>
+              <Style.PlusButton onClick={addNewSchedule}>
                 <Icon.RoundPlus />
                 <div>직접 입력해서 추가하기</div>
               </Style.PlusButton>

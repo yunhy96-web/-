@@ -7,10 +7,6 @@ import { useLocation } from "react-router-dom";
 
 type Props = {
   title: string;
-  onDragStart: (e: any) => void;
-  onDragEnter: (e: any) => void;
-  onDragOver: (e: any) => void;
-  onDragEnd: (e: any) => void;
   description: string;
   onChangeDescription: (value: string) => void;
   onChangeContent: (value: string) => void;
@@ -18,15 +14,11 @@ type Props = {
   isEditable: boolean;
   id?: number;
   index?: number;
-  moveItem?: (dragIndex: number, hoverIndex: number) => void;
+  moveItem: (dragIndex: number, hoverIndex: number) => void;
 };
 
 const ScheduleCard = ({
   title,
-  onDragEnd,
-  onDragEnter,
-  onDragOver,
-  onDragStart,
   description,
   onChangeDescription,
   onChangeContent,

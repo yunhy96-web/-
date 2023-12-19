@@ -48,8 +48,10 @@ export const getTripSchedule = async ({ groupId }: { groupId: number }) => {
   }
 };
 
+type ScheduleByDate = Omit<ScheduleInfo, "realday"> & { isEditable: boolean };
+
 export type NewSceduleInfo = {
-  [key: string]: (Omit<ScheduleInfo, "realday"> & { isEditable: boolean })[];
+  [key: string]: ScheduleByDate[];
 };
 
 const getScheduleListByDate = (
