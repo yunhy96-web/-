@@ -24,9 +24,6 @@ const MySchedule = () => {
     enabled: !!user,
   });
 
-  // const [auth, setAuth] = useRecoilState(authState);
-  // console.log(auth);
-
   const [tab, setTab] = useState<Tab>("내가 저장한 일정");
   const navigate = useNavigate();
 

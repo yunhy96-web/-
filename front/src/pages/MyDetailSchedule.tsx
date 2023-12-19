@@ -303,10 +303,6 @@ const MyDetailSchedule = () => {
 
           {mode === "EDIT" && (
             <Style.CreateButtonBox>
-              {/* <Style.PlusButton>
-                <Icon.RoundPlus />
-                <div>다른 장소 더 추천받기</div>
-              </Style.PlusButton> */}
               <Style.PlusButton onClick={addItem}>
                 <Icon.RoundPlus />
                 <div>직접 입력해서 추가하기</div>
