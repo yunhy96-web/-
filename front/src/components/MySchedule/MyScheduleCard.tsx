@@ -17,7 +17,6 @@ type Props = {
   groupId: number;
   openDropdown: () => void;
   isOpenDropdown: boolean;
-  onClose: () => void;
 };
 
 const MyScheduleCard = ({
@@ -27,7 +26,6 @@ const MyScheduleCard = ({
   title,
   openDropdown,
   isOpenDropdown,
-  onClose,
   groupId,
 }: Props) => {
   const navigate = useNavigate();

@@ -127,16 +127,6 @@ const MyDetailSchedule = () => {
     return result;
   };
 
-  const onSaveSchedule = () => {
-    openConfirmModal({
-      type: "COMPLETE",
-      confirm: () => {
-        navigate("/my-schedule");
-      },
-      cancel: closeConfirmModal,
-    });
-  };
-
   const openDeleteModal = () => {
     openConfirmModal({
       type: "DELETE",

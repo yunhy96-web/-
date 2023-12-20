@@ -5,6 +5,20 @@ import { useRecoilState } from "recoil";
 import { authState } from "../atom/authState";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { setAccesToken } from "../utils/getAccessToken";
+/**
+ *
+ * 클릭을하면
+ * 장바구니 담기 요청
+ * 금액 산출 요청
+ * 장바구니 담기 요청
+ * 금액 산출 요청
+ * Queue = [열개]
+ *
+ * DroppingQueue(1, queue)
+ * 장바구니에서 3개를 한번에 담을 수도 있고
+ *
+ * queue.shift()
+ */
 
 const UserLogin = () => {
   const searchParams = useSearchParams();

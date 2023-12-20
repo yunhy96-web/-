@@ -1,6 +1,7 @@
 import { useRecoilState } from "recoil";
 import { initialSurvey, surveyState } from "../atom/surveyState";
 import dayjs from "dayjs";
+import { nestedUpdate, updateFieldByName } from "../utils";
 
 const useSurvey = () => {
   const [survey, setSurvey] = useRecoilState(surveyState);
@@ -30,31 +31,60 @@ const useSurvey = () => {
     }));
   };
 
+  // const setTripType = (type: string) => {
+  //   setSurvey((prev) =>
+  //     updateFieldByName(
+  //       prev,
+  //       "trip",
+  //       updateFieldByName(
+  //         prev.trip,
+  //         "type",
+  //         toggleButtonList(prev.trip.type, type)
+  //       )
+  //     )
+  //   );
+  // };
+
   const setTripType = (type: string) => {
-    setSurvey((prev) => ({
-      ...prev,
-      trip: { ...prev.trip, type: toggleButtonList(prev.trip.type, type) },
-    }));
+    setSurvey((prev) => {
+      // return nestedUpdate(prev, ["trip", "type"], (value: any) => {
+      //   console.log(value);
+      //   return value;
+      // });
+      return updateFieldByName(
+        prev,
+        "trip",
+        updateFieldByName(
+          prev.trip,
+          "type",
+          toggleButtonList(prev.trip.type, type)
+        )
+      );
+    });
   };
 
   const setTripInterest = (interest: string) => {
-    setSurvey((prev) => ({
-      ...prev,
-      trip: {
-        ...prev.trip,
-        interest: toggleButtonList(prev.trip.interest, interest),
-      },
-    }));
+    setSurvey((prev) =>
+      updateFieldByName(
+        prev,
+        "trip",
+        updateFieldByName(
+          prev.trip,
+          "interest",
+          toggleButtonList(prev.trip.interest, interest)
+        )
+      )
+    );
   };
 
   const setTripStyle = (style: string) => {
-    setSurvey((prev) => ({
-      ...prev,
-      trip: {
-        ...prev.trip,
-        style,
-      },
-    }));
+    setSurvey((prev) =>
+      updateFieldByName(
+        prev,
+        "trip",
+        updateFieldByName(prev.trip, "style", style)
+      )
+    );
   };
 
   const getTripPeriod = () => {

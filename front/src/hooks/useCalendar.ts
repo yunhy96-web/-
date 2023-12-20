@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from "dayjs";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import createCalendar from "../utils/createCalendar";
 
 const useCalendar = () => {

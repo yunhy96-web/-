@@ -1,16 +1,18 @@
 import { MyScheduleList } from "../api/clova";
-import { Tab } from "../pages/MySchedule";
+import { Tab } from "../hooks/useMySchedule";
 import convertDateFormmat from "../utils/convertDateFormmat";
+
+export type MySchedule = {
+  id: number;
+  groupId: number;
+  title: string;
+  startDate: string;
+  endDate: string;
+};
 
 interface IMyScheduleListController {
   filter: (tab: Tab) => IMyScheduleListController;
-  get: () => {
-    id: number;
-    groupId: number;
-    title: string;
-    startDate: string;
-    endDate: string;
-  }[];
+  get: () => MySchedule[];
 }
 
 export const MyScheduleListController = (

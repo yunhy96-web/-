@@ -7,9 +7,8 @@ import { ScheduleController } from "../controller/ScheduleController";
 const useSchedule = (scheduleList: NewSceduleInfo = {}) => {
   const { openConfirmModal, closeConfirmModal } = useConfirmModal();
   const [day, setDay] = useState(1);
-
-  //다른 부분
   const [date, setDate] = useState("");
+
   const getDate = (schedule: NewSceduleInfo) => {
     const result = Object.keys(schedule);
     result.sort((a, b) => new Date(a).getTime() - new Date(b).getTime());
@@ -23,10 +22,8 @@ const useSchedule = (scheduleList: NewSceduleInfo = {}) => {
     const { startDate } = getDate(scheduleList);
     setDate(startDate.add(day - 1, "day").format("YYYY-MM-DD"));
   }, [scheduleList]);
-  // const date = survey.startDate.add(day - 1, "day").format("YYYY-MM-DD");
 
   const [schedule, setSchedule] = useState<NewSceduleInfo>(scheduleList);
-  //다른 부분
 
   const initData = (date: string) => {
     setSchedule((prev) => ({

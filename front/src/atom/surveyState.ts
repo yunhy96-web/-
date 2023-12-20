@@ -1,7 +1,7 @@
 import dayjs, { Dayjs } from "dayjs";
 import { atom } from "recoil";
 
-type SurveyState = {
+export type SurveyState = {
   startDate: Dayjs;
   endDate: Dayjs;
   destination: {
